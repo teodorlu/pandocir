@@ -1,5 +1,7 @@
 (ns teodorlu.pandoc2hiccup)
 
+(defn a-function [] 42)
+
 (defn -main [& args]
   (println "hello from pandoc2hiccup")
   (println "got these args:")
