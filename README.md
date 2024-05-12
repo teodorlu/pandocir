@@ -32,8 +32,19 @@ Save your changes, then the next `pandoc2hiccup` invocation will run new code.
 2. From this folder, run:
 
    ```
-   bbin install . --as pandoc2hiccup
+   bbin install .
    ```
+
+Now, run pandoc2hiccup!
+
+    echo 'hi, _there_!' | pandoc2hiccup
+
+If you want a development version next to the previous version, you can install a development version with a different binary name:
+
+
+```
+bbin install . --as pandoc2hiccup-dev
+```
 
 ## Install from Github
 

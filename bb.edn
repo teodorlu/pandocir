@@ -1,1 +1,2 @@
-{:deps {io.github.teodorlu/pandoc2hiccup {:local/root "."}}}
+{:deps {io.github.teodorlu/pandoc2hiccup {:local/root "."}}
+ :bbin/bin {pandoc2hiccup {:main-opts ["-m" "teodorlu.pandoc2hiccup/-main"]}}}
