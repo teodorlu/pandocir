@@ -17,7 +17,6 @@ We aim to make it work, though.
 
     ```
     echo 'hi, _there_!' | pandoc2hiccup
-
     ```
 
     Teodor has installed a development version on his machine.
