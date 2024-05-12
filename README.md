@@ -20,7 +20,7 @@ We aim to make it work, though.
     ```
 
     Teodor has installed a development version on his machine.
-    New changes are reflected
+    New changes are reflected on next script execution.
 
 - **Run the tests**
 
