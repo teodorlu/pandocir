@@ -6,10 +6,10 @@ A Babashka script for converting Pandoc JSON to Hiccup.
     echo 'hi, _there_!' | pandoc2hiccup
     [:p "hi, " [:em "there"] "!"]
 
-## Does it work yet?
+## Does the example above work yet?
 
 No!
-The README was written before the code.
+We aim to make it work, though.
 
 ## How to run code in this project
 
