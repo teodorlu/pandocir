@@ -1,4 +1,4 @@
-(ns teodorlu.pandoc2hiccup.babashka-cli-demo
+(ns teodorlu.pandoc2hiccup.babashka-cli-demo-test
   (:require
    [clojure.test :refer [deftest is testing]]
    [babashka.cli]))

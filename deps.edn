@@ -37,4 +37,8 @@
   org.clojure/tools.logging {:mvn/version "1.1.0"},
   org.flatland/ordered {:mvn/version "1.5.9"},
   rewrite-clj/rewrite-clj {:mvn/version "1.1.47"},
-  selmer/selmer {:mvn/version "1.12.59"}}}
+  selmer/selmer {:mvn/version "1.12.59"}}
+ :aliases
+ {:kaocha ;; added by neil
+  {:extra-deps {lambdaisland/kaocha {:mvn/version "1.89.1380"}}
+   :main-opts ["-m" "kaocha.runner"]}}}
