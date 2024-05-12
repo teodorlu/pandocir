@@ -1,0 +1,1 @@
+{:deps {io.github.teodorlu/pandoc2hiccup {:local/root "."}}}
