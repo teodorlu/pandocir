@@ -1,6 +1,6 @@
 ;; this deps.edn file has been auto-generated with
 ;;
-;;     pp print-deps > deps.edn
+;;     bb print-deps > deps.edn
 ;;
 ;; . This provides all built-in Babashka dependencies to JVM Clojure, which
 ;; eases the job of writing cross compatible bb/JVM code.
