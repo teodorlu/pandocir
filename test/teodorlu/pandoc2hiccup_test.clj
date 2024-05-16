@@ -4,9 +4,6 @@
    [teodorlu.pandoc2hiccup :as pandoc2hiccup]
    [babashka.cli]))
 
-(deftest a-function-test
-  (is (= 42 (pandoc2hiccup/a-function))))
-
 (deftest space-test
   (is (= " " (pandoc2hiccup/pandoc-block->hiccup {:t "Space"}))))
 
