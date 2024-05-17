@@ -1,15 +1,12 @@
 # `pandoc2hiccup`
 
-A Babashka script for converting Pandoc JSON to Hiccup.
+An incomplete Babashka script for converting Pandoc JSON to Hiccup.
 `pandoc2hiccup` is meant to be used in a Unix pipe after Pandoc:
 
     $ echo 'hi, _there_!' | pandoc --from markdown --to json | pandoc2hiccup
     [:p "hi, " [:em "there"] "!"]
 
-## Does the example above work yet?
-
-No!
-We aim to make it work, though.
+Currently supports a tiny subset of Pandoc JSON.
 
 ## How to run code in this project
 
