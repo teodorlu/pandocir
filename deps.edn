@@ -9,4 +9,5 @@
  :aliases
  {:kaocha {:extra-deps {lambdaisland/kaocha {:mvn/version "1.89.1380"}}
            :main-opts ["-m" "kaocha.runner"]}
-  :dev {:extra-deps {lambdaisland/kaocha {:mvn/version "1.89.1380"}}}}}
+  :dev {:extra-deps {io.github.tonsky/clj-reload {:mvn/version "0.7.0"}
+                     lambdaisland/kaocha {:mvn/version "1.89.1380"}}}}}
