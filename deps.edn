@@ -1,15 +1,15 @@
 {:paths ["src"]
  :deps
- {babashka/fs {:mvn/version "0.4.19"}
-  babashka/process {:mvn/version "0.5.21"}
+ {babashka/fs {:mvn/version "0.5.21"}
+  babashka/process {:mvn/version "0.5.22"}
   cheshire/cheshire {:mvn/version "5.13.0"}
   hiccup/hiccup {:mvn/version "2.0.0-RC1"}
-  org.babashka/cli {:mvn/version "0.8.58"}
-  org.clojure/clojure {:mvn/version "1.11.2"}
+  org.babashka/cli {:mvn/version "0.8.59"}
+  org.clojure/clojure {:mvn/version "1.11.3"}
   selmer/selmer {:mvn/version "1.12.59"}}
  :aliases
- {:kaocha {:extra-deps {lambdaisland/kaocha {:mvn/version "1.89.1380"}}
+ {:kaocha {:extra-deps {lambdaisland/kaocha {:mvn/version "1.90.1383"}}
            :main-opts ["-m" "kaocha.runner"]}
   :dev {:extra-paths ["test" "dev"]
         :extra-deps {io.github.tonsky/clj-reload {:mvn/version "0.7.0"}
-                     lambdaisland/kaocha {:mvn/version "1.89.1380"}}}}}
+                     lambdaisland/kaocha {:mvn/version "1.90.1383"}}}}}
