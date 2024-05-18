@@ -3,6 +3,7 @@
 *.log
 tmp/
 
+# Clojure
 /target
 /classes
 /checkouts
@@ -15,3 +16,6 @@ pom.xml.asc
 /.nrepl-port
 /.prepl-port
 /.cpcache
+
+# Calva
+/.calva/
