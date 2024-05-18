@@ -1,4 +1,5 @@
-{:deps
+{:paths ["src"]
+ :deps
  {babashka/fs {:mvn/version "0.4.19"}
   babashka/process {:mvn/version "0.5.21"}
   cheshire/cheshire {:mvn/version "5.13.0"}
@@ -9,5 +10,6 @@
  :aliases
  {:kaocha {:extra-deps {lambdaisland/kaocha {:mvn/version "1.89.1380"}}
            :main-opts ["-m" "kaocha.runner"]}
-  :dev {:extra-deps {io.github.tonsky/clj-reload {:mvn/version "0.7.0"}
+  :dev {:extra-paths ["test" "dev"]
+        :extra-deps {io.github.tonsky/clj-reload {:mvn/version "0.7.0"}
                      lambdaisland/kaocha {:mvn/version "1.89.1380"}}}}}
