@@ -28,7 +28,12 @@
     ;; however assumes the pandoc default css file to be included. I'm opting to
     ;; inline this instead.
     ;; See: https://pandoc.org/chunkedhtml-demo/8.12-inline-formatting.html#small-caps
-    :SmallCaps (wrap-inline [:span {:style {:font-variant "small-caps"}}] c)))
+    :SmallCaps (wrap-inline [:span {:style {:font-variant "small-caps"}}] c)
+    :Quoted (let [[{quote-type :t} content] c
+                  [open close] (case (keyword quote-type)
+                                 :SingleQuote ["‘" "’"]
+                                 :DoubleQuote ["“" "”"])]
+              (concat [open] (wrap-inline () content) [close]))))
 
 (defn pandoc-para->hiccup [c]
   (wrap-inline [:p] c))
