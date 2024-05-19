@@ -58,6 +58,11 @@
 
 ;; Block Element Tests
 
+(deftest plain-test
+  (is (= '("Plain" " " "text")
+         (pandoc2hiccup/pandoc-block->hiccup
+          {:t "Plain", :c [{:t "Str", :c "Plain"} {:t "Space"} {:t "Str", :c "text"}]}))))
+
 (deftest para-test
   (is (= [:p "hi," " " [:em "there"] "!"]
          (pandoc2hiccup/pandoc-block->hiccup
