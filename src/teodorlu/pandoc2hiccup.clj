@@ -1,6 +1,7 @@
 (ns teodorlu.pandoc2hiccup
   (:require [cheshire.core :as json]))
 
+(declare pandoc-inline->hiccup)
 (declare pandoc-block->hiccup)
 
 ;; See: https://hackage.haskell.org/package/pandoc-types-1.23.1/docs/Text-Pandoc-Definition.html#t:Attr
@@ -10,25 +11,27 @@
     (not (empty? classes)) (assoc :class classes)))
 
 
+(defn wrap-inline [wrapper content]
+  (into wrapper (map pandoc-inline->hiccup content)))
+
 ;; See: https://hackage.haskell.org/package/pandoc-types-1.23.1/docs/Text-Pandoc-Definition.html#t:Inline
 (defn pandoc-inline->hiccup [{:keys [t c]}]
   (case (keyword t)
     :Space " "
     :Str c
-    :Emph (into [:em] (map pandoc-inline->hiccup c))
-    :Strong (into [:strong] (map pandoc-inline->hiccup c))
-    :Strikeout (into [:s] (map pandoc-inline->hiccup c))
-    :Superscript (into [:sup] (map pandoc-inline->hiccup c))
-    :Subscript (into [:sub] (map pandoc-inline->hiccup c))
+    :Emph (wrap-inline [:em] c)
+    :Strong (wrap-inline [:strong] c)
+    :Strikeout (wrap-inline [:s] c)
+    :Superscript (wrap-inline [:sup] c)
+    :Subscript (wrap-inline [:sub] c)
     ;; Pandoc defaults to generating a span with the `smallcaps` class; this
     ;; however assumes the pandoc default css file to be included. I'm opting to
     ;; inline this instead.
     ;; See: https://pandoc.org/chunkedhtml-demo/8.12-inline-formatting.html#small-caps
-    :SmallCaps (into [:span {:style {:font-variant "small-caps"}}]
-                     (map pandoc-inline->hiccup c))))
+    :SmallCaps (wrap-inline [:span {:style {:font-variant "small-caps"}}] c)))
 
 (defn pandoc-para->hiccup [c]
-  (into [:p] (map pandoc-inline->hiccup c)))
+  (wrap-inline [:p] c))
 
 (defn pandoc-header->hiccup [[level attr inlines]]
   (let [attributes (pandoc-attr->hiccup attr)]
