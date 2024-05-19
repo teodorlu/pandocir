@@ -10,9 +10,11 @@
     (not (empty? id)) (assoc :id id)
     (not (empty? classes)) (assoc :class classes)))
 
-
 (defn wrap-inline [wrapper content]
   (into wrapper (map pandoc-inline->hiccup content)))
+
+(defn wrap-block [wrapper content]
+  (into wrapper (map pandoc-block->hiccup content)))
 
 ;; See: https://hackage.haskell.org/package/pandoc-types-1.23.1/docs/Text-Pandoc-Definition.html#t:Inline
 (defn pandoc-inline->hiccup [{:keys [t c]}]
@@ -41,9 +43,6 @@
       (not (empty? attributes)) (conj attributes)
       true (into (map pandoc-inline->hiccup inlines)))))
 
-(defn pandoc-blockquote->hiccup [c]
-  (into [:blockquote] (map pandoc-block->hiccup c)))
-
 (defn pandoc-codeblock->hiccup [[attr code]]
   (let [attributes (-> attr
                        (update 2 (partial map (fn [[k v]] [(str "data-" k) v])))
@@ -52,14 +51,32 @@
       (not (empty? attributes)) (conj attributes)
       true (conj [:code code]))))
 
+;; See: https://hackage.haskell.org/package/pandoc-types-1.23.1/docs/Text-Pandoc-Definition.html#t:ListAttributes
+(defn pandoc-list-attr->hiccup [[start list-style _]]
+  (cond-> {}
+    (and start (not= start 1)) (assoc :start start)
+    list-style (assoc :type (case (keyword list-style)
+                              :LowerAlpha "a"
+                              :UpperAlpha "A"
+                              :LowerRoman "i"
+                              :UpperRoman "I"
+                              "1"))))
+
+(defn pandoc-orderedlist->hiccup [[list-attrs items]]
+  (->> items
+       (map (partial wrap-block [:li]))
+       (into [:ol (pandoc-list-attr->hiccup list-attrs)])))
+
 ;; See: https://hackage.haskell.org/package/pandoc-types-1.23.1/docs/Text-Pandoc-Definition.html#t:Block
 (defn pandoc-block->hiccup [{:keys [t c] :as block}]
+  (prn block)
   (case (keyword t)
-    :Plain (seq (wrap-inline [] c))
+    :Plain (map pandoc-inline->hiccup c)
     :Para (wrap-inline [:p] c)
     :Header (pandoc-header->hiccup c)
-    :BlockQuote (pandoc-blockquote->hiccup c)
-    :CodeBlock (pandoc-codeblock->hiccup c)))
+    :BlockQuote (wrap-block [:blockquote] c)
+    :CodeBlock (pandoc-codeblock->hiccup c)
+    :OrderedList (pandoc-orderedlist->hiccup c)))
 
 (defn pandoc->hiccup [{:keys [blocks]}]
   (map pandoc-block->hiccup blocks))
