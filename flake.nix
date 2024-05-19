@@ -13,6 +13,9 @@
       in {
         devShell = pkgs.mkShell {
           nativeBuildInputs = [ pkgs.clojure pkgs.babashka pkgs.bbin ];
+          shellHook = ''
+            export PATH=$HOME/.local/bin:$PATH
+          '';
         };
       });
 }
