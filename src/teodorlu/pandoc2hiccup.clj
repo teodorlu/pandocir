@@ -35,9 +35,6 @@
                                  :DoubleQuote ["“" "”"])]
               (concat [open] (wrap-inline () content) [close]))))
 
-(defn pandoc-para->hiccup [c]
-  (wrap-inline [:p] c))
-
 (defn pandoc-header->hiccup [[level attr inlines]]
   (let [attributes (pandoc-attr->hiccup attr)]
     (cond-> [(keyword (str "h" level))]
@@ -58,7 +55,7 @@
 ;; See: https://hackage.haskell.org/package/pandoc-types-1.23.1/docs/Text-Pandoc-Definition.html#t:Block
 (defn pandoc-block->hiccup [{:keys [t c] :as block}]
   (case (keyword t)
-    :Para (pandoc-para->hiccup c)
+    :Para (wrap-inline [:p] c)
     :Header (pandoc-header->hiccup c)
     :BlockQuote (pandoc-blockquote->hiccup c)
     :CodeBlock (pandoc-codeblock->hiccup c)))
