@@ -25,7 +25,7 @@
           {:t "Strong", :c [{:t "Str", :c "there"}]}))))
 
 (deftest strikeout-test
-  (is (= [:s "struckout"]
+  (is (= [:del "struckout"]
          (pandoc2hiccup/pandoc-inline->hiccup
           {:t "Strikeout", :c [{:t "Str", :c "struckout"}]}))))
 
