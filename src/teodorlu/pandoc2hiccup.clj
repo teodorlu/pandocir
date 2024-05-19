@@ -21,7 +21,7 @@
     :Str c
     :Emph (wrap-inline [:em] c)
     :Strong (wrap-inline [:strong] c)
-    :Strikeout (wrap-inline [:s] c)
+    :Strikeout (wrap-inline [:del] c)
     :Superscript (wrap-inline [:sup] c)
     :Subscript (wrap-inline [:sub] c)
     ;; Pandoc defaults to generating a span with the `smallcaps` class; this
