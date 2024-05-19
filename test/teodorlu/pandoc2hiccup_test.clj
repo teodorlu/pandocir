@@ -44,10 +44,15 @@
          (pandoc2hiccup/pandoc-inline->hiccup
           {:t "SmallCaps", :c [{:t "Str", :c "smallcaps"}]}))))
 
-(deftest quoted-test
-  (is (= [:q "quoted"]
+(deftest quoted-single-test
+  (is (= '("‘" "single quote" "’")
          (pandoc2hiccup/pandoc-inline->hiccup
-          {:t "Quoted", :c [["DoubleQuote"] [{:t "Str", :c "quoted"}]]}))))
+          {:t "Quoted", :c [{:t "SingleQuote"} [{:t "Str", :c "single quote"}]]}))))
+
+(deftest quoted-double-test
+  (is (= '("“" "double quote" "”")
+         (pandoc2hiccup/pandoc-inline->hiccup
+          {:t "Quoted", :c [{:t "DoubleQuote"} [{:t "Str", :c "double quote"}]]}))))
 
 
 
