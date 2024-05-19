@@ -55,6 +55,7 @@
 ;; See: https://hackage.haskell.org/package/pandoc-types-1.23.1/docs/Text-Pandoc-Definition.html#t:Block
 (defn pandoc-block->hiccup [{:keys [t c] :as block}]
   (case (keyword t)
+    :Plain (seq (wrap-inline [] c))
     :Para (wrap-inline [:p] c)
     :Header (pandoc-header->hiccup c)
     :BlockQuote (pandoc-blockquote->hiccup c)
