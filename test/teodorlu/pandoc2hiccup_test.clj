@@ -118,12 +118,12 @@
                 [{:t "Plain", :c [{:t "Emph", :c [{:t "Str", :c "Second"}]} {:t "Str", :c " Item"}]}]]]}))))
 
 (deftest bulletlist-test
-  (is (= [:ul [:li "Item 1"] [:li "Item 2"]]
+  (is (= '[:ul [:li ("Item 1")] [:li ("Item 2")]]
          (pandoc2hiccup/pandoc-block->hiccup
           {:t "BulletList", :c [[{:t "Plain", :c [{:t "Str", :c "Item 1"}]}] [{:t "Plain", :c [{:t "Str", :c "Item 2"}]}]]}))))
 
 (deftest nested-list-test
-  (is (= [:ul [:li "Item 1" [:ul [:li "Subitem 1"] [:li "Subitem 2"]]] [:li "Item 2"]]
+  (is (= '[:ul [:li ("Item 1") [:ul [:li ("Subitem 1")] [:li ("Subitem 2")]]] [:li ("Item 2")]]
          (pandoc2hiccup/pandoc-block->hiccup
           {:t "BulletList",
            :c [[{:t "Plain", :c [{:t "Str", :c "Item 1"}]},
