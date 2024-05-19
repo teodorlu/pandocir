@@ -67,6 +67,9 @@
        (map (partial wrap-block [:li]))
        (into [:ol (pandoc-list-attr->hiccup list-attrs)])))
 
+(defn pandoc-bulletlist->hiccup [items]
+  (into [:ul] (map (partial wrap-block [:li]) items)))
+
 ;; See: https://hackage.haskell.org/package/pandoc-types-1.23.1/docs/Text-Pandoc-Definition.html#t:Block
 (defn pandoc-block->hiccup [{:keys [t c] :as block}]
   (prn block)
@@ -76,7 +79,8 @@
     :Header (pandoc-header->hiccup c)
     :BlockQuote (wrap-block [:blockquote] c)
     :CodeBlock (pandoc-codeblock->hiccup c)
-    :OrderedList (pandoc-orderedlist->hiccup c)))
+    :OrderedList (pandoc-orderedlist->hiccup c)
+    :BulletList (pandoc-bulletlist->hiccup c)))
 
 (defn pandoc->hiccup [{:keys [blocks]}]
   (map pandoc-block->hiccup blocks))
