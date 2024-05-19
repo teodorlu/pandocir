@@ -105,15 +105,15 @@
           {:t "CodeBlock", :c [["id", ["class1", "class2"], [["key", "value"]]], "code here"]}))))
 
 (deftest orderedlist-test
-  (is (= [:ol [:li "Item 1"] [:li "Item 2"]]
+  (is (= '[:ol {:type "1"} [:li ("Item 1")] [:li ("Item 2")]]
          (pandoc2hiccup/pandoc-block->hiccup
           {:t "OrderedList", :c [[1, "Decimal", "Period"] [[{:t "Plain", :c [{:t "Str", :c "Item 1"}]}] [{:t "Plain", :c [{:t "Str", :c "Item 2"}]}]]]}))))
 
 (deftest orderedlist-rich-test
-  (is (= [:ol {:type "i"} [:li "First Item"] [:li [:em "Second"] " Item"]]
+  (is (= '[:ol {:type "i"} [:li ("First Item")] [:li ([:em "Second"] " Item")]]
          (pandoc2hiccup/pandoc-block->hiccup
           {:t "OrderedList",
-           :c [[1, "OneRoman", "Period"],
+           :c [[1, "LowerRoman", "Period"],
                [[{:t "Plain", :c [{:t "Str", :c "First Item"}]}],
                 [{:t "Plain", :c [{:t "Emph", :c [{:t "Str", :c "Second"}]} {:t "Str", :c " Item"}]}]]]}))))
 
