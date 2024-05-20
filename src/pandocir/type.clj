@@ -1,7 +1,7 @@
 (ns pandocir.type
   "Pandoc types without setting your hair on fire
 
-  Pandoc's types are from this package:
+  Pandoc's types are from the Haskell package `pandoc-types`:
 
     https://hackage.haskell.org/package/pandoc-types"
   (:refer-clojure :exclude [str type]))
