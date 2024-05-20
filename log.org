@@ -16,3 +16,39 @@ Here's how I think that can be done:
    Failing tests could either be added but commented out, or we could use metadata to annotate "pending" tests, (like Oddmund describes in [[https://blog.oddmundo.com/2019/01/27/test-commit-revert-pending.html][test && commit || pending]])
 3. We design ahead where possible.
    Designing ahead can mean writing what we intend to do in a worklog, checking in experimental code in a comment block, writing a new experimental namespace, or making a Rich Hickey-style design matrix.
+** Multiple people in the same worklog? ---Teodor
+I think a rough structure for a worklog that works is toplevel dates, then subheadings signed by a person.
+That way, we have minimal structure that is easy to follow.
+(This format is in part stolen by how Wikipedia structures comments, but hierarchy is dropped to keep the format as simple as possible).
+
+Effective quotation can be done by leaning on Org-mode and Github.
+Here's an example.
+
+Teodor claims that it's possible to move fast and not break things:
+
+#+begin_quote
+I believe both are possible, but hard.
+Here's how I think that can be done:
+
+https://github.com/teodorlu/pandoc2hiccup/blob/d424ab3315a593da4e2922352aae98e957622323/log.org#L9-L10
+#+end_quote
+
+Is that true?
+Let's see if it stands the test of time.
+** On the advantage of prototyping on master ---Teodor
+I've had the fortune to work with Michiel Borkent on Neil.
+That has been a tremendous learning experience.
+One thing I quickly discovered was that I wanted to be able to experiment on my own.
+
+I did that in two ways: with git branching (for =neil dep upgrade=) and by writing a separate program ("a fork") (for =neil-quickadd=).
+
+That way of branching let me move quickly.
+But I was /on my own/.
+
+- It was hard to communicate back when I learned something
+- I had to keep different code bases and different versions in mind
+
+I now think branching inside a code base is better.
+
+For an API, a different /experimental/ or /teodor/-namespace can be used.
+For a CLI, a different subcommand can be used.
