@@ -74,7 +74,6 @@
 
 ;; See: https://hackage.haskell.org/package/pandoc-types-1.23.1/docs/Text-Pandoc-Definition.html#t:Block
 (defn pandoc-block->hiccup [{:keys [t c] :as block}]
-  (prn block)
   (case (keyword t)
     :Plain (map pandoc-inline->hiccup c)
     :Para (wrap-inline [:p] c)
