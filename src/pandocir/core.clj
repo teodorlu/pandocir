@@ -94,6 +94,9 @@
 (defn type [block-or-inline]
   (:t block-or-inline))
 
+(defn children [block-or-inline]
+  (:c block-or-inline))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Inline predicate functions
 ;;
