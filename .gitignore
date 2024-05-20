@@ -19,3 +19,6 @@ pom.xml.asc
 
 # Calva
 /.calva/
+
+# Launchpad
+/deps.local.edn
