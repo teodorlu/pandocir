@@ -1,0 +1,18 @@
+#+title: Worklog
+
+* 2024-05-20
+** A worklog? ---Teodor
+I like to keep track of what I'm doing.
+I like to think ahead.
+I also like the ability to move fast, when possible.
+
+I believe both are possible, but hard.
+Here's how I think that can be done:
+
+1. We treat the code as "trunk" in trunk-based development.
+   If we need to explore something, we explore in the code, creating new files & new tests if we need to.
+2. We keep the tests green on master.
+   It's very hard to know whether I've introduced a bug if the tests start out red when I start working.
+   Failing tests could either be added but commented out, or we could use metadata to annotate "pending" tests, (like Oddmund describes in [[https://blog.oddmundo.com/2019/01/27/test-commit-revert-pending.html][test && commit || pending]])
+3. We design ahead where possible.
+   Designing ahead can mean writing what we intend to do in a worklog, checking in experimental code in a comment block, writing a new experimental namespace, or making a Rich Hickey-style design matrix.
