@@ -132,94 +132,6 @@
                      [{:t "Plain", :c [{:t "Str", :c "Subitem 2"}]}]]}],
                [{:t "Plain", :c [{:t "Str", :c "Item 2"}]}]]}))))
 
-#_
-(deftest definitionlist-test
-  (is (= [:dl [:dt "Term"] [:dd [:p "Definition"]]]
-         (pandocir/pandoc-block->hiccup
-          {:t "DefinitionList", :c [[{:t "Str", :c "Term"}] [[{:t "Para", :c [{:t "Str", :c "Definition"}]}]]]}))))
-
-#_
-(deftest lineblock-test
-  (is (= [:pre "Line 1\nLine 2"]
-         (pandocir/pandoc-block->hiccup
-          {:t "LineBlock", :c [[{:t "Str", :c "Line 1"}] [{:t "Str", :c "Line 2"}]]}))))
-
-#_
-(deftest lineblock-test-multiple
-  (is (= [:pre "Line 1\nLine 2\nLine 3"]
-         (pandocir/pandoc-block->hiccup
-          {:t "LineBlock", :c [[{:t "Str", :c "Line 1"}] [{:t "Str", :c "Line 2"}] [{:t "Str", :c "Line 3"}]]}))))
-
-#_
-(deftest rawblock-test
-  (is (= [:div {:dangerouslySetInnerHTML {:__html "<div>raw HTML</div>"}}]
-         (pandocir/pandoc-block->hiccup
-          {:t "RawBlock", :c ["html" "<div>raw HTML</div>"]}))))
-
-#_
-(deftest horizontalrule-test
-  (is (= [:hr]
-         (pandocir/pandoc-block->hiccup
-          {:t "HorizontalRule"}))))
-
-#_
-(deftest table-test
-  (is (= [:table [:caption "Caption"] [:thead [:tr [:th "Header"]]] [:tbody [:tr [:td "Cell"]]]]
-         (pandocir/pandoc-block->hiccup
-          {:t "Table", :c [["", [], []], ["Caption", []], [], [:thead [:tr [:th "Header"]]], [[:tbody [:tr [:td "Cell"]]]], [:tfoot]]}))))
-
-#_
-(deftest table-complex-test
-  (is (= [:table
-          [:caption "Complex Table"]
-          [:thead [:tr [:th "Header1"] [:th "Header2"]]]
-          [:tbody
-           [:tr [:td "Row1, Col1"] [:td "Row1, Col2"]]
-           [:tr [:td "Row2, Col1"] [:td "Row2, Col2"]]]]
-         (pandocir/pandoc-block->hiccup
-          {:t "Table",
-           :c [["", [], []],
-               ["Complex Table", []],
-               [], ; column alignments
-               [[{:t "Str", :c "Header1"}] [{:t "Str", :c "Header2"}]], ; headers
-               [[[{:t "Str", :c "Row1, Col1"}] [{:t "Str", :c "Row1, Col2"}]],
-                [[{:t "Str", :c "Row2, Col1"}] [{:t "Str", :c "Row2, Col2"}]]], ; rows
-               []]}))))
-
-#_
-(deftest figure-test
-  (is (= [:figure [:figcaption "Caption"] [:p "Content"]]
-         (pandocir/pandoc-block->hiccup
-          {:t "Figure", :c [["", [], []], ["Caption", []], [{:t "Para", :c [{:t "Str", :c "Content"}]}]]}))))
-
-#_
-(deftest div-test
-  (is (= [:div {:class "container"} [:p "Content"]]
-         (pandocir/pandoc-block->hiccup
-          {:t "Div", :c [["", ["container"], []], [{:t "Para", :c [{:t "Str", :c "Content"}]}]]}))))
-
-;; Document Tests
-
-#_
-(deftest document-with-meta-test
-  (is (= '([:meta {:title "Document Title"}]
-           [:p "Content"])
-         (pandocir/pandoc->hiccup
-          {:pandoc-api-version [1 23 1],
-           :meta {:title {:t "MetaInlines", :c [{:t "Str", :c "Document Title"}]}},
-           :blocks [{:t "Para", :c [{:t "Str", :c "Content"}]}]}))))
-
-#_
-(deftest complex-nested-test
-  (is (= [:div [:p "Complex" [:strong "nested"] "content"]]
-         (pandocir/pandoc-block->hiccup
-          {:t "Div",
-           :c [["", [], []],
-               [{:t "Para",
-                 :c [{:t "Str", :c "Complex"},
-                     {:t "Strong", :c [{:t "Str", :c "nested"}]},
-                     {:t "Str", :c "content"}]}]]}))))
-
 (deftest hiccup-test
   (is (= '([:p "hei"] [:p "oslo" " " "clojure"])
          (pandocir/pandoc->hiccup
@@ -229,3 +141,83 @@
            [{:t "Para", :c [{:t "Str", :c "hei"}]}
             {:t "Para",
              :c [{:t "Str", :c "oslo"} {:t "Space"} {:t "Str", :c "clojure"}]}]}))))
+
+(comment
+  ;; The following tests do not yet pass---but we expect them to pass when we've written more code.
+
+  (deftest definitionlist-test
+    (is (= [:dl [:dt "Term"] [:dd [:p "Definition"]]]
+           (pandocir/pandoc-block->hiccup
+            {:t "DefinitionList", :c [[{:t "Str", :c "Term"}] [[{:t "Para", :c [{:t "Str", :c "Definition"}]}]]]}))))
+
+  (deftest lineblock-test
+    (is (= [:pre "Line 1\nLine 2"]
+           (pandocir/pandoc-block->hiccup
+            {:t "LineBlock", :c [[{:t "Str", :c "Line 1"}] [{:t "Str", :c "Line 2"}]]}))))
+
+  (deftest lineblock-test-multiple
+    (is (= [:pre "Line 1\nLine 2\nLine 3"]
+           (pandocir/pandoc-block->hiccup
+            {:t "LineBlock", :c [[{:t "Str", :c "Line 1"}] [{:t "Str", :c "Line 2"}] [{:t "Str", :c "Line 3"}]]}))))
+
+  (deftest rawblock-test
+    (is (= [:div {:dangerouslySetInnerHTML {:__html "<div>raw HTML</div>"}}]
+           (pandocir/pandoc-block->hiccup
+            {:t "RawBlock", :c ["html" "<div>raw HTML</div>"]}))))
+
+  (deftest horizontalrule-test
+    (is (= [:hr]
+           (pandocir/pandoc-block->hiccup
+            {:t "HorizontalRule"}))))
+
+  (deftest table-test
+    (is (= [:table [:caption "Caption"] [:thead [:tr [:th "Header"]]] [:tbody [:tr [:td "Cell"]]]]
+           (pandocir/pandoc-block->hiccup
+            {:t "Table", :c [["", [], []], ["Caption", []], [], [:thead [:tr [:th "Header"]]], [[:tbody [:tr [:td "Cell"]]]], [:tfoot]]}))))
+
+  (deftest table-complex-test
+    (is (= [:table
+            [:caption "Complex Table"]
+            [:thead [:tr [:th "Header1"] [:th "Header2"]]]
+            [:tbody
+             [:tr [:td "Row1, Col1"] [:td "Row1, Col2"]]
+             [:tr [:td "Row2, Col1"] [:td "Row2, Col2"]]]]
+           (pandocir/pandoc-block->hiccup
+            {:t "Table",
+             :c [["", [], []],
+                 ["Complex Table", []],
+                 [], ; column alignments
+                 [[{:t "Str", :c "Header1"}] [{:t "Str", :c "Header2"}]], ; headers
+                 [[[{:t "Str", :c "Row1, Col1"}] [{:t "Str", :c "Row1, Col2"}]],
+                  [[{:t "Str", :c "Row2, Col1"}] [{:t "Str", :c "Row2, Col2"}]]], ; rows
+                 []]}))))
+
+  (deftest figure-test
+    (is (= [:figure [:figcaption "Caption"] [:p "Content"]]
+           (pandocir/pandoc-block->hiccup
+            {:t "Figure", :c [["", [], []], ["Caption", []], [{:t "Para", :c [{:t "Str", :c "Content"}]}]]}))))
+
+  (deftest div-test
+    (is (= [:div {:class "container"} [:p "Content"]]
+           (pandocir/pandoc-block->hiccup
+            {:t "Div", :c [["", ["container"], []], [{:t "Para", :c [{:t "Str", :c "Content"}]}]]}))))
+
+  ;; Document Tests
+
+  (deftest document-with-meta-test
+    (is (= '([:meta {:title "Document Title"}]
+             [:p "Content"])
+           (pandocir/pandoc->hiccup
+            {:pandoc-api-version [1 23 1],
+             :meta {:title {:t "MetaInlines", :c [{:t "Str", :c "Document Title"}]}},
+             :blocks [{:t "Para", :c [{:t "Str", :c "Content"}]}]}))))
+
+  (deftest complex-nested-test
+    (is (= [:div [:p "Complex" [:strong "nested"] "content"]]
+           (pandocir/pandoc-block->hiccup
+            {:t "Div",
+             :c [["", [], []],
+                 [{:t "Para",
+                   :c [{:t "Str", :c "Complex"},
+                       {:t "Strong", :c [{:t "Str", :c "nested"}]},
+                       {:t "Str", :c "content"}]}]]})))))
