@@ -1,7 +1,7 @@
-(ns teodorlu.pandocir-test
+(ns pandocir.core-test
   (:require
    [clojure.test :refer [deftest is]]
-   [teodorlu.pandocir :as pandoc2hiccup]
+   [pandocir.core :as pandoc2hiccup]
    [babashka.cli]))
 
 ;; Inline Element Tests

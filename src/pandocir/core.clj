@@ -1,4 +1,4 @@
-(ns teodorlu.pandocir
+(ns pandocir.core
   (:require [cheshire.core :as json]))
 
 (declare pandoc-inline->hiccup)
@@ -15,6 +15,8 @@
 
 (defn wrap-block [wrapper content]
   (into wrapper (map pandoc-block->hiccup content)))
+
+(def abc 123)
 
 ;; See: https://hackage.haskell.org/package/pandoc-types-1.23.1/docs/Text-Pandoc-Definition.html#t:Inline
 (defn pandoc-inline->hiccup [{:keys [t c]}]
