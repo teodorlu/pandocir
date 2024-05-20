@@ -8,6 +8,17 @@ This conversion happens by first converting from a source format to an intermedi
 
 [Pandoc]: https://pandoc.org/
 
+## A library spawned from a Clojure/Oslo mob programming session
+
+During [a Babashka Meetup in Oslo], we did some mob programming.
+The task was to write a script that converts Pandoc JSON to Hiccup.
+Some of us decided to give this code a bit more love.
+
+Note: all of Pandoc JSON is still not supported.
+Please consider this library _a start_.
+
+[a Babashka Meetup in Oslo]: https://www.meetup.com/clojure-oslo/events/300614179/
+
 ## Use as a library
 
 You can use `pandocir` as a Git dep with `deps.edn`:
