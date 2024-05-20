@@ -104,8 +104,8 @@
 (defn quoted? [block-or-inline]
   (= pandocir.type/quoted (pandocir.core/type block-or-inline)))
 
-(defn smallcaps? [block-or-inline]
-  (= pandocir.type/smallcaps (pandocir.core/type block-or-inline)))
+(defn small-caps? [block-or-inline]
+  (= pandocir.type/small-caps (pandocir.core/type block-or-inline)))
 
 (defn space? [block-or-inline]
   (= pandocir.type/space (pandocir.core/type block-or-inline)))
@@ -132,20 +132,20 @@
 ;; Block predicate functions
 ;;
 
-(defn blockquote? [block-or-inline]
-  (= pandocir.type/blockquote (pandocir.core/type block-or-inline)))
+(defn block-quote? [block-or-inline]
+  (= pandocir.type/block-quote (pandocir.core/type block-or-inline)))
 
-(defn bulletlist? [block-or-inline]
-  (= pandocir.type/bulletlist (pandocir.core/type block-or-inline)))
+(defn bullet-list? [block-or-inline]
+  (= pandocir.type/bullet-list (pandocir.core/type block-or-inline)))
 
-(defn codeblock? [block-or-inline]
-  (= pandocir.type/codeblock (pandocir.core/type block-or-inline)))
+(defn code-block? [block-or-inline]
+  (= pandocir.type/code-block (pandocir.core/type block-or-inline)))
 
 (defn header? [block-or-inline]
   (= pandocir.type/header (pandocir.core/type block-or-inline)))
 
-(defn orderedlist? [block-or-inline]
-  (= pandocir.type/orderedlist (pandocir.core/type block-or-inline)))
+(defn ordered-list? [block-or-inline]
+  (= pandocir.type/ordered-list (pandocir.core/type block-or-inline)))
 
 (defn para? [block-or-inline]
   (= pandocir.type/para (pandocir.core/type block-or-inline)))

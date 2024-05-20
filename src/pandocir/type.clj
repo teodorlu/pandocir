@@ -12,7 +12,7 @@
 ;; Inline types
 (def emph "Emph")
 (def quoted "Quoted")
-(def smallcaps "SmallCaps")
+(def small-caps "SmallCaps")
 (def space "Space")
 (def str "Str")
 (def strikeout "Strikeout")
@@ -21,19 +21,19 @@
 (def superscript "Superscript")
 
 (def inline-types
-  #{emph strikeout superscript space smallcaps strong subscript str quoted})
+  #{emph strikeout superscript space small-caps strong subscript str quoted})
 
 ;; Block types
-(def blockquote "BlockQuote")
-(def bulletlist "BulletList")
-(def codeblock "CodeBlock")
+(def block-quote "BlockQuote")
+(def bullet-list "BulletList")
+(def code-block "CodeBlock")
 (def header "Header")
-(def orderedlist "OrderedList")
+(def ordered-list "OrderedList")
 (def para "Para")
 (def plain "Plain")
 
 (def block-types
-  #{bulletlist orderedlist blockquote codeblock para header plain})
+  #{bullet-list ordered-list block-quote code-block para header plain})
 
 (comment
   (require '[clojure.string])
