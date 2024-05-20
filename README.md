@@ -45,17 +45,16 @@ You can now convert
 
 [bbin]: https://github.com/babashka/bbin
 
-## CLI tool for local development
+## Local development
 
-Installing from github with `bbin` will not automatically update the script.
-To install a local development version (which is always up-to-date), run
+We recommend using a JVM REPL for local development.
+
+You may run the tests with Kaocha:
+
+    bin/kaocha
+
+To work on the CLI, we recommend installing a development version with bbin:
 
     bbin install . --as pandocir-dev
 
-from this folder.
-Your local `pandocir-dev` binary will now always be in sync with the code in this folder.
-
-## Local development
-
-This repository aims to give a no-surprises local development experience.
-Start a REPL like you normally would, run the tests like you normally would.
+Installed this way, `pandocir-dev` will reflect your current local folder.
