@@ -21,10 +21,6 @@ If you don't want to copy Git SHAs by hand, consider using [Neil].
 
     neil dep add io.github.teodorlu/pandocir
 
-Upgrade to the latest version with:
-
-    neil dep upgrade
-
 For example usage, see the unit tests.
 
 [Neil]: https://github.com/babashka/neil
