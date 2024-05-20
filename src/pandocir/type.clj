@@ -6,9 +6,6 @@
     https://hackage.haskell.org/package/pandoc-types"
   (:refer-clojure :exclude [str type]))
 
-(defn type [block-or-inline]
-  (:t block-or-inline))
-
 ;; Inline types
 (def emph "Emph")
 (def quoted "Quoted")
