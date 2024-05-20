@@ -6,7 +6,7 @@
 This conversion happens by first converting from a source format to an intermediate representation, then converting from an intermediate representation to the target format.
 `pandocir` lets you work with Pandoc IR as Clojure data.
 
-[Panodoc]: https://pandoc.org/
+[Pandoc]: https://pandoc.org/
 
 ## Use as a library
 
