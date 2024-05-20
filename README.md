@@ -14,8 +14,9 @@ During [a Babashka Meetup in Oslo], we did some mob programming.
 The task was to write a script that converts Pandoc JSON to Hiccup.
 Some of us decided to give this code a bit more love.
 
-Note: all of Pandoc JSON is still not supported.
-Please consider this library _a start_.
+The mob programming resulted in one commit:
+
+https://github.com/teodorlu/pandocir/commit/13475492accd6de0b682ed677bbf9969e04d47ec
 
 [a Babashka Meetup in Oslo]: https://www.meetup.com/clojure-oslo/events/300614179/
 
