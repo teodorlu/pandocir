@@ -21,11 +21,9 @@ If you don't want to do this by hand, consider using [Neil].
 
     neil dep add io.github.teodorlu/pandocir
 
-, then upgrade to the latest version with
+upgrade to the latest version with:
 
     neil dep upgrade
-
-.
 
 For example usage, see the unit tests.
 
