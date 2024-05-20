@@ -1,4 +1,4 @@
-(ns teodorlu.pandoc2hiccup
+(ns teodorlu.pandocir
   (:require [cheshire.core :as json]))
 
 (declare pandoc-inline->hiccup)
