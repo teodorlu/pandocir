@@ -1,5 +1,5 @@
 {
-  description = "Development setup for pandoc2hiccup";
+  description = "Development setup for pandocir";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";

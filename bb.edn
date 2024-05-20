@@ -1,3 +1,3 @@
-{:deps {io.github.teodorlu/pandoc2hiccup {:local/root "."}
+{:deps {io.github.teodorlu/pandocir {:local/root "."}
         com.lambdaisland/launchpad {:mvn/version "0.28.129-alpha"}}
- :bbin/bin {pandoc2hiccup {:main-opts ["-m" "teodorlu.pandoc2hiccup/-main"]}}}
+ :bbin/bin {pandocir {:main-opts ["-m" "pandocir.core/-main"]}}}
