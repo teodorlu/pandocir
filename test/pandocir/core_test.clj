@@ -142,24 +142,29 @@
             {:t "Para",
              :c [{:t "Str", :c "oslo"} {:t "Space"} {:t "Str", :c "clojure"}]}]}))))
 
-(comment
+(deftest definition-list-two-definitions
+  (is (= [:dl
+          [:dt "java"]
+          [:dd "island"]
+          [:dd "coffee"]]
+         (pandoc/block->hiccup
+          {:c [[[{:c "java", :t "Str"}]
+                [[{:c [{:c "island", :t "Str"}], :t "Plain"}]
+                 [{:c [{:c "coffee", :t "Str"}], :t "Plain"}]]]],
+           :t "DefinitionList"}))))
 
-  (def myel {:t "DefinitionList", :c [[{:t "Str", :c "Term"}] [[{:t "Para", :c [{:t "Str", :c "Definition"}]}]]]})
-
-  (let [[dt dd] (pandoc/children myel)]
-    {:dt dt :dd dd}
-    )
-
-  :rfc)
+(deftest definition-list-one-definition
+    (is (= [:dl
+            [:dt "Term"]
+            [:dd "Definition"]]
+           (pandoc/block->hiccup
+            {:c [[[{:c "Term", :t "Str"}]
+                  [[{:c [{:c "Definition", :t "Str"}]
+                     :t "Plain"}]]]],
+             :t "DefinitionList"}))))
 
 (comment
   ;; The following tests do not yet pass---but we expect them to pass when we've written more code.
-
-  (deftest definitionlist-test
-    (is (= [:dl [:dt "Term"] [:dd [:p "Definition"]]]
-           (pandoc/block->hiccup
-            {:t "DefinitionList", :c [[{:t "Str", :c "Term"}]
-                                      [[{:t "Para", :c [{:t "Str", :c "Definition"}]}]]]}))))
 
   (deftest lineblock-test
     (is (= [:pre "Line 1\nLine 2"]
