@@ -60,8 +60,6 @@ Your local `pandocir-dev` binary will now always be in sync with the code in thi
 This repository aims to give a no-surprises local development experience.
 Start a REPL like you normally would, run the tests like you normally would.
 
-In addition, we choose to document how we work with the project locally.
-
 ### Teodor's development environment
 
 Teodor uses [launchpad] for local development.
