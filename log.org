@@ -13,7 +13,7 @@ Here's how I think that can be done:
    If we need to explore something, we explore in the code, creating new files & new tests if we need to.
 2. We keep the tests green on master.
    It's very hard to know whether I've introduced a bug if the tests start out red when I start working.
-   Failing tests could either be added but commented out, or we could use metadata to annotate "pending" tests, (like Oddmund describes in [[https://blog.oddmundo.com/2019/01/27/test-commit-revert-pending.html][test && commit || pending]])
+   Failing tests could either be added but commented out, or we could use metadata to annotate "pending" tests, (like Oddmund Strømme describes in [[https://blog.oddmundo.com/2019/01/27/test-commit-revert-pending.html][test && commit || pending]])
 3. We design ahead where possible.
    Designing ahead can mean writing what we intend to do in a worklog, checking in experimental code in a comment block, writing a new experimental namespace, or making a Rich Hickey-style design matrix.
 ** Multiple people in the same worklog? ---Teodor
