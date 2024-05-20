@@ -7,8 +7,8 @@
 ;; See: https://hackage.haskell.org/package/pandoc-types-1.23.1/docs/Text-Pandoc-Definition.html#t:Attr
 (defn pandoc-attr->hiccup [[id classes keyvals]]
   (cond-> (into {} keyvals)
-    (not (empty? id)) (assoc :id id)
-    (not (empty? classes)) (assoc :class classes)))
+    (seq id) (assoc :id id)
+    (seq classes) (assoc :class classes)))
 
 (defn wrap-inline [wrapper content]
   (into wrapper (map pandoc-inline->hiccup content)))
@@ -40,7 +40,7 @@
 (defn pandoc-header->hiccup [[level attr inlines]]
   (let [attributes (pandoc-attr->hiccup attr)]
     (cond-> [(keyword (str "h" level))]
-      (not (empty? attributes)) (conj attributes)
+      (seq  attributes) (conj attributes)
       true (into (map pandoc-inline->hiccup inlines)))))
 
 (defn pandoc-codeblock->hiccup [[attr code]]
@@ -48,7 +48,7 @@
                        (update 2 (partial map (fn [[k v]] [(str "data-" k) v])))
                        (pandoc-attr->hiccup))]
     (cond-> [:pre]
-      (not (empty? attributes)) (conj attributes)
+      (seq attributes) (conj attributes)
       true (conj [:code code]))))
 
 ;; See: https://hackage.haskell.org/package/pandoc-types-1.23.1/docs/Text-Pandoc-Definition.html#t:ListAttributes
