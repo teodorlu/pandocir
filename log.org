@@ -52,3 +52,11 @@ I now think branching inside a code base is better.
 
 For an API, a different /experimental/ or /teodor/-namespace can be used.
 For a CLI, a different subcommand can be used.
+** Name: =pandoc2hiccup= or =pandocir=?
+I've been pondering if /pandocir/ is a better name than /pandoc2hiccup/.
+Motivation:
+
+1. "Pandoc IR" for "Pandoc Intermediate Representation" more closely matches the intent of the data format we're working on than "Pandoc JSON".
+   And it's not JSON while we're working on it, it's Pandoc's intermediate data representation that we happened to get by converting from Pandoc JSON.
+2. We want to convert from hiccup to JSON too, not just JSON to hiccup.
+3. We also want this code to be usable as a library to do "common pandoc IR things" like inferring title from a document.
