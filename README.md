@@ -17,7 +17,7 @@ io.github.teodorlu/pandocir {:git/sha "GIT SHA"}
 ```
 
 Replace `"GIT SHA"` with the version you want.
-If you don't want to do this by hand, consider using [Neil].
+If you don't want to copy Git SHAs by hand, consider using [Neil].
 
     neil dep add io.github.teodorlu/pandocir
 
