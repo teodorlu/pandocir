@@ -73,6 +73,12 @@
 (defn pandoc-bulletlist->hiccup [items]
   (into [:ul] (map (partial wrap-block [:li]) items)))
 
+(defn type [block-or-inline]
+  (:t block-or-inline))
+
+(defn children [block-or-inline]
+  (:c block-or-inline))
+
 ;; See: https://hackage.haskell.org/package/pandoc-types-1.23.1/docs/Text-Pandoc-Definition.html#t:Block
 (defn pandoc-block->hiccup [{:keys [t c] :as block}]
   (case (keyword t)
@@ -91,11 +97,6 @@
   (let [in (slurp System/in)]
     (prn (pandoc->hiccup (json/parse-string in keyword)))))
 
-(defn type [block-or-inline]
-  (:t block-or-inline))
-
-(defn children [block-or-inline]
-  (:c block-or-inline))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Inline predicate functions
