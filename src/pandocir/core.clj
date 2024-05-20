@@ -4,23 +4,25 @@
    [pandocir.type])
   (:refer-clojure :exclude [type]))
 
-(declare pandoc-inline->hiccup)
-(declare pandoc-block->hiccup)
+(declare inline->hiccup)
+(declare block->hiccup)
 
 ;; See: https://hackage.haskell.org/package/pandoc-types-1.23.1/docs/Text-Pandoc-Definition.html#t:Attr
-(defn pandoc-attr->hiccup [[id classes keyvals]]
+(defn attr->hiccup [[id classes keyvals]]
   (cond-> (into {} keyvals)
     (seq id) (assoc :id id)
     (seq classes) (assoc :class classes)))
 
 (defn wrap-inline [wrapper content]
-  (into wrapper (map pandoc-inline->hiccup content)))
+  (into wrapper (map inline->hiccup content)))
 
 (defn wrap-block [wrapper content]
-  (into wrapper (map pandoc-block->hiccup content)))
+  (into wrapper (map block->hiccup content)))
+
+;; TEODOR NOTE: as currently written, we expose `wrap-inline` and `wrap-block` to PandocIR library consumers. Not sure if we want that.
 
 ;; See: https://hackage.haskell.org/package/pandoc-types-1.23.1/docs/Text-Pandoc-Definition.html#t:Inline
-(defn pandoc-inline->hiccup [{:keys [t c]}]
+(defn inline->hiccup [{:keys [t c]}]
   (case (keyword t)
     :Space " "
     :Str c
@@ -40,22 +42,22 @@
                                  :DoubleQuote ["“" "”"])]
               (concat [open] (wrap-inline () content) [close]))))
 
-(defn pandoc-header->hiccup [[level attr inlines]]
-  (let [attributes (pandoc-attr->hiccup attr)]
+(defn header->hiccup [[level attr inlines]]
+  (let [attributes (attr->hiccup attr)]
     (cond-> [(keyword (str "h" level))]
       (seq  attributes) (conj attributes)
-      true (into (map pandoc-inline->hiccup inlines)))))
+      true (into (map inline->hiccup inlines)))))
 
-(defn pandoc-codeblock->hiccup [[attr code]]
+(defn codeblock->hiccup [[attr code]]
   (let [attributes (-> attr
                        (update 2 (partial map (fn [[k v]] [(str "data-" k) v])))
-                       (pandoc-attr->hiccup))]
+                       (attr->hiccup))]
     (cond-> [:pre]
       (seq attributes) (conj attributes)
       true (conj [:code code]))))
 
 ;; See: https://hackage.haskell.org/package/pandoc-types-1.23.1/docs/Text-Pandoc-Definition.html#t:ListAttributes
-(defn pandoc-list-attr->hiccup [[start list-style _]]
+(defn list-attr->hiccup [[start list-style _]]
   (cond-> {}
     (and start (not= start 1)) (assoc :start start)
     list-style (assoc :type (case (keyword list-style)
@@ -65,12 +67,12 @@
                               :UpperRoman "I"
                               "1"))))
 
-(defn pandoc-orderedlist->hiccup [[list-attrs items]]
+(defn orderedlist->hiccup [[list-attrs items]]
   (->> items
        (map (partial wrap-block [:li]))
-       (into [:ol (pandoc-list-attr->hiccup list-attrs)])))
+       (into [:ol (list-attr->hiccup list-attrs)])))
 
-(defn pandoc-bulletlist->hiccup [items]
+(defn bulletlist->hiccup [items]
   (into [:ul] (map (partial wrap-block [:li]) items)))
 
 (defn type [block-or-inline]
@@ -80,22 +82,28 @@
   (:c block-or-inline))
 
 ;; See: https://hackage.haskell.org/package/pandoc-types-1.23.1/docs/Text-Pandoc-Definition.html#t:Block
-(defn pandoc-block->hiccup [{:keys [t c] :as block}]
+(defn block->hiccup [{:keys [t c] :as block}]
   (case (keyword t)
-    :Plain (map pandoc-inline->hiccup c)
+    :Plain (map inline->hiccup c)
     :Para (wrap-inline [:p] c)
-    :Header (pandoc-header->hiccup c)
+    :Header (header->hiccup c)
     :BlockQuote (wrap-block [:blockquote] c)
-    :CodeBlock (pandoc-codeblock->hiccup c)
-    :OrderedList (pandoc-orderedlist->hiccup c)
-    :BulletList (pandoc-bulletlist->hiccup c)))
+    :CodeBlock (codeblock->hiccup c)
+    :OrderedList (orderedlist->hiccup c)
+    :BulletList (bulletlist->hiccup c)
+    #_#_
+    :DefinitionList (into [:dt]
+                          (apply concat
+                                 (for [[term [definition]] (children block)]
+                                   [[:dt (map inline->hiccup term)]
+                                    [:dd (map block->hiccup definition)]])))))
 
-(defn pandoc->hiccup [{:keys [blocks]}]
-  (map pandoc-block->hiccup blocks))
+(defn document->hiccup [{:keys [blocks]}]
+  (map block->hiccup blocks))
 
 (defn -main [& _args]
   (let [in (slurp System/in)]
-    (prn (pandoc->hiccup (json/parse-string in keyword)))))
+    (prn (document->hiccup (json/parse-string in keyword)))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -158,4 +166,4 @@
   (= pandocir.type/plain (pandocir.core/type block-or-inline)))
 
 (defn block? [block-or-inline]
-  (contains? pandocir.type/block-types (pandocir.type/type block-or-inline)))
+  (contains? pandocir.type/block-types (pandocir.core/type block-or-inline)))
