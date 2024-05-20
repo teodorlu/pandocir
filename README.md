@@ -10,18 +10,18 @@ This conversion happens by first converting from a source format to an intermedi
 
 ## Use as a library
 
-Put
+You can use `pandocir` as a Git dep with `deps.edn`:
 
 ``` clojure
 io.github.teodorlu/pandocir {:git/sha "GIT SHA"}
 ```
 
-in your `deps.edn`, replacing `"GIT SHA"` with the version you want.
+Replace `"GIT SHA"` with the version you want.
 If you don't want to do this by hand, consider using [Neil].
 
     neil dep add io.github.teodorlu/pandocir
 
-upgrade to the latest version with:
+Upgrade to the latest version with:
 
     neil dep upgrade
 
