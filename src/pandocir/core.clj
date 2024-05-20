@@ -1,6 +1,8 @@
 (ns pandocir.core
-  (:require [cheshire.core :as json]
-            [pandocir.type :as type]))
+  (:require
+   [cheshire.core :as json]
+   [pandocir.type])
+  (:refer-clojure :exclude [type]))
 
 (declare pandoc-inline->hiccup)
 (declare pandoc-block->hiccup)
@@ -90,29 +92,67 @@
   (let [in (slurp System/in)]
     (prn (pandoc->hiccup (json/parse-string in keyword)))))
 
+(defn type [block-or-inline]
+  (:t block-or-inline))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Inline predicate functions
+;;
+
 (defn emph? [block-or-inline]
-  (= type/emph (:t block-or-inline)))
+  (= pandocir.type/emph (pandocir.core/type block-or-inline)))
 
 (defn quoted? [block-or-inline]
-  (= type/quoted (:t block-or-inline)))
+  (= pandocir.type/quoted (pandocir.core/type block-or-inline)))
 
 (defn smallcaps? [block-or-inline]
-  (= type/smallcaps (:t block-or-inline)))
+  (= pandocir.type/smallcaps (pandocir.core/type block-or-inline)))
 
 (defn space? [block-or-inline]
-  (= type/space (:t block-or-inline)))
+  (= pandocir.type/space (pandocir.core/type block-or-inline)))
 
 (defn str? [block-or-inline]
-  (= type/str (:t block-or-inline)))
+  (= pandocir.type/str (pandocir.core/type block-or-inline)))
 
 (defn strikeout? [block-or-inline]
-  (= type/strikeout (:t block-or-inline)))
+  (= pandocir.type/strikeout (pandocir.core/type block-or-inline)))
 
 (defn strong? [block-or-inline]
-  (= type/strong (:t block-or-inline)))
+  (= pandocir.type/strong (pandocir.core/type block-or-inline)))
 
 (defn subscript? [block-or-inline]
-  (= type/subscript (:t block-or-inline)))
+  (= pandocir.type/subscript (pandocir.core/type block-or-inline)))
 
 (defn superscript? [block-or-inline]
-  (= type/superscript (:t block-or-inline)))
+  (= pandocir.type/superscript (pandocir.core/type block-or-inline)))
+
+(defn inline? [block-or-inline]
+  (contains? pandocir.type/inline-types (:t block-or-inline)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Block predicate functions
+;;
+
+(defn blockquote? [block-or-inline]
+  (= pandocir.type/blockquote (pandocir.core/type block-or-inline)))
+
+(defn bulletlist? [block-or-inline]
+  (= pandocir.type/bulletlist (pandocir.core/type block-or-inline)))
+
+(defn codeblock? [block-or-inline]
+  (= pandocir.type/codeblock (pandocir.core/type block-or-inline)))
+
+(defn header? [block-or-inline]
+  (= pandocir.type/header (pandocir.core/type block-or-inline)))
+
+(defn orderedlist? [block-or-inline]
+  (= pandocir.type/orderedlist (pandocir.core/type block-or-inline)))
+
+(defn para? [block-or-inline]
+  (= pandocir.type/para (pandocir.core/type block-or-inline)))
+
+(defn plain? [block-or-inline]
+  (= pandocir.type/plain (pandocir.core/type block-or-inline)))
+
+(defn block? [block-or-inline]
+  (contains? pandocir.type/block-types (pandocir.type/type block-or-inline)))

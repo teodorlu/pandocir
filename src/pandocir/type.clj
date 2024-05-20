@@ -6,11 +6,10 @@
     https://hackage.haskell.org/package/pandoc-types"
   (:refer-clojure :exclude [str type]))
 
-
-
 (defn type [block-or-inline]
   (:t block-or-inline))
 
+;; Inline types
 (def emph "Emph")
 (def quoted "Quoted")
 (def smallcaps "SmallCaps")
@@ -21,42 +20,69 @@
 (def subscript "Subscript")
 (def superscript "Superscript")
 
+(def inline-types
+  #{emph strikeout superscript space smallcaps strong subscript str quoted})
+
+;; Block types
+(def blockquote "BlockQuote")
+(def bulletlist "BulletList")
+(def codeblock "CodeBlock")
+(def header "Header")
+(def orderedlist "OrderedList")
+(def para "Para")
+(def plain "Plain")
+
+(def block-types
+  #{bulletlist orderedlist blockquote codeblock para header plain})
+
 (comment
   (require '[clojure.string])
+  (require '[clojure.pprint])
 
-  ;; Code generation for defs in this namespace
-  (for [kw (sort [:Space
-                  :Str
-                  :Emph
-                  :Strong
-                  :Strikeout
-                  :Superscript
-                  :Subscript
-                  :SmallCaps
-                  :Quoted])]
-    (list 'def
-          (symbol (clojure.string/lower-case (name kw)))
-          (name kw)))
+  (def inline-types-as-keywords [:Space :Str :Emph :Strong :Strikeout :Superscript :Subscript :SmallCaps :Quoted])
+  (def block-types-as-keywords [:Plain :Para :Header :BlockQuote :CodeBlock :OrderedList :BulletList])
 
-  ;; Code generation for predicate functions in `pandocir.core`
-  (for [kw (sort [:Space
-                  :Str
-                  :Emph
-                  :Strong
-                  :Strikeout
-                  :Superscript
-                  :Subscript
-                  :SmallCaps
-                  :Quoted])]
-    (list
-     'defn
-     #_
-     (clojure.core/str (clojure.string/lower-case (name kw))
-                       "?")
-     (symbol (clojure.core/str (clojure.string/lower-case (name kw))
-                               "?"))
-     '[block-or-inline]
-     (list '= (symbol "type" (clojure.string/lower-case (name kw)))
-           (list :t 'block-or-inline))))
+  (defn codegen-defs [types-as-keywords]
+    (for [kw (sort types-as-keywords)]
+      (list 'def
+            (symbol (clojure.string/lower-case (name kw)))
+            (name kw))))
+
+  (defmacro pprint-code [arg]
+    `(clojure.pprint/with-pprint-dispatch clojure.pprint/code-dispatch
+       (clojure.pprint/pprint ~arg)))
+
+  (pprint-code (codegen-defs inline-types-as-keywords))
+  (pprint-code (codegen-defs block-types-as-keywords))
+
+  `(def ~'inline-types ~(->> inline-types-as-keywords
+                             (map name)
+                             (map clojure.string/lower-case)
+                             (map symbol)
+                             (into #{})))
+
+  `(def ~'block-types ~(->> block-types-as-keywords
+                            (map name)
+                            (map clojure.string/lower-case)
+                            (map symbol)
+                            (into #{})))
+
+  (defn codegen-predicate-fns [types-as-keywords]
+    (concat '(do)
+            (for [kw (sort types-as-keywords)]
+              (list
+               'defn
+               (symbol (clojure.core/str (clojure.string/lower-case (name kw))
+                                         "?"))
+               '[block-or-inline]
+               (list '= (symbol "pandocir.type" (clojure.string/lower-case (name kw)))
+                     (list 'pandocir.core/type 'block-or-inline))))))
+
+  (pprint-code
+   (codegen-predicate-fns inline-types-as-keywords))
+
+  (pprint-code
+   (codegen-predicate-fns block-types-as-keywords))
+
 
   :rcf)
