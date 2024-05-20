@@ -1,45 +1,59 @@
-# `pandoc2hiccup`
+**⚠️ THIS PROJECT IS EXPERIMENTAL, EXPECT BREAKING CHANGES ⚠️**
 
-An incomplete Babashka script for converting Pandoc JSON to Hiccup.
-`pandoc2hiccup` is meant to be used in a Unix pipe after Pandoc:
+# `pandocir`: Pandoc Intermediate Representation as Clojure data
 
-    $ echo 'hi, _there_!' | pandoc --from markdown --to json | pandoc2hiccup
+[Pandoc] is a lovely program for converting documents between formats.
+This conversion happens by first converting from a source format to an intermediate representation, then converting from an intermediate representation to the target format.
+`pandocir` lets you work with Pandoc IR as Clojure data.
+
+[Panodoc]: https://pandoc.org/
+
+## Use as a library
+
+Put
+
+``` clojure
+io.github.teodorlu/pandocir {:git/sha "GIT SHA"}
+```
+
+in your `deps.edn`, replacing `"GIT SHA"` with the version you want.
+If you don't want to do this by hand, consider using [Neil].
+
+    neil dep add io.github.teodorlu/pandocir
+
+, then upgrade to the latest version with
+
+    neil dep upgrade
+
+.
+
+For example usage, see the unit tests.
+
+[Neil]: https://github.com/babashka/neil
+
+## Use as a CLI tool
+
+`pandocir` can be installed as a CLI tool.
+You can install `pandocir` with [bbin]:
+
+    bbin install io.github.teodorlu/pandocir --latest-sha
+
+You can now convert
+
+    $ echo 'hi, _there_!' | pandoc --from markdown --to json | pandocir pandoc2hiccup
     [:p "hi, " [:em "there"] "!"]
 
-Currently supports a tiny subset of Pandoc JSON.
+[bbin]: https://github.com/babashka/bbin
 
-## How to run code in this project
+## CLI tool for local development
 
-- **Run the script locally**
+Installing from github with `bbin` will not automatically update the script.
+To install a local development version (which is always up-to-date), run
 
-    ```
-    echo 'hi, _there_!' | pandoc2hiccup
-    ```
+    bbin install . --as pandocir-dev
 
-    Teodor has installed a development version on his machine.
-    New changes are reflected on next script execution.
-
-- **Run the tests**
-
-    ```
-    bin/kaocha
-    ```
-
-- **Run a JVM REPL**
-
-    ```
-    clj
-    ```
-
-- **Run a Babashka REPL**
-
-    ```
-    bb
-    ```
-
-- **Run a JVM/Babashka REPL from your editor**
-
-    Like you'd do normally with Cider, Calva or your tool of choice.
+from this folder.
+Your local `pandocir-dev` binary will now always be in sync with the code in this folder.
 
 ## Local development
 
@@ -110,4 +124,3 @@ For Visual Studio Code & Calva:
 Replace `"key": "ctrl+[Semicolon]"` with your editor hotkey of choice.
 Teodor recommends one that is easy to click (eg ctrl+t, not ctrl+t option+q option+q option+t ctrl+a ctrl+b ctrl+c).
 Your local workflow is important!
-
