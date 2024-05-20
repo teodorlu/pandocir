@@ -78,18 +78,15 @@
 (defn type [block-or-inline]
   (:t block-or-inline))
 
-(defn children [block-or-inline]
-  (:c block-or-inline))
+(defn definition-listitem->hiccup [[term definition]]
+  (cons (into [:dt] (map inline->hiccup term))
+        (map (partial wrap-block [:dd]) definition)))
 
-(defn ^:private collapse-lists [value]
-  (cond (and (seq value)
-             (= 1 (count value)))
-        (first value)
-        :else
-        value))
+(defn definitionlist->hiccup [definitions]
+  (into [:dl] (mapcat definition-listitem->hiccup definitions)))
 
 ;; See: https://hackage.haskell.org/package/pandoc-types-1.23.1/docs/Text-Pandoc-Definition.html#t:Block
-(defn block->hiccup [{:keys [t c] :as block}]
+(defn block->hiccup [{:keys [t c] :as _block}]
   (case (keyword t)
     :Plain (map inline->hiccup c)
     :Para (wrap-inline [:p] c)
@@ -98,17 +95,7 @@
     :CodeBlock (codeblock->hiccup c)
     :OrderedList (orderedlist->hiccup c)
     :BulletList (bulletlist->hiccup c)
-    :DefinitionList (into [:dl]
-                          (apply concat
-                                 (for [[term definitions] (children block)]
-                                   (into
-                                    [[:dt (->> (map inline->hiccup term)
-                                               (map collapse-lists)
-                                               collapse-lists)]]
-                                    (for [d definitions]
-                                      [:dd (->> (map block->hiccup d)
-                                                (map collapse-lists)
-                                                collapse-lists)])))))))
+    :DefinitionList (definitionlist->hiccup c)))
 
 (defn document->hiccup [{:keys [blocks]}]
   (map block->hiccup blocks))

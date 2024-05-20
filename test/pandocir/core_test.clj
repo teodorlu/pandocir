@@ -143,25 +143,25 @@
              :c [{:t "Str", :c "oslo"} {:t "Space"} {:t "Str", :c "clojure"}]}]}))))
 
 (deftest definition-list-two-definitions
-  (is (= [:dl
-          [:dt "java"]
-          [:dd "island"]
-          [:dd "coffee"]]
+  (is (= '[:dl
+           [:dt "java"]
+           [:dd ("island")]
+           [:dd ("coffee" " " "beans")]]
          (pandoc/block->hiccup
           {:c [[[{:c "java", :t "Str"}]
                 [[{:c [{:c "island", :t "Str"}], :t "Plain"}]
-                 [{:c [{:c "coffee", :t "Str"}], :t "Plain"}]]]],
+                 [{:c [{:c "coffee", :t "Str"} {:t "Space"} {:t "Str" :c "beans"}], :t "Plain"}]]]],
            :t "DefinitionList"}))))
 
 (deftest definition-list-one-definition
-    (is (= [:dl
-            [:dt "Term"]
-            [:dd "Definition"]]
-           (pandoc/block->hiccup
-            {:c [[[{:c "Term", :t "Str"}]
-                  [[{:c [{:c "Definition", :t "Str"}]
-                     :t "Plain"}]]]],
-             :t "DefinitionList"}))))
+  (is (= '[:dl
+           [:dt "Term"]
+           [:dd ("Definition")]]
+         (pandoc/block->hiccup
+          {:c [[[{:c "Term", :t "Str"}]
+                [[{:c [{:c "Definition", :t "Str"}]
+                   :t "Plain"}]]]],
+           :t "DefinitionList"}))))
 
 (comment
   ;; The following tests do not yet pass---but we expect them to pass when we've written more code.
