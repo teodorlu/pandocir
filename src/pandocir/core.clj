@@ -1,5 +1,6 @@
 (ns pandocir.core
-  (:require [cheshire.core :as json]))
+  (:require [cheshire.core :as json]
+            [pandocir.type :as type]))
 
 (declare pandoc-inline->hiccup)
 (declare pandoc-block->hiccup)
@@ -88,3 +89,13 @@
 (defn -main [& _args]
   (let [in (slurp System/in)]
     (prn (pandoc->hiccup (json/parse-string in keyword)))))
+
+(defn emph? [block-or-inline] (= type/emph (:t block-or-inline)))
+(defn quoted? [block-or-inline] (= type/quoted (:t block-or-inline)))
+(defn smallcaps? [block-or-inline] (= type/smallcaps (:t block-or-inline)))
+(defn space? [block-or-inline] (= type/space (:t block-or-inline)))
+(defn str? [block-or-inline] (= type/str (:t block-or-inline)))
+(defn strikeout? [block-or-inline] (= type/strikeout (:t block-or-inline)))
+(defn strong? [block-or-inline] (= type/strong (:t block-or-inline)))
+(defn subscript? [block-or-inline] (= type/subscript (:t block-or-inline)))
+(defn superscript? [block-or-inline] (= type/superscript (:t block-or-inline)))
