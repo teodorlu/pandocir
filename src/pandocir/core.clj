@@ -85,6 +85,15 @@
 (defn definitionlist->hiccup [definitions]
   (into [:dl] (mapcat definition-listitem->hiccup definitions)))
 
+;; RawBlock behaves differently depending on the langauge given as argument; it
+;; seems that the most common behavior is to ignore whenever the language
+;; differs from the target langauge. For hiccup, I think we should accept HTML.
+;; Here again, different renderers seem to handle this differently. The one
+;; used here is supported by replicant.
+(defn rawblock->hiccup [[lang content]]
+  (when (= lang "html")
+    [:div {:innerHTML content}]))
+
 ;; See: https://hackage.haskell.org/package/pandoc-types-1.23.1/docs/Text-Pandoc-Definition.html#t:Block
 (defn block->hiccup [{:keys [t c] :as _block}]
   (case (keyword t)
@@ -95,7 +104,8 @@
     :CodeBlock (codeblock->hiccup c)
     :OrderedList (orderedlist->hiccup c)
     :BulletList (bulletlist->hiccup c)
-    :DefinitionList (definitionlist->hiccup c)))
+    :DefinitionList (definitionlist->hiccup c)
+    :RawBlock (rawblock->hiccup c)))
 
 (defn document->hiccup [{:keys [blocks]}]
   (map block->hiccup blocks))

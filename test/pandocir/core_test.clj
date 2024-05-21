@@ -181,9 +181,21 @@
                    :t "Plain"}]]]],
            :t "DefinitionList"}))))
 
+
+(deftest rawblock-test
+  (is (= [:div {:innerHTML "<div>raw HTML</div>"}]
+         (pandoc/block->hiccup
+          {:t "RawBlock", :c ["html" "<div>raw HTML</div>"]}))))
+
+(deftest rawblock-unnsupported-test
+  (is (= nil
+         (pandoc/block->hiccup
+          {:t "RawBlock", :c ["latex" "$P \to \neg\negP$"]}))))
+
 (comment
   ;; The following tests do not yet pass---but we expect them to pass when we've written more code.
 
+  ;; Lineblocks tests doesn't look right.
   (deftest lineblock-test
     (is (= [:pre "Line 1\nLine 2"]
            (pandoc/block->hiccup
@@ -193,11 +205,6 @@
     (is (= [:pre "Line 1\nLine 2\nLine 3"]
            (pandoc/block->hiccup
             {:t "LineBlock", :c [[{:t "Str", :c "Line 1"}] [{:t "Str", :c "Line 2"}] [{:t "Str", :c "Line 3"}]]}))))
-
-  (deftest rawblock-test
-    (is (= [:div {:dangerouslySetInnerHTML {:__html "<div>raw HTML</div>"}}]
-           (pandoc/block->hiccup
-            {:t "RawBlock", :c ["html" "<div>raw HTML</div>"]}))))
 
   (deftest horizontalrule-test
     (is (= [:hr]
