@@ -2,7 +2,25 @@
   (:require
    [clojure.test :refer [deftest is]]
    [pandocir.core :as pandoc]
-   [babashka.cli]))
+   [babashka.cli]
+   [clojure.java.shell :as sh]
+   [cheshire.core :as json]))
+
+;; Utility functions for calling pandoc. Useful for checking tests against pandoc.
+(defn call-pandoc [input from to]
+  (let [{:keys [out err]} (sh/sh "pandoc" "-f" from "-t" to :in input)]
+    (when err (print err))
+    out))
+
+(defn block-test [block to]
+  (-> {:pandoc-api-version [1 23 1]
+       :meta {}
+       :blocks [block]}
+      (json/encode)
+      (call-pandoc "json" to)))
+
+(defn inline-test [inline to]
+  (block-test {:t "Plain" :c [inline]}))
 
 ;; Inline Element Tests
 
