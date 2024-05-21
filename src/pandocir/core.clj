@@ -85,6 +85,10 @@
 (defn definitionlist->hiccup [definitions]
   (into [:dl] (mapcat definition-listitem->hiccup definitions)))
 
+(defn lineblock->hiccup [inlines]
+  (into [:div {:class ["line-block"]}]
+        (interpose [:br] (mapcat (partial map inline->hiccup) inlines))))
+
 ;; RawBlock behaves differently depending on the langauge given as argument; it
 ;; seems that the most common behavior is to ignore whenever the language
 ;; differs from the target langauge. For hiccup, I think we should accept HTML.
@@ -108,6 +112,7 @@
     :OrderedList (orderedlist->hiccup c)
     :BulletList (bulletlist->hiccup c)
     :DefinitionList (definitionlist->hiccup c)
+    :LineBlock (lineblock->hiccup c)
     :RawBlock (rawblock->hiccup c)
     :HorizontalRule [:hr]
     :Div (div->hiccup c)))
