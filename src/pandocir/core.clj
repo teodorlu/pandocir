@@ -105,7 +105,8 @@
     :OrderedList (orderedlist->hiccup c)
     :BulletList (bulletlist->hiccup c)
     :DefinitionList (definitionlist->hiccup c)
-    :RawBlock (rawblock->hiccup c)))
+    :RawBlock (rawblock->hiccup c)
+    :HorizontalRule [:hr]))
 
 (defn document->hiccup [{:keys [blocks]}]
   (map block->hiccup blocks))

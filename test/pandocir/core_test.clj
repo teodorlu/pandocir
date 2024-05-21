@@ -192,6 +192,11 @@
          (pandoc/block->hiccup
           {:t "RawBlock", :c ["latex" "$P \to \neg\negP$"]}))))
 
+(deftest horizontalrule-test
+  (is (= [:hr]
+         (pandoc/block->hiccup
+          {:t "HorizontalRule"}))))
+
 (comment
   ;; The following tests do not yet pass---but we expect them to pass when we've written more code.
 
@@ -205,11 +210,6 @@
     (is (= [:pre "Line 1\nLine 2\nLine 3"]
            (pandoc/block->hiccup
             {:t "LineBlock", :c [[{:t "Str", :c "Line 1"}] [{:t "Str", :c "Line 2"}] [{:t "Str", :c "Line 3"}]]}))))
-
-  (deftest horizontalrule-test
-    (is (= [:hr]
-           (pandoc/block->hiccup
-            {:t "HorizontalRule"}))))
 
   (deftest table-test
     (is (= [:table [:caption "Caption"] [:thead [:tr [:th "Header"]]] [:tbody [:tr [:td "Cell"]]]]
