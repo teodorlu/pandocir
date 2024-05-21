@@ -12,7 +12,7 @@
       let pkgs = import nixpkgs { inherit system; };
       in {
         devShell = pkgs.mkShell {
-          nativeBuildInputs = [ pkgs.clojure pkgs.babashka pkgs.bbin ];
+          nativeBuildInputs = [ pkgs.clojure pkgs.babashka pkgs.bbin pkgs.clj-kondo ];
           shellHook = ''
             export PATH=$HOME/.local/bin:$PATH
           '';
