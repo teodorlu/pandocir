@@ -212,26 +212,34 @@
             {:t "LineBlock", :c [[{:t "Str", :c "Line 1"}] [{:t "Str", :c "Line 2"}] [{:t "Str", :c "Line 3"}]]}))))
 
   (deftest table-test
-    (is (= [:table [:caption "Caption"] [:thead [:tr [:th "Header"]]] [:tbody [:tr [:td "Cell"]]]]
-           (pandoc/block->hiccup
-            {:t "Table", :c [["", [], []], ["Caption", []], [], [:thead [:tr [:th "Header"]]], [[:tbody [:tr [:td "Cell"]]]], [:tfoot]]}))))
-
-  (deftest table-complex-test
-    (is (= [:table
-            [:caption "Complex Table"]
-            [:thead [:tr [:th "Header1"] [:th "Header2"]]]
-            [:tbody
-             [:tr [:td "Row1, Col1"] [:td "Row1, Col2"]]
-             [:tr [:td "Row2, Col1"] [:td "Row2, Col2"]]]]
+    (is (= '[:table
+             [:thead [:tr {:class ["header"]} [:th ("header" " " "1")]]]
+             [:tbody [:tr {:class ["odd"]} [:td ("cell" " " "1")]]]]
            (pandoc/block->hiccup
             {:t "Table",
-             :c [["", [], []],
-                 ["Complex Table", []],
-                 [],                    ; column alignments
-                 [[{:t "Str", :c "Header1"}] [{:t "Str", :c "Header2"}]], ; headers
-                 [[[{:t "Str", :c "Row1, Col1"}] [{:t "Str", :c "Row1, Col2"}]],
-                  [[{:t "Str", :c "Row2, Col1"}] [{:t "Str", :c "Row2, Col2"}]]], ; rows
-                 []]}))))
+             :c
+             [["" [] []]
+              [nil []]
+              [[{:t "AlignDefault"} {:t "ColWidthDefault"}]]
+              [["" [] []]
+               [[["" [] []]
+                 [[["" [] []] {:t "AlignDefault"}
+                   1
+                   1
+                   [{:t "Plain",
+                     :c [{:t "Str", :c "header"} {:t "Space"} {:t "Str", :c "1"}]}]]]]]]
+              [[["" [] []]
+                0
+                []
+                [[["" [] []]
+                  [[["" [] []]
+                    {:t "AlignDefault"}
+                    1
+                    1
+                    [{:t "Plain",
+                      :c [{:t "Str", :c "cell"} {:t "Space"} {:t "Str", :c "1"}]}]]]]]]]
+              [["" [] []] []]]}))))
+
 
   (deftest figure-test
     (is (= [:figure [:figcaption "Caption"] [:p "Content"]]
