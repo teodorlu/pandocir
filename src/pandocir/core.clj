@@ -94,6 +94,9 @@
   (when (= lang "html")
     [:div {:innerHTML content}]))
 
+(defn div->hiccup [[attr blocks]]
+  (into [:div (attr->hiccup attr)] (map block->hiccup blocks)))
+
 ;; See: https://hackage.haskell.org/package/pandoc-types-1.23.1/docs/Text-Pandoc-Definition.html#t:Block
 (defn block->hiccup [{:keys [t c] :as _block}]
   (case (keyword t)
@@ -106,7 +109,8 @@
     :BulletList (bulletlist->hiccup c)
     :DefinitionList (definitionlist->hiccup c)
     :RawBlock (rawblock->hiccup c)
-    :HorizontalRule [:hr]))
+    :HorizontalRule [:hr]
+    :Div (div->hiccup c)))
 
 (defn document->hiccup [{:keys [blocks]}]
   (map block->hiccup blocks))

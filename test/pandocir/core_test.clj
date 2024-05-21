@@ -197,6 +197,11 @@
          (pandoc/block->hiccup
           {:t "HorizontalRule"}))))
 
+(deftest div-test
+  (is (= [:div {:class ["container"]} [:p "Content"]]
+         (pandoc/block->hiccup
+          {:t "Div", :c [["", ["container"], []], [{:t "Para", :c [{:t "Str", :c "Content"}]}]]}))))
+
 (comment
   ;; The following tests do not yet pass---but we expect them to pass when we've written more code.
 
@@ -245,11 +250,6 @@
     (is (= [:figure [:figcaption "Caption"] [:p "Content"]]
            (pandoc/block->hiccup
             {:t "Figure", :c [["", [], []], ["Caption", []], [{:t "Para", :c [{:t "Str", :c "Content"}]}]]}))))
-
-  (deftest div-test
-    (is (= [:div {:class "container"} [:p "Content"]]
-           (pandoc/block->hiccup
-            {:t "Div", :c [["", ["container"], []], [{:t "Para", :c [{:t "Str", :c "Content"}]}]]}))))
 
   ;; Document Tests
 
