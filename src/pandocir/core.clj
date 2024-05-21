@@ -99,7 +99,10 @@
     [:div {:innerHTML content}]))
 
 (defn div->hiccup [[attr blocks]]
-  (into [:div (attr->hiccup attr)] (map block->hiccup blocks)))
+  (let [attributes (attr->hiccup attr)]
+    (cond-> [:div]
+      (seq attributes) (conj attributes)
+      true (into (map block->hiccup blocks)))))
 
 ;; See: https://hackage.haskell.org/package/pandoc-types-1.23.1/docs/Text-Pandoc-Definition.html#t:Block
 (defn block->hiccup [{:keys [t c] :as _block}]

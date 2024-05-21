@@ -211,6 +211,11 @@
          (pandoc/block->hiccup
           {:t "Div", :c [["", ["container"], []], [{:t "Para", :c [{:t "Str", :c "Content"}]}]]}))))
 
+(deftest div-no-attr-test
+  (is (= [:div [:p "Content"]]
+         (pandoc/block->hiccup
+          {:t "Div", :c [["", [], []], [{:t "Para", :c [{:t "Str", :c "Content"}]}]]}))))
+
 (comment
   ;; The following tests do not yet pass---but we expect them to pass when we've written more code.
 
