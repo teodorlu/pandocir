@@ -181,15 +181,15 @@
                    :t "Plain"}]]]],
            :t "DefinitionList"}))))
 
-  (deftest lineblock-test
-    (is (= [:div {:class ["line-block"]} "Line 1" [:br] "Line 2"]
-           (pandoc/block->hiccup
-            {:t "LineBlock", :c [[{:t "Str", :c "Line 1"}] [{:t "Str", :c "Line 2"}]]}))))
+(deftest lineblock-test
+  (is (= [:div {:class ["line-block"]} "Line 1" [:br] "Line 2"]
+         (pandoc/block->hiccup
+          {:t "LineBlock", :c [[{:t "Str", :c "Line 1"}] [{:t "Str", :c "Line 2"}]]}))))
 
-  (deftest lineblock-test-multiple
-    (is (= [:div {:class ["line-block"]} "Line 1" [:br] "Line 2" [:br] "Line 3"]
-           (pandoc/block->hiccup
-            {:t "LineBlock", :c [[{:t "Str", :c "Line 1"}] [{:t "Str", :c "Line 2"}] [{:t "Str", :c "Line 3"}]]}))))
+(deftest lineblock-test-multiple
+  (is (= [:div {:class ["line-block"]} "Line 1" [:br] "Line 2" [:br] "Line 3"]
+         (pandoc/block->hiccup
+          {:t "LineBlock", :c [[{:t "Str", :c "Line 1"}] [{:t "Str", :c "Line 2"}] [{:t "Str", :c "Line 3"}]]}))))
 
 (deftest rawblock-test
   (is (= [:div {:innerHTML "<div>raw HTML</div>"}]
