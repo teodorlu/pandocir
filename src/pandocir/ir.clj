@@ -21,14 +21,36 @@
    "Link"           [:pandocir.type/link :pandocir/attr :pandocir/inlines :pandocir/target]
    "Image"          [:pandocir.type/image :pandocir/attr :pandocir/inlines :pandocir/target]
    "Note"           [:pandocir.type/note :pandocir/blocks]
-   "Span"           [:pandocir.type/span :pandocir/attr :pandocir/inlines]})
+   "Span"           [:pandocir.type/span :pandocir/attr :pandocir/inlines]
+
+   ;; Block
+   "Plain"          [:pandocir.type/plain :pandocir/inlines]
+   "Para"           [:pandocir.type/para :pandocir/inlines]
+   "LineBlock"      [:pandocir.type/line-block :pandocir/inlines]
+   "CodeBlock"      [:pandocir.type/code-block :pandocir/attr :pandocir/text]
+   "RawBlock"       [:pandocir.type/raw-block :pandocir/format :pandocir/text]
+   "BlockQuote"     [:pandocir.type/block-quote :pandocir/blocks]
+   "OrderedList"    [:pandocir.type/ordered-list :pandocir/list-attributes :pandocir/list-items]
+   "BulletList"     [:pandocir.type/bullet-list :pandocir/list-items]
+   "DefinitionList" [:pandocir.type/definition-list :pandocir/definitions]
+   "Header"         [:pandocir.type/header :pandocir/level :pandocir/attr :pandocir/inlines]
+   "HorizontalRule" [:pandocir.type/horizontal-rule]
+   "Table"          [:pandocir.type/table
+                     :pandocir/attr
+                     :pandocir.table/caption
+                     :pandocir.table/col-specs
+                     :pandocir.table/head
+                     :pandocir.table/body
+                     :pandocir.table/foot]
+   "Figure"         [:pandocir.type/figure :pandocir/attr :pandocir.figure/caption :pandocir/blocks]
+   "Div"            [:pandocir.type/div :pandocir/attr :pandocir/blocks]})
 
 (defn ^:private pandoc->ir-1 [{:keys [t c] :as x}]
   (if-let [[pandocir-type & args] (get pandoc-types t)]
     (merge {:pandocir/type pandocir-type}
            (cond (nil? c) {}
-                 (vector? c) (zipmap args c)
-                 :else {(first args) c}))
+                 (= 1 (count args)) {(first args) c}
+                 :else (zipmap args c)))
     x))
 
 (defn pandoc->ir [inline]
