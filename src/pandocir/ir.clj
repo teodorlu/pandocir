@@ -45,13 +45,20 @@
    "Figure"         [:pandocir.type/figure :pandocir/attr :pandocir.figure/caption :pandocir/blocks]
    "Div"            [:pandocir.type/div :pandocir/attr :pandocir/blocks]})
 
-(defn ^:private pandoc->ir-1 [{:keys [t c] :as x}]
+
+(defn ^:private attr->ir [[id classes keyvals]]
+  {:pandocir/id id
+   :pandocir/classes classes
+   :pandocir/keyvals (into {} keyvals)})
+
+(defn ^:private pandoc->ir-1 [{:keys [t c] :as pandoc-node}]
   (if-let [[pandocir-type & args] (get pandoc-types t)]
-    (merge {:pandocir/type pandocir-type}
-           (cond (nil? c) {}
-                 (= 1 (count args)) {(first args) c}
-                 :else (zipmap args c)))
-    x))
+    (cond-> {}
+      (= 1 (count args)) (assoc (first args) c)
+      (< 1 (count args)) (merge (zipmap args c))
+      true (assoc :pandocir/type pandocir-type)
+      ((set args) :pandocir/attr) (update :pandocir/attr attr->ir))
+    pandoc-node))
 
 (defn pandoc->ir [inline]
   (walk/postwalk pandoc->ir-1 inline))
