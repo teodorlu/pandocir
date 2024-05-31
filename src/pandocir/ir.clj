@@ -30,7 +30,7 @@
    "CodeBlock"      [:pandocir.type/code-block :pandocir/attr :pandocir/text]
    "RawBlock"       [:pandocir.type/raw-block :pandocir/format :pandocir/text]
    "BlockQuote"     [:pandocir.type/block-quote :pandocir/blocks]
-   "OrderedList"    [:pandocir.type/ordered-list :pandocir/list-attributes :pandocir/list-items]
+   "OrderedList"    [:pandocir.type/ordered-list :pandocir/list-attr :pandocir/list-items]
    "BulletList"     [:pandocir.type/bullet-list :pandocir/list-items]
    "DefinitionList" [:pandocir.type/definition-list :pandocir/definitions]
    "Header"         [:pandocir.type/header :pandocir/level :pandocir/attr :pandocir/inlines]
@@ -47,9 +47,14 @@
 
 
 (defn ^:private attr->ir [[id classes keyvals]]
-  {:pandocir/id id
-   :pandocir/classes classes
-   :pandocir/keyvals (into {} keyvals)})
+  {:pandocir.attr/id id
+   :pandocir.attr/classes classes
+   :pandocir.attr/keyvals (into {} keyvals)})
+
+(defn ^:private list-attr->ir [[start style delim]]
+  {:pandocir.list-attr/start start
+   :pandocir.list-attr/style style
+   :pandocir.list-attr/delim delim})
 
 (defn ^:private pandoc->ir-1 [{:keys [t c] :as pandoc-node}]
   (if-let [[pandocir-type & args] (get pandoc-types t)]
@@ -57,7 +62,8 @@
       (= 1 (count args)) (assoc (first args) c)
       (< 1 (count args)) (merge (zipmap args c))
       true (assoc :pandocir/type pandocir-type)
-      ((set args) :pandocir/attr) (update :pandocir/attr attr->ir))
+      ((set args) :pandocir/attr) (update :pandocir/attr attr->ir)
+      ((set args) :pandocir/list-attr) (update :pandocir/list-attr list-attr->ir))
     pandoc-node))
 
 (defn pandoc->ir [inline]
