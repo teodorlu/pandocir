@@ -1,67 +1,145 @@
 (ns pandocir.ir
   (:require [clojure.walk :as walk]))
 
+(defn ^:private associate-by [f coll]
+  (reduce (fn [m v] (assoc m (f v) v)) {} coll))
+
 (def ^:private pandoc-types
-  {"Str"            [:pandocir.type/str :pandocir/text]
-   "Emph"           [:pandocir.type/emph :pandocir/inlines]
-   "Underline"      [:pandocir.type/underline :pandocir/inlines]
-   "Strong"         [:pandocir.type/strong :pandocir/inlines]
-   "Strikeout"      [:pandocir.type/strikeout :pandocir/inlines]
-   "Superscript"    [:pandocir.type/superscript :pandocir/inlines]
-   "Subscript"      [:pandocir.type/subscript :pandocir/inlines]
-   "SmallCaps"      [:pandocir.type/small-caps :pandocir/inlines]
-   "Quoted"         [:pandocir.type/quoted :pandocir.quote/type :pandocir/inlines]
-   "Cite"           [:pandocir.type/cite :pandocir/citations :pandocir/inlines]
-   "Code"           [:pandocir.type/code :pandocir/attr :pandocir/text]
-   "Space"          [:pandocir.type/space]
-   "SoftBreak"      [:pandocir.type/soft-break]
-   "LineBreak"      [:pandocir.type/line-break]
-   "Math"           [:pandocir.type/math :pandocir.math/type :pandocir/text]
-   "RawInline"      [:pandocir.type/raw-inline :pandocir/format :pandocir/text]
-   "Link"           [:pandocir.type/link :pandocir/attr :pandocir/inlines :pandocir/target]
-   "Image"          [:pandocir.type/image :pandocir/attr :pandocir/inlines :pandocir/target]
-   "Note"           [:pandocir.type/note :pandocir/blocks]
-   "Span"           [:pandocir.type/span :pandocir/attr :pandocir/inlines]
+  [
+   ;; Inline
+   {:pandocir/type :pandocir.type/str
+    :pandocir/pandoc-type "Str"
+    :pandocir/args [:pandocir/text]}
+   {:pandocir/type :pandocir.type/emph
+    :pandocir/pandoc-type "Emph"
+    :pandocir/args [:pandocir/inlines]}
+   {:pandocir/type :pandocir.type/underline
+    :pandocir/pandoc-type "Underline"
+    :pandocir/args [:pandocir/inlines]}
+   {:pandocir/type :pandocir.type/strong
+    :pandocir/pandoc-type "Strong"
+    :pandocir/args [:pandocir/inlines]}
+   {:pandocir/type :pandocir.type/strikeout
+    :pandocir/pandoc-type "Strikeout"
+    :pandocir/args [:pandocir/inlines]}
+   {:pandocir/type :pandocir.type/superscript
+    :pandocir/pandoc-type "Superscript"
+    :pandocir/args [:pandocir/inlines]}
+   {:pandocir/type :pandocir.type/subscript
+    :pandocir/pandoc-type "Subscript"
+    :pandocir/args [:pandocir/inlines]}
+   {:pandocir/type :pandocir.type/small-caps
+    :pandocir/pandoc-type "SmallCaps"
+    :pandocir/args [:pandocir/inlines]}
+   {:pandocir/type :pandocir.type/quoted
+    :pandocir/pandoc-type "Quoted"
+    :pandocir/args [:pandocir.quote/type :pandocir/inlines]}
+   {:pandocir/type :pandocir.type/cite
+    :pandocir/pandoc-type "Cite"
+    :pandocir/args [:pandocir/citations :pandocir/inlines]}
+   {:pandocir/type :pandocir.type/code
+    :pandocir/pandoc-type "Code"
+    :pandocir/args [:pandocir/attr :pandocir/text]}
+   {:pandocir/type :pandocir.type/space
+    :pandocir/pandoc-type "Space"}
+   {:pandocir/type :pandocir.type/soft-break
+    :pandocir/pandoc-type "SoftBreak"}
+   {:pandocir/type :pandocir.type/line-break
+    :pandocir/pandoc-type "LineBreak"}
+   {:pandocir/type :pandocir.type/math
+    :pandocir/pandoc-type "Math"
+    :pandocir/args [:pandocir.math/type :pandocir/text]}
+   {:pandocir/type :pandocir.type/raw-inline
+    :pandocir/pandoc-type "RawInline"
+    :pandocir/args [:pandocir/format :pandocir/text]}
+   {:pandocir/type :pandocir.type/link
+    :pandocir/pandoc-type "Link"
+    :pandocir/args [:pandocir/attr :pandocir/inlines :pandocir/target]}
+   {:pandocir/type :pandocir.type/image
+    :pandocir/pandoc-type "Image"
+    :pandocir/args [:pandocir/attr :pandocir/inlines :pandocir/target]}
+   {:pandocir/type :pandocir.type/note
+    :pandocir/pandoc-type "Note"
+    :pandocir/args [:pandocir/blocks]}
+   {:pandocir/type :pandocir.type/span
+    :pandocir/pandoc-type "Span"
+    :pandocir/args [:pandocir/attr :pandocir/inlines]}
 
    ;; Block
-   "Plain"          [:pandocir.type/plain :pandocir/inlines]
-   "Para"           [:pandocir.type/para :pandocir/inlines]
-   "LineBlock"      [:pandocir.type/line-block :pandocir/inlines]
-   "CodeBlock"      [:pandocir.type/code-block :pandocir/attr :pandocir/text]
-   "RawBlock"       [:pandocir.type/raw-block :pandocir/format :pandocir/text]
-   "BlockQuote"     [:pandocir.type/block-quote :pandocir/blocks]
-   "OrderedList"    [:pandocir.type/ordered-list :pandocir/list-attr :pandocir/list-items]
-   "BulletList"     [:pandocir.type/bullet-list :pandocir/list-items]
-   "DefinitionList" [:pandocir.type/definition-list :pandocir/definitions]
-   "Header"         [:pandocir.type/header :pandocir/level :pandocir/attr :pandocir/inlines]
-   "HorizontalRule" [:pandocir.type/horizontal-rule]
-   "Table"          [:pandocir.type/table
-                     :pandocir/attr
-                     :pandocir.table/caption
-                     :pandocir.table/col-specs
-                     :pandocir.table/head
-                     :pandocir.table/body
-                     :pandocir.table/foot]
-   "Figure"         [:pandocir.type/figure :pandocir/attr :pandocir.figure/caption :pandocir/blocks]
-   "Div"            [:pandocir.type/div :pandocir/attr :pandocir/blocks]})
+   {:pandocir/type :pandocir.type/plain
+    :pandocir/pandoc-type "Plain"
+    :pandocir/args [:pandocir/inlines]}
+   {:pandocir/type :pandocir.type/para
+    :pandocir/pandoc-type "Para"
+    :pandocir/args [:pandocir/inlines]}
+   {:pandocir/type :pandocir.type/line-block
+    :pandocir/pandoc-type "LineBlock"
+    :pandocir/args [:pandocir/inlines]}
+   {:pandocir/type :pandocir.type/code-block
+    :pandocir/pandoc-type "CodeBlock"
+    :pandocir/args [:pandocir/attr :pandocir/text]}
+   {:pandocir/type :pandocir.type/raw-block
+    :pandocir/pandoc-type "RawBlock"
+    :pandocir/args [:pandocir/format :pandocir/text]}
+   {:pandocir/type :pandocir.type/block-quote
+    :pandocir/pandoc-type "BlockQuote"
+    :pandocir/args [:pandocir/blocks]}
+   {:pandocir/type :pandocir.type/ordered-list
+    :pandocir/pandoc-type "OrderedList"
+    :pandocir/args [:pandocir/list-attr :pandocir/list-items]}
+   {:pandocir/type :pandocir.type/bullet-list
+    :pandocir/pandoc-type "BulletList"
+    :pandocir/args [:pandocir/list-items]}
+   {:pandocir/type :pandocir.type/definition-list
+    :pandocir/pandoc-type "DefinitionList"
+    :pandocir/args [:pandocir/definitions]}
+   {:pandocir/type :pandocir.type/header
+    :pandocir/pandoc-type "Header"
+    :pandocir/args [:pandocir/level :pandocir/attr :pandocir/inlines]}
+   {:pandocir/type :pandocir.type/horizontal-rule
+    :pandocir/pandoc-type "HorizontalRule"}
+   {:pandocir/type :pandocir.type/table
+    :pandocir/pandoc-type "Table"
+    :pandocir/args [:pandocir/attr
+                    :pandocir.table/caption
+                    :pandocir.table/col-specs
+                    :pandocir.table/head
+                    :pandocir.table/body
+                    :pandocir.table/foot]}
+   {:pandocir/type :pandocir.type/figure
+    :pandocir/pandoc-type "Figure"
+    :pandocir/args [:pandocir/attr :pandocir.figure/caption :pandocir/blocks]}
+   {:pandocir/type :pandocir.type/div
+    :pandocir/pandoc-type "Div"
+    :pandocir/args [:pandocir/attr :pandocir/blocks]}
 
-(def ^:private pandoc-argument-types
-  {:pandocir/attr      [:pandocir.attr/id :pandocir.attr/classes :pandocir.attr/keyvals]
-   :pandocir/list-attr [:pandocir.list-attr/start :pandocir.list-attr/style :pandocir.list-attr/delim]})
+   ;; Arguments
+   {:pandocir/type :pandocir/attr
+    :pandocir/pandoc-type :pandocir/pandoc-args
+    :pandocir/args [:pandocir.attr/id :pandocir.attr/classes :pandocir.attr/keyvals]}
+   {:pandocir/type :pandocir/list-attr
+    :pandocir/pandoc-type :pandocir/pandoc-args
+    :pandocir/args [:pandocir.list-attr/start :pandocir.list-attr/style :pandocir.list-attr/delim]}])
+
+(def ^:private pandoc-types-by-pandoc-type
+  (associate-by :pandocir/pandoc-type pandoc-types))
+
+(def ^:private pandoc-types-by-pandocir-type
+  (associate-by :pandocir/type pandoc-types))
 
 (defn ^:private args->ir [ir-node]
   (-> (fn [node k]
-        (if-let [args (k pandoc-argument-types)]
+        (if-let [{:pandocir/keys [args]} (k pandoc-types-by-pandocir-type)]
           (update node k (partial zipmap args))
           node))
       (reduce ir-node (keys ir-node))))
 
 (defn ^:private pandoc->ir-1 [{:keys [t c] :as pandoc-node}]
-  (if-let [[pandocir-type & args] (get pandoc-types t)]
-    (cond-> {:pandocir/type pandocir-type}
-      (= 1 (count args)) (assoc (first args) c)
-      (< 1 (count args)) (merge (zipmap args c))
-      true (args->ir))
+  (if-let [{:pandocir/keys [type args]} (get pandoc-types-by-pandoc-type t)]
+    (args->ir
+     (cond-> {:pandocir/type type}
+       (= 1 (count args)) (assoc (first args) c)
+       (< 1 (count args)) (merge (zipmap args c))))
     pandoc-node))
 
 (defn pandoc->ir [pandoc]
