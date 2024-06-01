@@ -1,7 +1,7 @@
-(ns pandocir.pandoc-types-test
+(ns pandocir.pandoc-test-data
   (:require  [clojure.test :as t]))
 
-(def pandoc-types-test
+(def pandoc-test-data
   '[[:pandocir.test/meta
      {:foo {:t "MetaBool", :c true}}]
 
