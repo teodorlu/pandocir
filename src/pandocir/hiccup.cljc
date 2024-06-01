@@ -3,8 +3,8 @@
 (defmulti ir->hiccup :pandocir/type)
 
 ;; Inline
-(defmethod ir->hiccup :pandocir.type/str [ir-node]
-  :pandocir.error/str-not-implemented)
+(defmethod ir->hiccup :pandocir.type/str [{:pandocir/keys [text]}]
+  text)
 (defmethod ir->hiccup :pandocir.type/emph [ir-node]
   :pandocir.error/emph-not-implemented)
 (defmethod ir->hiccup :pandocir.type/underline [ir-node]
