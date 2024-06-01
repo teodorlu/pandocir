@@ -45,25 +45,16 @@
    "Figure"         [:pandocir.type/figure :pandocir/attr :pandocir.figure/caption :pandocir/blocks]
    "Div"            [:pandocir.type/div :pandocir/attr :pandocir/blocks]})
 
-
-(defn ^:private attr->ir [[id classes keyvals]]
-  {:pandocir.attr/id id
-   :pandocir.attr/classes classes
-   :pandocir.attr/keyvals (into {} keyvals)})
-
-(defn ^:private list-attr->ir [[start style delim]]
-  {:pandocir.list-attr/start start
-   :pandocir.list-attr/style style
-   :pandocir.list-attr/delim delim})
-
-(defn ^:private update-arg [node k f]
-  (cond-> node
-    (k node) (update k f)))
+(def ^:private pandoc-argument-types
+  {:pandocir/attr      [:pandocir.attr/id :pandocir.attr/classes :pandocir.attr/keyvals]
+   :pandocir/list-attr [:pandocir.list-attr/start :pandocir.list-attr/style :pandocir.list-attr/delim]})
 
 (defn ^:private args->ir [ir-node]
-  (-> ir-node
-      (update-arg :pandocir/attr attr->ir)
-      (update-arg :pandocir/list-attr list-attr->ir)))
+  (-> (fn [node k]
+        (if-let [args (k pandoc-argument-types)]
+          (update node k (partial zipmap args))
+          node))
+      (reduce ir-node (keys ir-node))))
 
 (defn ^:private pandoc->ir-1 [{:keys [t c] :as pandoc-node}]
   (if-let [[pandocir-type & args] (get pandoc-types t)]
