@@ -56,15 +56,22 @@
    :pandocir.list-attr/style style
    :pandocir.list-attr/delim delim})
 
+(defn ^:private update-arg [node k f]
+  (cond-> node
+    (k node) (update k f)))
+
+(defn ^:private args->ir [ir-node]
+  (-> ir-node
+      (update-arg :pandocir/attr attr->ir)
+      (update-arg :pandocir/list-attr list-attr->ir)))
+
 (defn ^:private pandoc->ir-1 [{:keys [t c] :as pandoc-node}]
   (if-let [[pandocir-type & args] (get pandoc-types t)]
-    (cond-> {}
+    (cond-> {:pandocir/type pandocir-type}
       (= 1 (count args)) (assoc (first args) c)
       (< 1 (count args)) (merge (zipmap args c))
-      true (assoc :pandocir/type pandocir-type)
-      ((set args) :pandocir/attr) (update :pandocir/attr attr->ir)
-      ((set args) :pandocir/list-attr) (update :pandocir/list-attr list-attr->ir))
+      true (args->ir))
     pandoc-node))
 
-(defn pandoc->ir [inline]
-  (walk/postwalk pandoc->ir-1 inline))
+(defn pandoc->ir [pandoc]
+  (walk/postwalk pandoc->ir-1 pandoc))
