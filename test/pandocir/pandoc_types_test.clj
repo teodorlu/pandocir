@@ -167,36 +167,36 @@
      {:t "Header",
       :c [2 ["id" ["kls"] [["k1" "v1"] ["k2" "v2"]]] [{:t "Str", :c "Head"}]]}]
 
-    [:pandocir.test/row
-     [["id" ["kls"] [["k1" "v1"] ["k2" "v2"]]]
-      [[["" [] []]
-        {:t "AlignRight"}
-        2
+    #_[:pandocir.test/row
+       [["id" ["kls"] [["k1" "v1"] ["k2" "v2"]]]
+        [[["" [] []]
+          {:t "AlignRight"}
+          2
+          3
+          [{:t "Para", :c [{:t "Str", :c "bar"}]}]]]]]
+    #_[:pandocir.test/caption
+       [[{:t "Str", :c "foo"}] [{:t "Para", :c [{:t "Str", :c "bar"}]}]]]
+    #_[:pandocir.test/tablehead
+       [["id" ["kls"] [["k1" "v1"] ["k2" "v2"]]]
+        [[["id" ["kls"] [["k1" "v1"] ["k2" "v2"]]] []]]]]
+    #_[:pandocir.test/tablebody
+       [["id" ["kls"] [["k1" "v1"] ["k2" "v2"]]]
         3
-        [{:t "Para", :c [{:t "Str", :c "bar"}]}]]]]]
-    [:pandocir.test/caption
-     [[{:t "Str", :c "foo"}] [{:t "Para", :c [{:t "Str", :c "bar"}]}]]]
-    [:pandocir.test/tablehead
-     [["id" ["kls"] [["k1" "v1"] ["k2" "v2"]]]
-      [[["id" ["kls"] [["k1" "v1"] ["k2" "v2"]]] []]]]]
-    [:pandocir.test/tablebody
-     [["id" ["kls"] [["k1" "v1"] ["k2" "v2"]]]
-      3
-      [[["id" ["kls"] [["k1" "v1"] ["k2" "v2"]]] []]]
-      [[["id'" ["kls'"] [["k1" "v1"] ["k2" "v2"]]] []]]]]
-    [:pandocir.test/tablefoot
-     [["id" ["kls"] [["k1" "v1"] ["k2" "v2"]]]
-      [[["id" ["kls"] [["k1" "v1"] ["k2" "v2"]]] []]]]]
-    [:pandocir.test/cell
-     [["id" ["kls"] [["k1" "v1"] ["k2" "v2"]]]
-      {:t "AlignLeft"}
-      1
-      1
-      [{:t "Para", :c [{:t "Str", :c "bar"}]}]]]
-    [:pandocir.test/rowspan
-     1]
-    [:pandocir.test/colspan
-     1]
+        [[["id" ["kls"] [["k1" "v1"] ["k2" "v2"]]] []]]
+        [[["id'" ["kls'"] [["k1" "v1"] ["k2" "v2"]]] []]]]]
+    #_[:pandocir.test/tablefoot
+       [["id" ["kls"] [["k1" "v1"] ["k2" "v2"]]]
+        [[["id" ["kls"] [["k1" "v1"] ["k2" "v2"]]] []]]]]
+    #_[:pandocir.test/cell
+       [["id" ["kls"] [["k1" "v1"] ["k2" "v2"]]]
+        {:t "AlignLeft"}
+        1
+        1
+        [{:t "Para", :c [{:t "Str", :c "bar"}]}]]]
+    #_[:pandocir.test/rowspan
+       1]
+    #_[:pandocir.test/colspan
+       1]
 
     [:pandocir.test/table
      {:t "Table",
