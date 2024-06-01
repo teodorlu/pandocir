@@ -142,5 +142,22 @@
        (< 1 (count args)) (merge (zipmap args c))))
     pandoc-node))
 
+(defn ^:private ir->args [{:pandocir/keys [type] :as ir-node}]
+  (-> (fn [node k]
+        (if-let [{:pandocir/keys [args]} (k pandoc-types-by-pandocir-type)]
+          (update node k (apply juxt args))
+          node))
+      (reduce ir-node (keys ir-node))))
+
+(defn ^:private ir->pandoc-1 [{:pandocir/keys [type] :as node}]
+  (if-let [{:pandocir/keys [pandoc-type args]} (get pandoc-types-by-pandocir-type type)]
+    (cond-> {:t pandoc-type}
+      args (assoc :c ((apply juxt args) (ir->args node)))
+      (= 1 (count args)) (update :c first))
+    node))
+
 (defn pandoc->ir [pandoc]
   (walk/postwalk pandoc->ir-1 pandoc))
+
+(defn ir->pandoc [ir]
+  (walk/postwalk ir->pandoc-1 ir))
