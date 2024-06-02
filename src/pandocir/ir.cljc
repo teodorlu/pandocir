@@ -148,7 +148,7 @@
        (< 1 (count args)) (merge (zipmap args c))))
     pandoc-node))
 
-(defn ^:private ir->args [{:pandocir/keys [type] :as ir-node}]
+(defn ^:private ir->args [ir-node]
   (-> (fn [node k]
         (if-let [{:pandocir/keys [args]} (k pandoc-types-by-pandocir-type)]
           (update node k (apply juxt args))
