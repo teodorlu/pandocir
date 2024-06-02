@@ -2,6 +2,7 @@
   (:require
    [cheshire.core :as json]
    [clojure.java.shell :as sh]
+   [clojure.string :as s]
    [clojure.test :refer [deftest is]]
    [hiccup2.core :as hiccup]
    [pandocir.hiccup :refer [ir->hiccup]]
@@ -13,7 +14,7 @@
 (defn call-pandoc [input from to]
   (let [{:keys [out err]} (sh/sh "pandoc" "-f" from "-t" to :in input)]
     (when err (print err))
-    out))
+    (s/trim out)))
 
 (defn call-pandoc-with-block [block to]
   (-> {:pandoc-api-version [1 23 1]
@@ -29,7 +30,7 @@
   (ir->hiccup (pandoc->ir pandoc)))
 
 (defn pandoc->hiccup->html [pandoc]
-  (str (hiccup/html (pandoc->hiccup pandoc)) "\n"))
+  (s/trim (str (hiccup/html (pandoc->hiccup pandoc)))))
 
 (defn block-compare-pandoc-to-hiccup [block]
   (= (call-pandoc-with-block block "html") (pandoc->hiccup->html block)))
@@ -48,4 +49,5 @@
   (is (inline-compare-pandoc-to-hiccup (:pandocir.test/quoted test-data)))
   ;; Postponing cite
   ;; (is (inline-compare-pandoc-to-hiccup (:pandocir.test/cite test-data)))
-  (is (inline-compare-pandoc-to-hiccup (:pandocir.test/code test-data))))
+  (is (inline-compare-pandoc-to-hiccup (:pandocir.test/code test-data)))
+  (is (inline-compare-pandoc-to-hiccup (:pandocir.test/space test-data))))
