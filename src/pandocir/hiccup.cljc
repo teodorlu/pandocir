@@ -48,8 +48,9 @@
 (defmethod ir->hiccup-1 :pandocir.type/space [_ir-node]
   " ")
 
-(defmethod ir->hiccup-1 :pandocir.type/soft-break [ir-node]
-  :pandocir.error/soft-break-not-implemented)
+(defmethod ir->hiccup-1 :pandocir.type/soft-break [_ir-node]
+  " ")
+
 (defmethod ir->hiccup-1 :pandocir.type/line-break [ir-node]
   :pandocir.error/line-break-not-implemented)
 (defmethod ir->hiccup-1 :pandocir.type/math [ir-node]
