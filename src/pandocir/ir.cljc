@@ -113,6 +113,12 @@
     :pandocir/pandoc-type "Div"
     :pandocir/args [:pandocir/attr :pandocir/blocks]}
 
+   ;; Quotes
+   {:pandocir/type :pandocir.type/single-quote
+    :pandocir/pandoc-type "SingleQuote"}
+   {:pandocir/type :pandocir.type/double-quote
+    :pandocir/pandoc-type "DoubleQuote"}
+
    ;; Arguments
    {:pandocir/type :pandocir/attr
     :pandocir/pandoc-type :pandocir/pandoc-args

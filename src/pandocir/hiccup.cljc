@@ -29,7 +29,11 @@
   (into [:span {:class ["smallcaps"]}] (:pandocir/inlines ir-node)))
 
 (defmethod ir->hiccup-1 :pandocir.type/quoted [ir-node]
-  :pandocir.error/quoted-not-implemented)
+  (let [[open close] (case (:pandocir/type (:pandocir.quote/type ir-node))
+                       :pandocir.type/single-quote ["‘" "’"]
+                       :pandocir.type/double-quote ["“" "”"])]
+    (concat [open] (:pandocir/inlines ir-node) [close])))
+
 (defmethod ir->hiccup-1 :pandocir.type/cite [ir-node]
   :pandocir.error/cite-not-implemented)
 (defmethod ir->hiccup-1 :pandocir.type/code [ir-node]
