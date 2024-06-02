@@ -45,4 +45,7 @@
   (is (inline-compare-pandoc-to-hiccup (:pandocir.test/superscript test-data)))
   (is (inline-compare-pandoc-to-hiccup (:pandocir.test/subscript test-data)))
   (is (inline-compare-pandoc-to-hiccup (:pandocir.test/smallcaps test-data)))
-  (is (inline-compare-pandoc-to-hiccup (:pandocir.test/quoted test-data))))
+  (is (inline-compare-pandoc-to-hiccup (:pandocir.test/quoted test-data)))
+  ;; Postponing cite
+  ;; (is (inline-compare-pandoc-to-hiccup (:pandocir.test/cite test-data)))
+  (is (inline-compare-pandoc-to-hiccup (:pandocir.test/code test-data))))

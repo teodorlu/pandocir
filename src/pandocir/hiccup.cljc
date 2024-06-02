@@ -36,8 +36,15 @@
 
 (defmethod ir->hiccup-1 :pandocir.type/cite [ir-node]
   :pandocir.error/cite-not-implemented)
+
 (defmethod ir->hiccup-1 :pandocir.type/code [ir-node]
-  :pandocir.error/code-not-implemented)
+  (let [{:pandocir.attr/keys [id classes keyvals]} (:pandocir/attr ir-node)
+        ks (map (comp keyword (partial str "data-") first) keyvals)
+        attributes (cond-> (zipmap ks (map second keyvals))
+                     (seq id) (assoc :id id)
+                     (seq classes) (assoc :class classes))]
+    [:code attributes (:pandocir/text ir-node)]))1
+
 (defmethod ir->hiccup-1 :pandocir.type/space [ir-node]
   :pandocir.error/space-not-implemented)
 (defmethod ir->hiccup-1 :pandocir.type/soft-break [ir-node]
