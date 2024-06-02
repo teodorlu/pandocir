@@ -52,7 +52,8 @@
   " ")
 
 (defmethod ir->hiccup-1 :pandocir.type/line-break [_ir-node]
-  :pandocir.error/line-break-not-implemented)
+  [:br])
+
 (defmethod ir->hiccup-1 :pandocir.type/math [_ir-node]
   :pandocir.error/math-not-implemented)
 (defmethod ir->hiccup-1 :pandocir.type/raw-inline [_ir-node]

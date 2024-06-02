@@ -51,4 +51,5 @@
   ;; (is (inline-compare-pandoc-to-hiccup (:pandocir.test/cite test-data)))
   (is (inline-compare-pandoc-to-hiccup (:pandocir.test/code test-data)))
   (is (inline-compare-pandoc-to-hiccup (:pandocir.test/space test-data)))
-  (is (inline-compare-pandoc-to-hiccup (:pandocir.test/softbreak test-data))))
+  (is (inline-compare-pandoc-to-hiccup (:pandocir.test/softbreak test-data)))
+  (is (inline-compare-pandoc-to-hiccup (:pandocir.test/linebreak test-data))))
