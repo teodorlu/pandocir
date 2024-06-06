@@ -117,15 +117,12 @@
    {:pandocir/type :pandocir.type/single-quote
     :pandocir/pandoc-type "SingleQuote"}
    {:pandocir/type :pandocir.type/double-quote
-    :pandocir/pandoc-type "DoubleQuote"}
+    :pandocir/pandoc-type "DoubleQuote"}])
 
-   ;; Arguments
-   {:pandocir/type :pandocir/attr
-    :pandocir/pandoc-type :pandocir/pandoc-args
-    :pandocir/args [:pandocir.attr/id :pandocir.attr/classes :pandocir.attr/keyvals]}
-   {:pandocir/type :pandocir/list-attr
-    :pandocir/pandoc-type :pandocir/pandoc-args
-    :pandocir/args [:pandocir.list-attr/start :pandocir.list-attr/style :pandocir.list-attr/delim]}])
+(def ^:private pandoc-args
+  {:pandocir/attr [:pandocir.attr/id :pandocir.attr/classes :pandocir.attr/keyvals]
+   :pandocir/list-attr [:pandocir.list-attr/start :pandocir.list-attr/style :pandocir.list-attr/delim]
+   :pandocir/target [:pandocir.target/url :pandocir.target/title]})
 
 (def ^:private pandoc-types-by-pandoc-type
   (associate-by :pandocir/pandoc-type pandoc-types))
@@ -135,8 +132,9 @@
 
 (defn ^:private args->ir [ir-node]
   (-> (fn [node k]
-        (if-let [{:pandocir/keys [args]} (k pandoc-types-by-pandocir-type)]
-          (update node k (partial zipmap args))
+        (if-let [args (k pandoc-args)]
+          (-> (dissoc node k)
+              (merge (zipmap args (k node))))
           node))
       (reduce ir-node (keys ir-node))))
 
@@ -149,11 +147,11 @@
     pandoc-node))
 
 (defn ^:private ir->args [ir-node]
-  (-> (fn [node k]
-        (if-let [{:pandocir/keys [args]} (k pandoc-types-by-pandocir-type)]
-          (update node k (apply juxt args))
+  (-> (fn [node [k args]]
+        (if-let [vs (mapv node args)]
+          (assoc node k vs)
           node))
-      (reduce ir-node (keys ir-node))))
+      (reduce ir-node pandoc-args)))
 
 (defn ^:private ir->pandoc-1 [{:pandocir/keys [type] :as node}]
   (if-let [{:pandocir/keys [pandoc-type args]} (get pandoc-types-by-pandocir-type type)]

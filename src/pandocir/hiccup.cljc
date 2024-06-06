@@ -39,7 +39,7 @@
   :pandocir.error/cite-not-implemented)
 
 (defmethod ir->hiccup-1 :pandocir.type/code [ir-node]
-  (let [{:pandocir.attr/keys [id classes keyvals]} (:pandocir/attr ir-node)
+  (let [{:pandocir.attr/keys [id classes keyvals]} ir-node
         ks (map (comp keyword (partial str "data-") first) keyvals)
         attributes (cond-> (zipmap ks (map second keyvals))
                      (seq id) (assoc :id id)
