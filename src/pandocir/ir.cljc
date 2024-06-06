@@ -54,10 +54,10 @@
     :pandocir/args [:pandocir/format :pandocir/text]}
    {:pandocir/type :pandocir.type/link
     :pandocir/pandoc-type "Link"
-    :pandocir/args [:pandocir/attr :pandocir/inlines :pandocir/target]}
+    :pandocir/args [:pandocir/attr :pandocir/inlines :pandocir/link]}
    {:pandocir/type :pandocir.type/image
     :pandocir/pandoc-type "Image"
-    :pandocir/args [:pandocir/attr :pandocir/inlines :pandocir/target]}
+    :pandocir/args [:pandocir/attr :pandocir/inlines :pandocir/image]}
    {:pandocir/type :pandocir.type/note
     :pandocir/pandoc-type "Note"
     :pandocir/args [:pandocir/blocks]}
@@ -122,7 +122,8 @@
 (def ^:private pandoc-args
   {:pandocir/attr [:pandocir.attr/id :pandocir.attr/classes :pandocir.attr/keyvals]
    :pandocir/list-attr [:pandocir.list-attr/start :pandocir.list-attr/style :pandocir.list-attr/delim]
-   :pandocir/target [:pandocir.target/url :pandocir.target/title]})
+   :pandocir/link [:pandocir.link/href :pandocir.link/title]
+   :pandocir/image [:pandocir.image/src :pandocir.image/title]})
 
 (def ^:private pandoc-types-by-pandoc-type
   (associate-by :pandocir/pandoc-type pandoc-types))
