@@ -1,5 +1,6 @@
 (ns pandocir.hiccup
-  (:require [clojure.walk :as walk]))
+  (:require [clojure.walk :as walk]
+            [hiccup2.core :as h]))
 
 (defmulti ir->hiccup-1 :pandocir/type)
 
@@ -56,8 +57,13 @@
 
 (defmethod ir->hiccup-1 :pandocir.type/math [_ir-node]
   :pandocir.error/math-not-implemented)
-(defmethod ir->hiccup-1 :pandocir.type/raw-inline [_ir-node]
-  :pandocir.error/raw-inline-not-implemented)
+
+(defmethod ir->hiccup-1 :pandocir.type/raw-inline [ir-node]
+  ;; Raw strings are treated differently in hiccup, reagent and replicant.
+  ;; This solution is dependent on hiccup, which might not be ideal.
+  (when (= (:pandocir/format ir-node) "html")
+    (h/raw (:pandocir/text ir-node))))
+
 (defmethod ir->hiccup-1 :pandocir.type/link [_ir-node]
   :pandocir.error/link-not-implemented)
 (defmethod ir->hiccup-1 :pandocir.type/image [_ir-node]
