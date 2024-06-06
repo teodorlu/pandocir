@@ -2,6 +2,20 @@
   (:require [clojure.walk :as walk]
             [hiccup2.core :as h]))
 
+(defn ir->html-attrs [ir-node]
+  (let [renaming {:pandocir.attr/id :id
+                  :pandocir.attr/classes :class
+                  :pandocir.target/url :href
+                  :pandocir.target/title :title}
+        keyvals (:pandocir.attr/keyvals ir-node)
+        ks (map (comp keyword (partial str "data-") first) keyvals)]
+    (-> (fn [m k]
+          (let [v (k ir-node)]
+            (cond-> m
+              (seq v) (assoc (k renaming) v))))
+        (reduce {} (keys renaming))
+        (merge (zipmap ks (map second keyvals))))))
+
 (defmulti ir->hiccup-1 :pandocir/type)
 
 ;; Inline
@@ -39,12 +53,7 @@
   :pandocir.error/cite-not-implemented)
 
 (defmethod ir->hiccup-1 :pandocir.type/code [ir-node]
-  (let [{:pandocir.attr/keys [id classes keyvals]} ir-node
-        ks (map (comp keyword (partial str "data-") first) keyvals)
-        attributes (cond-> (zipmap ks (map second keyvals))
-                     (seq id) (assoc :id id)
-                     (seq classes) (assoc :class classes))]
-    [:code attributes (:pandocir/text ir-node)]))1
+  [:code (ir->html-attrs ir-node) (:pandocir/text ir-node)])1
 
 (defmethod ir->hiccup-1 :pandocir.type/space [_ir-node]
   " ")
@@ -64,8 +73,9 @@
   (when (= (:pandocir/format ir-node) "html")
     (h/raw (:pandocir/text ir-node))))
 
-(defmethod ir->hiccup-1 :pandocir.type/link [_ir-node]
-  :pandocir.error/link-not-implemented)
+(defmethod ir->hiccup-1 :pandocir.type/link [ir-node]
+  (into [:a (ir->html-attrs ir-node)] (:pandocir/inlines ir-node)))
+
 (defmethod ir->hiccup-1 :pandocir.type/image [_ir-node]
   :pandocir.error/image-not-implemented)
 (defmethod ir->hiccup-1 :pandocir.type/note [_ir-node]
