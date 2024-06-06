@@ -5,6 +5,7 @@
    [clojure.string :as s]
    [clojure.test :refer [deftest is]]
    [hiccup2.core :as hiccup]
+   [hickory.core :as hickory]
    [pandocir.hiccup :refer [ir->hiccup]]
    [pandocir.ir :refer [pandoc->ir]]
    [pandocir.pandoc-test-data :refer [pandoc-test-data]]))
@@ -16,27 +17,29 @@
     (when err (print err))
     (s/trim out)))
 
-(defn call-pandoc-with-block [block to]
+(defn call-pandoc-with-block [block]
   (-> {:pandoc-api-version [1 23 1]
        :meta {}
        :blocks [block]}
       (json/encode)
-      (call-pandoc "json" to)))
+      (call-pandoc "json" "html")
+      (hickory/parse)
+      (hickory/as-hickory)))
 
-(defn call-pandoc-with-inline [inline to]
-  (call-pandoc-with-block {:t "Plain" :c [inline]} to))
+(defn call-pandoc-with-inline [inline]
+  (call-pandoc-with-block {:t "Plain" :c [inline]}))
 
 (defn pandoc->hiccup [pandoc]
   (ir->hiccup (pandoc->ir pandoc)))
 
 (defn pandoc->hiccup->html [pandoc]
-  (s/trim (str (hiccup/html (pandoc->hiccup pandoc)))))
+  (hickory/as-hickory (hickory/parse (str (hiccup/html (pandoc->hiccup pandoc))))))
 
 (defn block-compare-pandoc-to-hiccup [block]
-  (= (call-pandoc-with-block block "html") (pandoc->hiccup->html block)))
+  (= (call-pandoc-with-block block) (pandoc->hiccup->html block)))
 
 (defn inline-compare-pandoc-to-hiccup [inline]
-  (= (call-pandoc-with-inline inline "html") (pandoc->hiccup->html inline)))
+  (= (call-pandoc-with-inline inline) (pandoc->hiccup->html inline)))
 
 (deftest comparing-with-pandoc
   (is (inline-compare-pandoc-to-hiccup (:pandocir.test/str test-data)))
