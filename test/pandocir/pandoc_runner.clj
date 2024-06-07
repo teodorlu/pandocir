@@ -63,3 +63,7 @@
   ;; (is (inline-compare-pandoc-to-hiccup (:pandocir.test/note test-data)))
   (is (inline-compare-pandoc-to-hiccup (:pandocir.test/span test-data))))
 
+(deftest comparing-block-with-pandoc
+  (is (block-compare-pandoc-to-hiccup (:pandocir.test/plain test-data)))
+  (is (block-compare-pandoc-to-hiccup (:pandocir.test/para test-data)))
+  (is (block-compare-pandoc-to-hiccup (:pandocir.test/line-block test-data))))

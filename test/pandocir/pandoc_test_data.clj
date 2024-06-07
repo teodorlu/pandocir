@@ -132,32 +132,32 @@
     [:pandocir.test/para
      {:t "Para", :c [{:t "Str", :c "Hello"}]}]
 
-    [:pandocir.test/lineblock
+    [:pandocir.test/line-block
      {:t "LineBlock", :c [[{:t "Str", :c "Hello"}] [{:t "Str", :c "Moin"}]]}]
 
-    [:pandocir.test/codeblock
+    [:pandocir.test/code-block
      {:t "CodeBlock", :c [["id" ["kls"] [["k1" "v1"] ["k2" "v2"]]] "Foo Bar"]}]
 
-    [:pandocir.test/rawblock
+    [:pandocir.test/raw-block
      {:t "RawBlock", :c ["tex" "\\foo{bar}"]}]
 
-    [:pandocir.test/blockquote
+    [:pandocir.test/block-quote
      {:t "BlockQuote", :c [{:t "Para", :c [{:t "Str", :c "Hello"}]}]}]
 
-    [:pandocir.test/orderedlist
+    [:pandocir.test/ordered-list
      {:t "OrderedList",
       :c
       [[1 {:t "Decimal"} {:t "Period"}]
        [[{:t "Para", :c [{:t "Str", :c "foo"}]}]
         [{:t "Para", :c [{:t "Str", :c "bar"}]}]]]}]
 
-    [:pandocir.test/bulletlist
+    [:pandocir.test/bullet-list
      {:t "BulletList",
       :c
       [[{:t "Para", :c [{:t "Str", :c "foo"}]}]
        [{:t "Para", :c [{:t "Str", :c "bar"}]}]]}]
 
-    [:pandocir.test/definitionlist
+    [:pandocir.test/definition-list
      {:t "DefinitionList",
       :c
       [[[{:t "Str", :c "foo"}] [[{:t "Para", :c [{:t "Str", :c "bar"}]}]]]

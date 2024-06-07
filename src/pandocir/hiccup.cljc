@@ -1,7 +1,8 @@
 (ns pandocir.hiccup
   (:require [clojure.walk :as walk]
             [hiccup2.core :as h]
-            [clojure.string :as s]))
+            [clojure.string :as s]
+            [pandocir.core :as pandocir]))
 
 (defn ir->html-attrs [ir-node]
   (let [renaming {:pandocir.attr/id :id
@@ -90,12 +91,16 @@
   (into [:span (ir->html-attrs ir-node)] (:pandocir/inlines ir-node)))
 
 ;; Block
-(defmethod ir->hiccup-1 :pandocir.type/plain [_ir-node]
-  :pandocir.error/plain-not-implemented)
-(defmethod ir->hiccup-1 :pandocir.type/para [_ir-node]
-  :pandocir.error/para-not-implemented)
-(defmethod ir->hiccup-1 :pandocir.type/line-block [_ir-node]
-  :pandocir.error/line-block-not-implemented)
+(defmethod ir->hiccup-1 :pandocir.type/plain [ir-node]
+  (seq (:pandocir/inlines ir-node)))
+
+(defmethod ir->hiccup-1 :pandocir.type/para [ir-node]
+  (into [:p] (:pandocir/inlines ir-node)))
+
+(defmethod ir->hiccup-1 :pandocir.type/line-block [ir-node]
+  (into [:div {:class ["line-block"]}]
+        (mapcat identity (interpose (list [:br] "\n") (:pandocir/inlines ir-node)))))
+
 (defmethod ir->hiccup-1 :pandocir.type/code-block [_ir-node]
   :pandocir.error/code-block-not-implemented)
 (defmethod ir->hiccup-1 :pandocir.type/raw-block [_ir-node]
