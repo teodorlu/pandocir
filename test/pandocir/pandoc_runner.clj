@@ -24,7 +24,7 @@
       (json/encode)
       (call-pandoc "json" "html")
       (hickory/parse)
-      (hickory/as-hickory)))
+      (hickory/as-hiccup)))
 
 (defn call-pandoc-with-inline [inline]
   (call-pandoc-with-block {:t "Plain" :c [inline]}))
@@ -33,7 +33,7 @@
   (ir->hiccup (pandoc->ir pandoc)))
 
 (defn pandoc->hiccup->html [pandoc]
-  (hickory/as-hickory (hickory/parse (str (hiccup/html (pandoc->hiccup pandoc))))))
+  (hickory/as-hiccup (hickory/parse (str (hiccup/html (pandoc->hiccup pandoc))))))
 
 (defn block-compare-pandoc-to-hiccup [block]
   (= (call-pandoc-with-block block) (pandoc->hiccup->html block)))
