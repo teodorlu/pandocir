@@ -101,8 +101,9 @@
   (into [:div {:class ["line-block"]}]
         (mapcat identity (interpose (list [:br] "\n") (:pandocir/inlines ir-node)))))
 
-(defmethod ir->hiccup-1 :pandocir.type/code-block [_ir-node]
-  :pandocir.error/code-block-not-implemented)
+(defmethod ir->hiccup-1 :pandocir.type/code-block [ir-node]
+  [:pre (ir->html-attrs ir-node) [:code (:pandocir/text ir-node)]])
+
 (defmethod ir->hiccup-1 :pandocir.type/raw-block [_ir-node]
   :pandocir.error/raw-block-not-implemented)
 (defmethod ir->hiccup-1 :pandocir.type/block-quote [_ir-node]
