@@ -85,8 +85,9 @@
 
 (defmethod ir->hiccup-1 :pandocir.type/note [_ir-node]
   :pandocir.error/note-not-implemented)
-(defmethod ir->hiccup-1 :pandocir.type/span [_ir-node]
-  :pandocir.error/span-not-implemented)
+
+(defmethod ir->hiccup-1 :pandocir.type/span [ir-node]
+  (into [:span (ir->html-attrs ir-node)] (:pandocir/inlines ir-node)))
 
 ;; Block
 (defmethod ir->hiccup-1 :pandocir.type/plain [_ir-node]

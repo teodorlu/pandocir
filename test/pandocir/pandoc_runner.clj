@@ -41,7 +41,7 @@
 (defn inline-compare-pandoc-to-hiccup [inline]
   (= (call-pandoc-with-inline inline) (pandoc->hiccup->html inline)))
 
-(deftest comparing-with-pandoc
+(deftest comparing-inline-with-pandoc
   (is (inline-compare-pandoc-to-hiccup (:pandocir.test/str test-data)))
   (is (inline-compare-pandoc-to-hiccup (:pandocir.test/emph test-data)))
   (is (inline-compare-pandoc-to-hiccup (:pandocir.test/underline test-data)))
@@ -58,4 +58,8 @@
   (is (inline-compare-pandoc-to-hiccup (:pandocir.test/linebreak test-data)))
   (is (inline-compare-pandoc-to-hiccup (:pandocir.test/rawinline test-data)))
   (is (inline-compare-pandoc-to-hiccup (:pandocir.test/link test-data)))
-  (is (inline-compare-pandoc-to-hiccup (:pandocir.test/image test-data))))
+  (is (inline-compare-pandoc-to-hiccup (:pandocir.test/image test-data)))
+  ;; Postponing footnote
+  ;; (is (inline-compare-pandoc-to-hiccup (:pandocir.test/note test-data)))
+  (is (inline-compare-pandoc-to-hiccup (:pandocir.test/span test-data))))
+
