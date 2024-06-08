@@ -5,7 +5,6 @@
    [clojure.string :as s]
    [clojure.test :refer [deftest is]]
    [hiccup2.core :as hiccup]
-   [hickory.core :as hickory]
    [pandocir.hiccup :refer [ir->hiccup]]
    [pandocir.ir :refer [pandoc->ir]]
    [pandocir.pandoc-test-data :refer [pandoc-test-data]]))
@@ -23,8 +22,7 @@
        :blocks [block]}
       (json/encode)
       (call-pandoc "json" "html")
-      (hickory/parse)
-      (hickory/as-hiccup)))
+      (call-pandoc "html" "json")))
 
 (defn call-pandoc-with-inline [inline]
   (call-pandoc-with-block {:t "Plain" :c [inline]}))
@@ -33,7 +31,7 @@
   (ir->hiccup (pandoc->ir pandoc)))
 
 (defn pandoc->hiccup->html [pandoc]
-  (hickory/as-hiccup (hickory/parse (str (hiccup/html (pandoc->hiccup pandoc))))))
+  (call-pandoc (str (hiccup/html (pandoc->hiccup pandoc))) "html" "json"))
 
 (defn block-compare-pandoc-to-hiccup [block]
   (= (call-pandoc-with-block block) (pandoc->hiccup->html block)))

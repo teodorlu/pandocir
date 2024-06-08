@@ -111,7 +111,7 @@
     (h/raw (:pandocir/text ir-node))))
 
 (defmethod ir->hiccup-1 :pandocir.type/block-quote [ir-node]
-  (conj (into [:blockquote "\n"] (:pandocir/blocks ir-node)) "\n"))
+  (into [:blockquote] (:pandocir/blocks ir-node)))
 
 (defmethod ir->hiccup-1 :pandocir.type/ordered-list [_ir-node]
   :pandocir.error/ordered-list-not-implemented)
