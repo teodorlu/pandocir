@@ -135,8 +135,10 @@
                       (cons (into [:dt] term)))))
        (into [:dl])))
 
-(defmethod ir->hiccup-1 :pandocir.type/header [_ir-node]
-  :pandocir.error/header-not-implemented)
+(defmethod ir->hiccup-1 :pandocir.type/header [ir-node]
+  (let [h (keyword (str "h" (:pandocir/level ir-node)))]
+    (into [h (ir->html-attrs ir-node)] (:pandocir/inlines ir-node))))
+
 (defmethod ir->hiccup-1 :pandocir.type/horizontal-rule [_ir-node]
   :pandocir.error/horizontal-rule-not-implemented)
 (defmethod ir->hiccup-1 :pandocir.type/table [_ir-node]
