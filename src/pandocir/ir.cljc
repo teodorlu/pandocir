@@ -125,11 +125,20 @@
    :pandocir/link [:pandocir.link/href :pandocir.link/title]
    :pandocir/image [:pandocir.image/src :pandocir.image/title]})
 
+(def ^:private pandoc-simple-types
+  [:pandocir.quote/type])
+
 (def ^:private pandoc-types-by-pandoc-type
   (associate-by :pandocir/pandoc-type pandoc-types))
 
 (def ^:private pandoc-types-by-pandocir-type
   (associate-by :pandocir/type pandoc-types))
+
+(defn ^:private unwrap-simple-types [ir-node]
+  (-> (fn [node k]
+        (cond-> node
+          (k node) (assoc k (:pandocir/type (k node)))))
+      (reduce ir-node pandoc-simple-types)))
 
 (defn ^:private args->ir [ir-node]
   (-> (fn [node k]
@@ -141,11 +150,18 @@
 
 (defn ^:private pandoc->ir-1 [{:keys [t c] :as pandoc-node}]
   (if-let [{:pandocir/keys [type args]} (get pandoc-types-by-pandoc-type t)]
-    (args->ir
-     (cond-> {:pandocir/type type}
-       (= 1 (count args)) (assoc (first args) c)
-       (< 1 (count args)) (merge (zipmap args c))))
+    (unwrap-simple-types
+     (args->ir
+      (cond-> {:pandocir/type type}
+        (= 1 (count args)) (assoc (first args) c)
+        (< 1 (count args)) (merge (zipmap args c)))))
     pandoc-node))
+
+(defn ^:private wrap-simple-types [ir-node]
+  (-> (fn [node k]
+        (cond-> node
+          (k node) (assoc k {:pandocir/type (k node)})))
+      (reduce ir-node pandoc-simple-types)))
 
 (defn ^:private ir->args [ir-node]
   (-> (fn [node [k args]]
@@ -154,15 +170,16 @@
           node))
       (reduce ir-node pandoc-args)))
 
-(defn ^:private ir->pandoc-1 [{:pandocir/keys [type] :as node}]
+(defn ^:private ir->pandoc-1 [{:pandocir/keys [type] :as ir-node}]
   (if-let [{:pandocir/keys [pandoc-type args]} (get pandoc-types-by-pandocir-type type)]
-    (cond-> {:t pandoc-type}
-      args (assoc :c ((apply juxt args) (ir->args node)))
-      (= 1 (count args)) (update :c first))
-    node))
+    (let [node (ir->args (wrap-simple-types ir-node))]
+      (cond-> {:t pandoc-type}
+        args (assoc :c ((apply juxt args) node))
+        (= 1 (count args)) (update :c first)))
+    ir-node))
 
 (defn pandoc->ir [pandoc]
   (walk/postwalk pandoc->ir-1 pandoc))
 
 (defn ir->pandoc [ir]
-  (walk/postwalk ir->pandoc-1 ir))
+  (walk/prewalk ir->pandoc-1 ir))

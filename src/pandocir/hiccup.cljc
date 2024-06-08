@@ -48,7 +48,7 @@
   (into [:span {:class ["smallcaps"]}] (:pandocir/inlines ir-node)))
 
 (defmethod ir->hiccup-1 :pandocir.type/quoted [ir-node]
-  (let [[open close] (case (:pandocir/type (:pandocir.quote/type ir-node))
+  (let [[open close] (case (:pandocir.quote/type ir-node)
                        :pandocir.type/single-quote ["‘" "’"]
                        :pandocir.type/double-quote ["“" "”"])]
     (concat [open] (:pandocir/inlines ir-node) [close])))
