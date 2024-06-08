@@ -95,7 +95,7 @@
     [:pandocir.test/linebreak
      {:t "LineBreak"}]
     [:pandocir.test/rawinline
-     {:t "RawInline", :c ["tex" "\\foo{bar}"]}]
+     {:t "RawInline", :c ["html" "<div>foo bar</div>"]}]
 
     [:pandocir.test/link
      {:t "Link",
@@ -139,7 +139,7 @@
      {:t "CodeBlock", :c [["id" ["kls"] [["k1" "v1"] ["k2" "v2"]]] "Foo Bar"]}]
 
     [:pandocir.test/raw-block
-     {:t "RawBlock", :c ["tex" "\\foo{bar}"]}]
+     {:t "RawBlock", :c ["html" "<div>foo bar</div>"]}]
 
     [:pandocir.test/block-quote
      {:t "BlockQuote", :c [{:t "Para", :c [{:t "Str", :c "Hello"}]}]}]

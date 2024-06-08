@@ -104,10 +104,15 @@
 (defmethod ir->hiccup-1 :pandocir.type/code-block [ir-node]
   [:pre (ir->html-attrs ir-node) [:code (:pandocir/text ir-node)]])
 
-(defmethod ir->hiccup-1 :pandocir.type/raw-block [_ir-node]
-  :pandocir.error/raw-block-not-implemented)
-(defmethod ir->hiccup-1 :pandocir.type/block-quote [_ir-node]
-  :pandocir.error/block-quote-not-implemented)
+(defmethod ir->hiccup-1 :pandocir.type/raw-block [ir-node]
+  ;; Raw strings are treated differently in hiccup, reagent and replicant.
+  ;; This solution is dependent on hiccup, which might not be ideal.
+  (when (= (:pandocir/format ir-node) "html")
+    (h/raw (:pandocir/text ir-node))))
+
+(defmethod ir->hiccup-1 :pandocir.type/block-quote [ir-node]
+  (conj (into [:blockquote "\n"] (:pandocir/blocks ir-node)) "\n"))
+
 (defmethod ir->hiccup-1 :pandocir.type/ordered-list [_ir-node]
   :pandocir.error/ordered-list-not-implemented)
 (defmethod ir->hiccup-1 :pandocir.type/bullet-list [_ir-node]
