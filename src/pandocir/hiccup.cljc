@@ -127,8 +127,14 @@
 (defmethod ir->hiccup-1 :pandocir.type/bullet-list [ir-node]
   (into [:ul] (map (partial into [:li]) (:pandocir/list-items ir-node))))
 
-(defmethod ir->hiccup-1 :pandocir.type/definition-list [_ir-node]
-  :pandocir.error/definition-list-not-implemented)
+(defmethod ir->hiccup-1 :pandocir.type/definition-list [ir-node]
+  (->> (:pandocir/definitions ir-node)
+       (mapcat (fn [[term definition]]
+                 (->> definition
+                      (map (partial into [:dd]))
+                      (cons (into [:dt] term)))))
+       (into [:dl])))
+
 (defmethod ir->hiccup-1 :pandocir.type/header [_ir-node]
   :pandocir.error/header-not-implemented)
 (defmethod ir->hiccup-1 :pandocir.type/horizontal-rule [_ir-node]
