@@ -139,8 +139,9 @@
   (let [h (keyword (str "h" (:pandocir/level ir-node)))]
     (into [h (ir->html-attrs ir-node)] (:pandocir/inlines ir-node))))
 
-(defmethod ir->hiccup-1 :pandocir.type/horizontal-rule [_ir-node]
-  :pandocir.error/horizontal-rule-not-implemented)
+(defmethod ir->hiccup-1 :pandocir.type/horizontal-rule [_]
+  [:hr])
+
 (defmethod ir->hiccup-1 :pandocir.type/table [_ir-node]
   :pandocir.error/table-not-implemented)
 (defmethod ir->hiccup-1 :pandocir.type/figure [_ir-node]

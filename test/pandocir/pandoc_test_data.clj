@@ -166,6 +166,9 @@
      {:t "Header",
       :c [2 ["id" ["kls"] [["k1" "v1"] ["k2" "v2"]]] [{:t "Str", :c "Head"}]]}]
 
+    [:pandocir.test/horizontal-rule
+     {:t "HorizontalRule"}]
+
     #_[:pandocir.test/row
        [["id" ["kls"] [["k1" "v1"] ["k2" "v2"]]]
         [[["" [] []]
