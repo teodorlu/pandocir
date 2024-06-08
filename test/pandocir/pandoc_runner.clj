@@ -68,4 +68,5 @@
   (is (block-compare-pandoc-to-hiccup (:pandocir.test/code-block test-data)))
   (is (block-compare-pandoc-to-hiccup (:pandocir.test/raw-block test-data)))
   (is (block-compare-pandoc-to-hiccup (:pandocir.test/block-quote test-data)))
-  (is (block-compare-pandoc-to-hiccup (:pandocir.test/ordered-list test-data))))
+  (is (block-compare-pandoc-to-hiccup (:pandocir.test/ordered-list test-data)))
+  (is (block-compare-pandoc-to-hiccup (:pandocir.test/bullet-list test-data))))

@@ -124,8 +124,9 @@
                  (not= start 1) (assoc :start start))]
           (map (partial into [:li]) (:pandocir/list-items ir-node)))))
 
-(defmethod ir->hiccup-1 :pandocir.type/bullet-list [_ir-node]
-  :pandocir.error/bullet-list-not-implemented)
+(defmethod ir->hiccup-1 :pandocir.type/bullet-list [ir-node]
+  (into [:ul] (map (partial into [:li]) (:pandocir/list-items ir-node))))
+
 (defmethod ir->hiccup-1 :pandocir.type/definition-list [_ir-node]
   :pandocir.error/definition-list-not-implemented)
 (defmethod ir->hiccup-1 :pandocir.type/header [_ir-node]
