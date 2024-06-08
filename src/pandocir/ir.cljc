@@ -1,149 +1,76 @@
 (ns pandocir.ir
-  (:require [clojure.walk :as walk]))
+  (:require
+   [clojure.string :as s]
+   [clojure.walk :as walk]))
 
 (defn ^:private associate-by [f coll]
   (reduce (fn [m v] (assoc m (f v) v)) {} coll))
 
+(defn ^:private make-pandoc-type [pandoc-type & args]
+  (let [words (re-seq #"[A-Z][a-z]+" pandoc-type)
+        kebab-cased (s/join "-" (map s/lower-case words))]
+    {:pandocir/type (keyword "pandocir.type" kebab-cased)
+     :pandocir/pandoc-type pandoc-type
+     :pandocir/args args}))
+
 (def ^:private pandoc-types
   [
    ;; Inline
-   {:pandocir/type :pandocir.type/str
-    :pandocir/pandoc-type "Str"
-    :pandocir/args [:pandocir/text]}
-   {:pandocir/type :pandocir.type/emph
-    :pandocir/pandoc-type "Emph"
-    :pandocir/args [:pandocir/inlines]}
-   {:pandocir/type :pandocir.type/underline
-    :pandocir/pandoc-type "Underline"
-    :pandocir/args [:pandocir/inlines]}
-   {:pandocir/type :pandocir.type/strong
-    :pandocir/pandoc-type "Strong"
-    :pandocir/args [:pandocir/inlines]}
-   {:pandocir/type :pandocir.type/strikeout
-    :pandocir/pandoc-type "Strikeout"
-    :pandocir/args [:pandocir/inlines]}
-   {:pandocir/type :pandocir.type/superscript
-    :pandocir/pandoc-type "Superscript"
-    :pandocir/args [:pandocir/inlines]}
-   {:pandocir/type :pandocir.type/subscript
-    :pandocir/pandoc-type "Subscript"
-    :pandocir/args [:pandocir/inlines]}
-   {:pandocir/type :pandocir.type/small-caps
-    :pandocir/pandoc-type "SmallCaps"
-    :pandocir/args [:pandocir/inlines]}
-   {:pandocir/type :pandocir.type/quoted
-    :pandocir/pandoc-type "Quoted"
-    :pandocir/args [:pandocir.quote/type :pandocir/inlines]}
-   {:pandocir/type :pandocir.type/cite
-    :pandocir/pandoc-type "Cite"
-    :pandocir/args [:pandocir/citations :pandocir/inlines]}
-   {:pandocir/type :pandocir.type/code
-    :pandocir/pandoc-type "Code"
-    :pandocir/args [:pandocir/attr :pandocir/text]}
-   {:pandocir/type :pandocir.type/space
-    :pandocir/pandoc-type "Space"}
-   {:pandocir/type :pandocir.type/soft-break
-    :pandocir/pandoc-type "SoftBreak"}
-   {:pandocir/type :pandocir.type/line-break
-    :pandocir/pandoc-type "LineBreak"}
-   {:pandocir/type :pandocir.type/math
-    :pandocir/pandoc-type "Math"
-    :pandocir/args [:pandocir.math/type :pandocir/text]}
-   {:pandocir/type :pandocir.type/raw-inline
-    :pandocir/pandoc-type "RawInline"
-    :pandocir/args [:pandocir/format :pandocir/text]}
-   {:pandocir/type :pandocir.type/link
-    :pandocir/pandoc-type "Link"
-    :pandocir/args [:pandocir/attr :pandocir/inlines :pandocir/link]}
-   {:pandocir/type :pandocir.type/image
-    :pandocir/pandoc-type "Image"
-    :pandocir/args [:pandocir/attr :pandocir/inlines :pandocir/image]}
-   {:pandocir/type :pandocir.type/note
-    :pandocir/pandoc-type "Note"
-    :pandocir/args [:pandocir/blocks]}
-   {:pandocir/type :pandocir.type/span
-    :pandocir/pandoc-type "Span"
-    :pandocir/args [:pandocir/attr :pandocir/inlines]}
+   (make-pandoc-type "Str" :pandocir/text)
+   (make-pandoc-type "Emph" :pandocir/inlines)
+   (make-pandoc-type "Underline" :pandocir/inlines)
+   (make-pandoc-type "Strong" :pandocir/inlines)
+   (make-pandoc-type "Strikeout" :pandocir/inlines)
+   (make-pandoc-type "Superscript" :pandocir/inlines)
+   (make-pandoc-type "Subscript" :pandocir/inlines)
+   (make-pandoc-type "SmallCaps" :pandocir/inlines)
+   (make-pandoc-type "Quoted" :pandocir.quote/type :pandocir/inlines)
+   (make-pandoc-type "Cite" :pandocir/citations :pandocir/inlines)
+   (make-pandoc-type "Code" :pandocir/attr :pandocir/text)
+   (make-pandoc-type "Space")
+   (make-pandoc-type "SoftBreak")
+   (make-pandoc-type "LineBreak")
+   (make-pandoc-type "Math" :pandocir.math/type :pandocir/text)
+   (make-pandoc-type "RawInline" :pandocir/format :pandocir/text)
+   (make-pandoc-type "Link" :pandocir/attr :pandocir/inlines :pandocir/link)
+   (make-pandoc-type "Image" :pandocir/attr :pandocir/inlines :pandocir/image)
+   (make-pandoc-type "Note" :pandocir/blocks)
+   (make-pandoc-type "Span" :pandocir/attr :pandocir/inlines)
 
    ;; Block
-   {:pandocir/type :pandocir.type/plain
-    :pandocir/pandoc-type "Plain"
-    :pandocir/args [:pandocir/inlines]}
-   {:pandocir/type :pandocir.type/para
-    :pandocir/pandoc-type "Para"
-    :pandocir/args [:pandocir/inlines]}
-   {:pandocir/type :pandocir.type/line-block
-    :pandocir/pandoc-type "LineBlock"
-    :pandocir/args [:pandocir/inlines]}
-   {:pandocir/type :pandocir.type/code-block
-    :pandocir/pandoc-type "CodeBlock"
-    :pandocir/args [:pandocir/attr :pandocir/text]}
-   {:pandocir/type :pandocir.type/raw-block
-    :pandocir/pandoc-type "RawBlock"
-    :pandocir/args [:pandocir/format :pandocir/text]}
-   {:pandocir/type :pandocir.type/block-quote
-    :pandocir/pandoc-type "BlockQuote"
-    :pandocir/args [:pandocir/blocks]}
-   {:pandocir/type :pandocir.type/ordered-list
-    :pandocir/pandoc-type "OrderedList"
-    :pandocir/args [:pandocir/list-attr :pandocir/list-items]}
-   {:pandocir/type :pandocir.type/bullet-list
-    :pandocir/pandoc-type "BulletList"
-    :pandocir/args [:pandocir/list-items]}
-   {:pandocir/type :pandocir.type/definition-list
-    :pandocir/pandoc-type "DefinitionList"
-    :pandocir/args [:pandocir/definitions]}
-   {:pandocir/type :pandocir.type/header
-    :pandocir/pandoc-type "Header"
-    :pandocir/args [:pandocir/level :pandocir/attr :pandocir/inlines]}
-   {:pandocir/type :pandocir.type/horizontal-rule
-    :pandocir/pandoc-type "HorizontalRule"}
-   {:pandocir/type :pandocir.type/table
-    :pandocir/pandoc-type "Table"
-    :pandocir/args [:pandocir/attr
-                    :pandocir.table/caption
-                    :pandocir.table/col-specs
-                    :pandocir.table/head
-                    :pandocir.table/body
-                    :pandocir.table/foot]}
-   {:pandocir/type :pandocir.type/figure
-    :pandocir/pandoc-type "Figure"
-    :pandocir/args [:pandocir/attr :pandocir.figure/caption :pandocir/blocks]}
-   {:pandocir/type :pandocir.type/div
-    :pandocir/pandoc-type "Div"
-    :pandocir/args [:pandocir/attr :pandocir/blocks]}
+   (make-pandoc-type "Plain" :pandocir/inlines)
+   (make-pandoc-type "Para" :pandocir/inlines)
+   (make-pandoc-type "LineBlock" :pandocir/inlines)
+   (make-pandoc-type "CodeBlock" :pandocir/attr :pandocir/text)
+   (make-pandoc-type "RawBlock" :pandocir/format :pandocir/text)
+   (make-pandoc-type "BlockQuote" :pandocir/blocks)
+   (make-pandoc-type "OrderedList" :pandocir/list-attr :pandocir/list-items)
+   (make-pandoc-type "BulletList" :pandocir/list-items)
+   (make-pandoc-type "DefinitionList" :pandocir/definitions)
+   (make-pandoc-type "Header" :pandocir/level :pandocir/attr :pandocir/inlines)
+   (make-pandoc-type "HorizontalRule")
+   (make-pandoc-type "Table" :pandocir/attr :pandocir.table/caption :pandocir.table/col-specs :pandocir.table/head :pandocir.table/body :pandocir.table/foot)
+   (make-pandoc-type "Figure" :pandocir/attr :pandocir.figure/caption :pandocir/blocks)
+   (make-pandoc-type "Div" :pandocir/attr :pandocir/blocks)
 
    ;; Quotes
-   {:pandocir/type :pandocir.type/single-quote
-    :pandocir/pandoc-type "SingleQuote"}
-   {:pandocir/type :pandocir.type/double-quote
-    :pandocir/pandoc-type "DoubleQuote"}
+   (make-pandoc-type "SingleQuote")
+   (make-pandoc-type "DoubleQuote")
 
    ;; List styles
-   {:pandocir/type :pandocir.type/default-style
-    :pandocir/pandoc-type "DefaultStyle"}
-   {:pandocir/type :pandocir.type/example
-    :pandocir/pandoc-type "Example"}
-   {:pandocir/type :pandocir.type/decimal
-    :pandocir/pandoc-type "Decimal"}
-   {:pandocir/type :pandocir.type/lower-roman
-    :pandocir/pandoc-type "LowerRoman"}
-   {:pandocir/type :pandocir.type/upper-roman
-    :pandocir/pandoc-type "UpperRoman"}
-   {:pandocir/type :pandocir.type/lower-alpha
-    :pandocir/pandoc-type "LowerAlpha"}
-   {:pandocir/type :pandocir.type/upper-alpha
-    :pandocir/pandoc-type "UpperAlpha"}
+   (make-pandoc-type "DefaultStyle")
+   (make-pandoc-type "Example")
+   (make-pandoc-type "Decimal")
+   (make-pandoc-type "LowerRoman")
+   (make-pandoc-type "UpperRoman")
+   (make-pandoc-type "LowerAlpha")
+   (make-pandoc-type "UpperAlpha")
 
    ;; List delimiters
-   {:pandocir/type :pandoc.type/default-delim
-    :pandocir/pandoc-type "DefaultDelim"}
-   {:pandocir/type :pandoc.type/period
-    :pandocir/pandoc-type "Period"}
-   {:pandocir/type :pandoc.type/one-paren
-    :pandocir/pandoc-type "OneParen"}
-   {:pandocir/type :pandoc.type/two-parens
-    :pandocir/pandoc-type "TwoParens"}])
+   (make-pandoc-type "DefaultDelim")
+   (make-pandoc-type "Period")
+   (make-pandoc-type "OneParen")
+   (make-pandoc-type "TwoParens")])
 
 (def ^:private pandoc-args
   {:pandocir/attr [:pandocir.attr/id :pandocir.attr/classes :pandocir.attr/keyvals]
