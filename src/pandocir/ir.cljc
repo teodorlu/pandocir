@@ -117,7 +117,33 @@
    {:pandocir/type :pandocir.type/single-quote
     :pandocir/pandoc-type "SingleQuote"}
    {:pandocir/type :pandocir.type/double-quote
-    :pandocir/pandoc-type "DoubleQuote"}])
+    :pandocir/pandoc-type "DoubleQuote"}
+
+   ;; List styles
+   {:pandocir/type :pandocir.type/default-style
+    :pandocir/pandoc-type "DefaultStyle"}
+   {:pandocir/type :pandocir.type/example
+    :pandocir/pandoc-type "Example"}
+   {:pandocir/type :pandocir.type/decimal
+    :pandocir/pandoc-type "Decimal"}
+   {:pandocir/type :pandocir.type/lower-roman
+    :pandocir/pandoc-type "LowerRoman"}
+   {:pandocir/type :pandocir.type/upper-roman
+    :pandocir/pandoc-type "UpperRoman"}
+   {:pandocir/type :pandocir.type/lower-alpha
+    :pandocir/pandoc-type "LowerAlpha"}
+   {:pandocir/type :pandocir.type/upper-alpha
+    :pandocir/pandoc-type "UpperAlpha"}
+
+   ;; List delimiters
+   {:pandocir/type :pandoc.type/default-delim
+    :pandocir/pandoc-type "DefaultDelim"}
+   {:pandocir/type :pandoc.type/period
+    :pandocir/pandoc-type "Period"}
+   {:pandocir/type :pandoc.type/one-paren
+    :pandocir/pandoc-type "OneParen"}
+   {:pandocir/type :pandoc.type/two-parens
+    :pandocir/pandoc-type "TwoParens"}])
 
 (def ^:private pandoc-args
   {:pandocir/attr [:pandocir.attr/id :pandocir.attr/classes :pandocir.attr/keyvals]
@@ -126,7 +152,7 @@
    :pandocir/image [:pandocir.image/src :pandocir.image/title]})
 
 (def ^:private pandoc-simple-types
-  [:pandocir.quote/type])
+  [:pandocir.quote/type :pandocir.list-attr/style :pandocir.list-attr/delim])
 
 (def ^:private pandoc-types-by-pandoc-type
   (associate-by :pandocir/pandoc-type pandoc-types))

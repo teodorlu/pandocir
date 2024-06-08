@@ -113,8 +113,18 @@
 (defmethod ir->hiccup-1 :pandocir.type/block-quote [ir-node]
   (into [:blockquote] (:pandocir/blocks ir-node)))
 
-(defmethod ir->hiccup-1 :pandocir.type/ordered-list [_ir-node]
-  :pandocir.error/ordered-list-not-implemented)
+(defmethod ir->hiccup-1 :pandocir.type/ordered-list [ir-node]
+  (let [{:pandocir.list-attr/keys [start style]} ir-node
+        type (case style
+               :pandocir.type/lower-roman "i"
+               :pandocir.type/upper-roman "I"
+               :pandocir.type/lower-alpha "a"
+               :pandocir.type/upper-alpha "A"
+               "1")]
+    (into [:ol (cond-> {:type type}
+                 (not= start 1) (assoc :start start))]
+          (map (partial into [:li]) (:pandocir/list-items ir-node)))))
+
 (defmethod ir->hiccup-1 :pandocir.type/bullet-list [_ir-node]
   :pandocir.error/bullet-list-not-implemented)
 (defmethod ir->hiccup-1 :pandocir.type/definition-list [_ir-node]
