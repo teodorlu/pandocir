@@ -27,13 +27,13 @@
              "Treat Pandoc JSON as Clojure data."
              (cli/format-opts option-spec)
              "Example usage:"
-             (str "    "
+             (str "  "
                   (str/trim
                    "
 echo 'Hello Pandoc' \\
-        | pandoc --from markdown --to json \\
-        | jet --from json --to edn --keywordize \\
-        | pandocir --from raw --to hiccup
+    | pandoc --from markdown --to json \\
+    | jet --from json --to edn --keywordize \\
+    | pandocir --from raw --to hiccup
 "))]))
 
 (defn -main [& args]
