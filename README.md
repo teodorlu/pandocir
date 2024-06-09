@@ -37,20 +37,6 @@ For example usage, see the unit tests.
 
 [Neil]: https://github.com/babashka/neil
 
-## Use as a CLI tool
-
-`pandocir` can be installed as a CLI tool.
-You can install `pandocir` with [bbin]:
-
-    bbin install io.github.teodorlu/pandocir --latest-sha
-
-You can now convert
-
-    $ echo 'hi, _there_!' | pandoc --from markdown --to json | pandocir pandoc2hiccup
-    [:p "hi, " [:em "there"] "!"]
-
-[bbin]: https://github.com/babashka/bbin
-
 ## Local development
 
 We recommend using a JVM REPL for local development.
