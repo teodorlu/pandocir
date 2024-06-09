@@ -177,5 +177,8 @@
   [pandoc]
   (walk/postwalk pandoc->ir-1 pandoc))
 
-(defn ir->pandoc [ir]
+(defn ir->pandoc
+  "Walk a pandocir tree and convert each node to a Pandoc JSON abstract syntax
+  tree node by calling [[ir->pandoc-1]]. It is the inverse of [[pandoc->ir]]."
+  [ir]
   (walk/prewalk ir->pandoc-1 ir))
