@@ -96,9 +96,11 @@
   [:pandocir.quote/type :pandocir.list-attr/style :pandocir.list-attr/delim])
 
 (def ^:private descriptors-by-pandoc-type
+  "A mapping from the original Pandoc type to the corresponding type descriptor."
   (associate-by :pandocir/pandoc-type pandoc-type-descriptors))
 
 (def ^:private descriptors-by-pandocir-type
+  "A mapping from the pandocir type to the corresponding type descriptor."
   (associate-by :pandocir/type pandoc-type-descriptors))
 
 (defn ^:private unwrap-simple-types [ir-node]
