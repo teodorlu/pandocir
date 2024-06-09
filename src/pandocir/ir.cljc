@@ -138,7 +138,10 @@
         (< 1 (count args)) (merge (zipmap args c)))))
     pandoc-node))
 
-(defn ^:private wrap-simple-types [ir-node]
+(defn ^:private wrap-simple-types
+  "Transforms {k v} into {k {:pandorir/type v}} for every simple type listed
+  in [[pandoc-simple-types]]. It is the inverse of [[unwrap-simple-types]]."
+  [ir-node]
   (-> (fn [node k]
         (cond-> node
           (k node) (assoc k {:pandocir/type (k node)})))
