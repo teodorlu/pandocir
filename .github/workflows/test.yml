@@ -1,4 +1,4 @@
-name: Static analysis with clj-kondo
+name: Run tests with Kaocha
 on: push
 jobs:
   lint:
@@ -12,8 +12,5 @@ jobs:
       with:
         clj-kondo: 2024.03.13
 
-    - name: "Clj-kondo: show version"
-      run: clj-kondo --version
-
-    - name: "Clj-kondo: lint"
-      run: clj-kondo --fail-level error --lint src test
+    - name: "Kaocha: run tests"
+      run: bin/kaocha
