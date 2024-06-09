@@ -12,8 +12,8 @@ jobs:
       with:
         clj-kondo: 2024.03.13
 
-    - name: Get clj-kondo version
+    - name: Clj-kondo: show version
       run: clj-kondo --version
 
-    - name: clj-kondo lint
+    - name: Clj-kondo: lint
       run: clj-kondo --fail-level error --lint src
