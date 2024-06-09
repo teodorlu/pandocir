@@ -16,3 +16,6 @@
 
 (defn str [s]
   {:pandocir/type :pandocir.type/str, :pandocir/text s})
+
+(defn space []
+  {:pandocir/type :pandocir.type/space})

@@ -7,6 +7,11 @@
   (is (= {:pandocir/type :pandocir.type/str, :pandocir/text "Hello,"}
          (builder/str "Hello,"))))
 
+(deftest space-test
+  (is (= {:pandocir/type :pandocir.type/space}
+         (builder/space)))
+  )
+
 (deftest doc-test
   (is (= {:blocks []}
          (builder/doc [])))
