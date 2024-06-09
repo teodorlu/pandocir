@@ -17,6 +17,9 @@ Most development work requires that you have installed a JVM, Clojure and Babash
 Static analysis requires that you have installed clj-kondo locally.
 See https://github.com/clj-kondo/clj-kondo for installation instructions.
 
-## Run the slower tests that require a local Pandoc binary
+## Run the slower tests
 
-    clj -X:pandoc-tests
+    bb pandoc-tests
+
+`pandoc-tests` requires that you have `pandoc` on your `PATH`.
+For Pandoc installation instructions, see https://pandoc.org/.
