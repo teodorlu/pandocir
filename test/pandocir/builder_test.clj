@@ -13,15 +13,12 @@
 
 (deftest para-test
   (is (= {:pandocir/type :pandocir.type/para,
-          :pandocir/inlines
-          [(b/str "Hello,")
-           (b/space)]}
+          :pandocir/inlines [(b/str "Hello,") (b/space)]}
          (b/para (b/str "Hello,") (b/space)))))
 
 (deftest emph-test
   (is (= {:pandocir/type :pandocir.type/emph,
-          :pandocir/inlines
-          [(b/str "Pandoc")]}
+          :pandocir/inlines [(b/str "Pandoc")]}
          (b/emph (b/str "Pandoc")))))
 
 (deftest doc-test
