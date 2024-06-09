@@ -1,4 +1,5 @@
 (ns pandocir.hiccup
+  "A namespace for converting from pandocir to hiccup."
   (:require [clojure.walk :as walk]
             [hiccup2.core :as h]
             [clojure.string :as s]))
