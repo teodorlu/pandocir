@@ -2,9 +2,6 @@
   "Functions to create Pandoc IR with less typing"
   (:refer-clojure :exclude [str]))
 
-(defn ^:private ir? [m]
-  (contains? m :pandocir/type))
-
 (defn doc
   ([{:keys [pandoc-api-version meta]} & blocks]
    (cond-> {:blocks (or blocks [])}
