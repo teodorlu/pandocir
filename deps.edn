@@ -5,12 +5,12 @@
   hiccup/hiccup {:mvn/version "2.0.0-RC1"}
   org.clojure/clojure {:mvn/version "1.11.3"}}
  :aliases
- {:kaocha {:extra-deps {lambdaisland/kaocha {:mvn/version "1.90.1383"}}
+ {:kaocha {:extra-deps {lambdaisland/kaocha {:mvn/version "1.91.1392"}}
            :main-opts ["-m" "kaocha.runner"]}
   :dev {:extra-paths ["test" "dev"]
         :extra-deps {io.github.tonsky/clj-reload {:mvn/version "0.7.0"}
-                     lambdaisland/kaocha {:mvn/version "1.90.1383"}}}
-  :ci {:extra-deps {lambdaisland/kaocha {:mvn/version "1.90.1383"}}
+                     lambdaisland/kaocha {:mvn/version "1.91.1392"}}}
+  :ci {:extra-deps {lambdaisland/kaocha {:mvn/version "1.91.1392"}}
        :extra-paths ["test"]}
   :pandoc-tests {:extra-paths ["test"]
                  :exec-fn pandocir.pandoc-runner/run-pandoc-tests}}}
