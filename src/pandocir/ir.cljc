@@ -91,6 +91,8 @@
    :pandocir/image [:pandocir.image/src :pandocir.image/title]})
 
 (def ^:private pandoc-simple-types
+  "Pandoc AST nodes that are always leaves. In addition, these types are not
+  inlines or blocks, meaning they only occur in some well-defined contexts."
   [:pandocir.quote/type :pandocir.list-attr/style :pandocir.list-attr/delim])
 
 (def ^:private descriptors-by-pandoc-type
