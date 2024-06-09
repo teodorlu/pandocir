@@ -4,8 +4,7 @@
   babashka/process {:mvn/version "0.5.22"}
   cheshire/cheshire {:mvn/version "5.13.0"}
   hiccup/hiccup {:mvn/version "2.0.0-RC1"}
-  org.clojure/clojure {:mvn/version "1.11.3"}
-  selmer/selmer {:mvn/version "1.12.59"}}
+  org.clojure/clojure {:mvn/version "1.11.3"}}
  :aliases
  {:kaocha {:extra-deps {lambdaisland/kaocha {:mvn/version "1.90.1383"}}
            :main-opts ["-m" "kaocha.runner"]}
