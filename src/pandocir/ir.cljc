@@ -103,7 +103,10 @@
   "A mapping from the pandocir type to the corresponding type descriptor."
   (associate-by :pandocir/type pandoc-type-descriptors))
 
-(defn ^:private unwrap-simple-types [ir-node]
+(defn ^:private unwrap-simple-types
+  "Transforms {k {:pandorir/type v}} into {k v} for every simple type listed
+  in [[pandoc-simple-types]]. It is the inverse of [[wrap-simple-types]]."
+  [ir-node]
   (-> (fn [node k]
         (cond-> node
           (k node) (assoc k (:pandocir/type (k node)))))
