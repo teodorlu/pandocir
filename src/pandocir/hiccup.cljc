@@ -57,7 +57,7 @@
   :pandocir.error/cite-not-implemented)
 
 (defmethod ir->hiccup-1 :pandocir.type/code [ir-node]
-  [:code (ir->html-attrs ir-node) (:pandocir/text ir-node)])1
+  [:code (ir->html-attrs ir-node) (:pandocir/text ir-node)])
 
 (defmethod ir->hiccup-1 :pandocir.type/space [_ir-node]
   " ")
