@@ -1,5 +1,6 @@
 (ns pandocir.pandoc-runner
   (:require
+   [babashka.fs :as fs]
    [cheshire.core :as json]
    [clojure.java.shell :as sh]
    [clojure.string :as s]
@@ -73,3 +74,16 @@
   (is (block-compare-pandoc-to-hiccup (:pandocir.test/definition-list test-data)))
   (is (block-compare-pandoc-to-hiccup (:pandocir.test/header test-data)))
   (is (block-compare-pandoc-to-hiccup (:pandocir.test/horizontal-rule test-data))))
+
+#_{:clj-kondo/ignore [:clojure-lsp/unused-public-var]}
+(defn run-pandoc-tests [_]
+  (let [this-ns (symbol (namespace ::sym))]
+    (when-not (fs/which "pandoc")
+      (throw (ex-info "These tests require pandoc. Please make sure `pandoc` is on your PATH." {})))
+    (let [{:keys [fail error] :as report}
+          (clojure.test/run-tests this-ns)]
+      (when-not (zero? (+ fail error))
+        (throw (ex-info (str "Test failures in " this-ns)
+                        (assoc report :ns this-ns)))))))
+
+#_ (run-pandoc-tests {})
