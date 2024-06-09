@@ -12,4 +12,6 @@
            :main-opts ["-m" "kaocha.runner"]}
   :dev {:extra-paths ["test" "dev"]
         :extra-deps {io.github.tonsky/clj-reload {:mvn/version "0.7.0"}
-                     lambdaisland/kaocha {:mvn/version "1.90.1383"}}}}}
+                     lambdaisland/kaocha {:mvn/version "1.90.1383"}}}
+  :ci {:extra-deps {lambdaisland/kaocha {:mvn/version "1.90.1383"}}
+       :extra-paths ["test"]}}}

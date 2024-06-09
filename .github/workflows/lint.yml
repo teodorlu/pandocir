@@ -1,4 +1,4 @@
-name: clj-kondo static analysis
+name: Static analysis with clj-kondo
 on: push
 jobs:
   lint:
@@ -7,7 +7,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
-    - name: Install Clojure & Clj-kondo
+    - name: Install Clj-kondo
       uses: DeLaGuardo/setup-clojure@12.5
       with:
         clj-kondo: 2024.03.13
