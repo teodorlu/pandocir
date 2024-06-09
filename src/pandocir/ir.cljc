@@ -171,7 +171,10 @@
         (= 1 (count args)) (update :c first)))
     ir-node))
 
-(defn pandoc->ir [pandoc]
+(defn pandoc->ir
+  "Walk a Pandoc JSON abstract syntax tree and convert each node to a pandocir
+  node by calling [[pandoc->ir-1]]. It is the inverse of [[ir->pandoc]]."
+  [pandoc]
   (walk/postwalk pandoc->ir-1 pandoc))
 
 (defn ir->pandoc [ir]
