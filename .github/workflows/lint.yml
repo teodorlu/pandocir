@@ -1,0 +1,19 @@
+name: clj-kondo static analysis
+on: push
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Install Clojure & Clj-kodno
+      uses: DeLaGuardo/setup-clj@12.5
+      with:
+        clj-kondo: 2024.03.13
+
+    - name: Get clj-kondo version
+      run: clj-kondo --version
+
+    - name: clj-kondo lint
+      run: clj-kondo --fail-level error --lint src
