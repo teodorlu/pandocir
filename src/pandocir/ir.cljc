@@ -123,7 +123,13 @@
           node))
       (reduce ir-node (keys ir-node))))
 
-(defn ^:private pandoc->ir-1 [{:keys [t c] :as pandoc-node}]
+(defn ^:private pandoc->ir-1
+  "Converts a Pandoc JSON abstract syntax tree node `pandoc-node` to pandocir.
+  It is the inverse of [[ir->pandoc-1]].
+
+  Note that it only converts a single node of the tree. See [[pandoc->ir]] for
+  converting a full Pandoc JSON abstract syntax tree."
+  [{:keys [t c] :as pandoc-node}]
   (if-let [{:pandocir/keys [type args]} (get descriptors-by-pandoc-type t)]
     (unwrap-simple-types
      (args->ir
