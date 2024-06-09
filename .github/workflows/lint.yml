@@ -16,4 +16,4 @@ jobs:
       run: clj-kondo --version
 
     - name: Clj-kondo: lint
-      run: clj-kondo --fail-level error --lint src
+      run: clj-kondo --fail-level error --lint src test
