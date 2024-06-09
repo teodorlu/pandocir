@@ -10,7 +10,7 @@
      meta (assoc :meta meta))))
 
 (defn para
-  [inlines]
+  [& inlines]
   {:pandocir/type :pandocir.type/para,
    :pandocir/inlines inlines})
 

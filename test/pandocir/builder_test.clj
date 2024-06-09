@@ -9,8 +9,14 @@
 
 (deftest space-test
   (is (= {:pandocir/type :pandocir.type/space}
-         (builder/space)))
-  )
+         (builder/space))))
+
+(deftest para-test
+  (is (= {:pandocir/type :pandocir.type/para,
+          :pandocir/inlines
+          [(builder/str "Hello,")
+           (builder/space)]}
+         (builder/para (builder/str "Hello,") (builder/space)))))
 
 (deftest doc-test
   (is (= {:blocks []}
