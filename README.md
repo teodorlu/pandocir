@@ -39,6 +39,6 @@ For example usage, see the unit tests.
 
 ## Local development
 
-Please read [DEVELOPING.md]
+Please read [DEVELOPING.md].
 
 [DEVELOPING.md]: DEVELOPING.md
