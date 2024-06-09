@@ -14,16 +14,16 @@
 
 (def hello-pandoc-ir
   {:pandoc-api-version [1 23 1],
-    :meta {},
-    :blocks
-    [{:pandocir/type :pandocir.type/para,
-      :pandocir/inlines
-      [{:pandocir/type :pandocir.type/str, :pandocir/text "Hello,"}
-       {:pandocir/type :pandocir.type/space}
-       {:pandocir/type :pandocir.type/emph,
-        :pandocir/inlines
-        [{:pandocir/type :pandocir.type/str, :pandocir/text "Pandoc"}]}
-       {:pandocir/type :pandocir.type/str, :pandocir/text "!"}]}]})
+   :meta {},
+   :blocks
+   [{:pandocir/type :pandocir.type/para,
+     :pandocir/inlines
+     [{:pandocir/type :pandocir.type/str, :pandocir/text "Hello,"}
+      {:pandocir/type :pandocir.type/space}
+      {:pandocir/type :pandocir.type/emph,
+       :pandocir/inlines
+       [{:pandocir/type :pandocir.type/str, :pandocir/text "Pandoc"}]}
+      {:pandocir/type :pandocir.type/str, :pandocir/text "!"}]}]})
 
 (deftest raw->ir-test
   (is (= hello-pandoc-ir
