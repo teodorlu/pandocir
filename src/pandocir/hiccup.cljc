@@ -1,8 +1,7 @@
 (ns pandocir.hiccup
   (:require [clojure.walk :as walk]
             [hiccup2.core :as h]
-            [clojure.string :as s]
-            [pandocir.core :as pandocir]))
+            [clojure.string :as s]))
 
 (defn ir->html-attrs [ir-node]
   (let [renaming {:pandocir.attr/id :id
