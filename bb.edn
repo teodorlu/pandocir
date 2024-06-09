@@ -1,6 +1,5 @@
 {:deps {io.github.teodorlu/pandocir {:local/root "."}
         com.lambdaisland/launchpad {:mvn/version "0.28.129-alpha"}}
- :bbin/bin {pandocir {:main-opts ["-m" "pandocir.core/-main"]}}
  :tasks
  {lint (shell "clj-kondo --fail-level error --lint src test")
   pandoc-tests (clojure "-X:pandoc-tests")}}
