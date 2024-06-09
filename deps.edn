@@ -3,7 +3,8 @@
  {babashka/fs {:mvn/version "0.5.21"}
   cheshire/cheshire {:mvn/version "5.13.0"}
   hiccup/hiccup {:mvn/version "2.0.0-RC1"}
-  org.clojure/clojure {:mvn/version "1.11.3"}}
+  org.clojure/clojure {:mvn/version "1.11.3"}
+  org.babashka/cli {:mvn/version "0.8.59"}}
  :aliases
  {:kaocha {:extra-deps {lambdaisland/kaocha {:mvn/version "1.91.1392"}}
            :main-opts ["-m" "kaocha.runner"]}
