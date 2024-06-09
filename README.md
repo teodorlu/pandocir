@@ -44,9 +44,3 @@ We recommend using a JVM REPL for local development.
 You may run the tests with Kaocha:
 
     bin/kaocha
-
-To work on the CLI, we recommend installing a development version with bbin:
-
-    bbin install . --as pandocir-dev
-
-Installed this way, `pandocir-dev` will reflect your current local folder.
