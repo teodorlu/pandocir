@@ -20,10 +20,10 @@
 
 (deftest doc-test
   (is (= {:blocks []}
-         (builder/doc [])))
+         (builder/doc)))
   (is (= {:blocks []
           :pandoc-api-version [1 23 1]}
-         (builder/doc [] {:pandoc-api-version [1 23 1]})))
+         (builder/doc {:pandoc-api-version [1 23 1]})))
   (is (= {:blocks []
           :meta {}}
-         (builder/doc [] {:meta {}}))))
+         (builder/doc {:meta {}}))))
