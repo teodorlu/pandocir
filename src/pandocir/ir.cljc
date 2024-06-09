@@ -1,6 +1,6 @@
 (ns pandocir.ir
-  "A namespace for converting between Pandoc JSON abstract syntax trees, to a
-  Clojure intermediate representation."
+  "A namespace for converting between Pandoc JSON abstract syntax trees and a
+  Clojure intermediate representation (IR)."
   (:require
    [clojure.string :as s]
    [clojure.walk :as walk]))
@@ -13,7 +13,7 @@
   (reduce (fn [m v] (assoc m (f v) v)) {} coll))
 
 (defn ^:private make-descriptor
-  "Produces Pandoc type descriptor. The pandoc-type is Pandoc's name for the AST
+  "Produces a Pandoc type descriptor. The pandoc-type is Pandoc's name for the AST
   node, which is converted to lisp-case and namespaced for pandocir. The
   children of the Pandoc AST node are named by args (in order)."
   [pandoc-type & args]
@@ -24,7 +24,7 @@
      :pandocir/args args}))
 
 (def ^:private pandoc-type-descriptors
-  "A list of Pandoc type descriptiors."
+  "A list of Pandoc type descriptors."
   [
    ;; Inline
    (make-descriptor "Str" :pandocir/text)
@@ -104,7 +104,7 @@
   (associate-by :pandocir/type pandoc-type-descriptors))
 
 (defn ^:private unwrap-simple-types
-  "Transforms {k {:pandorir/type v}} into {k v} for every simple type listed
+  "Transforms {k {:pandocir/type v}} into {k v} for every simple type listed
   in [[pandoc-simple-types]]. It is the inverse of [[wrap-simple-types]]."
   [ir-node]
   (-> (fn [node k]
@@ -139,7 +139,7 @@
     pandoc-node))
 
 (defn ^:private wrap-simple-types
-  "Transforms {k v} into {k {:pandorir/type v}} for every simple type listed
+  "Transforms {k v} into {k {:pandocir/type v}} for every simple type listed
   in [[pandoc-simple-types]]. It is the inverse of [[unwrap-simple-types]]."
   [ir-node]
   (-> (fn [node k]
