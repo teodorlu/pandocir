@@ -5,7 +5,11 @@
    [clojure.string :as s]
    [clojure.walk :as walk]))
 
-(defn ^:private associate-by [f coll]
+(defn ^:private associate-by
+  "Returns a map of the elements of coll keyed by the result of f on each
+  element. Each element is assumed to be unique (if this is not the case,
+  consider using [[group-by]])."
+  [f coll]
   (reduce (fn [m v] (assoc m (f v) v)) {} coll))
 
 (defn ^:private make-pandoc-type [pandoc-type & args]
