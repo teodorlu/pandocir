@@ -2,6 +2,7 @@
   (:require
    [babashka.cli :as cli]
    [clojure.edn :as edn]
+   [clojure.string :as str]
    [pandocir.core :as pandocir]))
 
 (def converters
@@ -20,13 +21,32 @@
                :require true}}
    :order [:from :to]})
 
+(defn helptext []
+  (str/join "\n\n"
+            ["pandocir"
+             "Treat Pandoc JSON as Clojure data."
+             (cli/format-opts option-spec)
+             "Example usage:"
+             (str "    "
+                  (str/trim
+                   "
+echo 'Hello Pandoc' \\
+        | pandoc --from markdown --to json \\
+        | jet --from json --to edn --keywordize \\
+        | pandocir --from raw --to hiccup
+"))]))
+
 (defn -main [& args]
   (binding [*print-namespace-maps* false]
-    (let [opts (cli/parse-opts args option-spec)]
-      (if-let [converter (get converters (select-keys opts [:from :to]))]
-        (-> *in* slurp edn/read-string converter prn)
-        (do
-          (println (format "No converter available for converting from %s to %s"
-                           (pr-str (:from opts))
-                           (pr-str (:to opts))))
-          (System/exit 1))))))
+    (try
+      (let [opts (cli/parse-opts args option-spec)]
+        (if-let [converter (get converters (select-keys opts [:from :to]))]
+          (-> *in* slurp edn/read-string converter prn)
+          (do
+            (println (format "No converter available for converting from %s to %s"
+                             (pr-str (:from opts))
+                             (pr-str (:to opts))))
+            (System/exit 1))))
+      (catch Exception _
+        (println (helptext))
+        (System/exit 1)))))
