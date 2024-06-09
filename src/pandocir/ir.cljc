@@ -83,7 +83,8 @@
    (make-descriptor "OneParen")
    (make-descriptor "TwoParens")])
 
-(def ^:private pandoc-args
+(def ^:private pandoc-arg-descriptor
+  "Descriptions for arguments to Pandoc AST nodes."
   {:pandocir/attr [:pandocir.attr/id :pandocir.attr/classes :pandocir.attr/keyvals]
    :pandocir/list-attr [:pandocir.list-attr/start :pandocir.list-attr/style :pandocir.list-attr/delim]
    :pandocir/link [:pandocir.link/href :pandocir.link/title]
@@ -106,7 +107,7 @@
 
 (defn ^:private args->ir [ir-node]
   (-> (fn [node k]
-        (if-let [args (k pandoc-args)]
+        (if-let [args (k pandoc-arg-descriptor)]
           (-> (dissoc node k)
               (merge (zipmap args (k node))))
           node))
@@ -132,7 +133,7 @@
         (if-let [vs (mapv node args)]
           (assoc node k vs)
           node))
-      (reduce ir-node pandoc-args)))
+      (reduce ir-node pandoc-arg-descriptor)))
 
 (defn ^:private ir->pandoc-1 [{:pandocir/keys [type] :as ir-node}]
   (if-let [{:pandocir/keys [pandoc-type args]} (get descriptors-by-pandocir-type type)]
