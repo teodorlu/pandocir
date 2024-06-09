@@ -39,8 +39,6 @@ For example usage, see the unit tests.
 
 ## Local development
 
-We recommend using a JVM REPL for local development.
+Please read [DEVELOPING.md]
 
-You may run the tests with Kaocha:
-
-    bin/kaocha
+[DEVELOPING.md]: DEVELOPING.md
