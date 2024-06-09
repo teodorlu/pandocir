@@ -1,4 +1,6 @@
 (ns pandocir.ir
+  "A namespace for converting between Pandoc JSON abstract syntax trees, to a
+  Clojure intermediate representation."
   (:require
    [clojure.string :as s]
    [clojure.walk :as walk]))
