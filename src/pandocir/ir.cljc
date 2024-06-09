@@ -24,6 +24,7 @@
      :pandocir/args args}))
 
 (def ^:private pandoc-types
+  "A list of Pandoc type descriptiors."
   [
    ;; Inline
    (pandoc-type-desc "Str" :pandocir/text)
