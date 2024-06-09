@@ -20,7 +20,7 @@
       (call-pandoc "json" to)))
 
 (defn inline-test [inline to]
-  (block-test {:t "Plain" :c [inline]}))
+  (block-test {:t "Plain" :c [inline]} to))
 
 ;; Inline Element Tests
 
