@@ -12,6 +12,9 @@ jobs:
       with:
         clj-kondo: 2024.03.13
 
+    - name: Install dependencies
+      run: clj -e :download-deps
+
     - name: "Clj-kondo: show version"
       run: clj-kondo --version
 
