@@ -19,7 +19,7 @@ jobs:
         cli: 1.11.3.1463
 
     - name: Install dependencies
-      run: clj -A:ci -e :download-deps
+      run: clojure -A:ci -e :download-deps
 
     - name: "Kaocha: run tests"
       run: bin/kaocha
