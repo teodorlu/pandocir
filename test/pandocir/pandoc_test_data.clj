@@ -1,5 +1,4 @@
-(ns pandocir.pandoc-test-data
-  (:require  [clojure.test :as t]))
+(ns pandocir.pandoc-test-data)
 
 (def pandoc-test-data
   '[[:pandocir.test/meta
