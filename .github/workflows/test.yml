@@ -13,7 +13,7 @@ jobs:
         distribution: 'temurin'
         java-version: '21'
 
-    - name: Install Clojure & Clj-kondo
+    - name: Install Clojure
       uses: DeLaGuardo/setup-clojure@12.5
       with:
         cli: 1.11.3.1463
