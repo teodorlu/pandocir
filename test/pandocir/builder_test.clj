@@ -3,6 +3,10 @@
    [pandocir.builder :as builder]
    [clojure.test :refer [deftest is]]))
 
+(deftest str-test
+  (is (= {:pandocir/type :pandocir.type/str, :pandocir/text "Hello,"}
+         (builder/str "Hello,"))))
+
 (deftest doc-test
   (is (= {:blocks []}
          (builder/doc [])))
