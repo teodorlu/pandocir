@@ -147,7 +147,10 @@
           (k node) (assoc k {:pandocir/type (k node)})))
       (reduce ir-node pandoc-simple-types)))
 
-(defn ^:private ir->args [ir-node]
+(defn ^:private ir->args
+  "Inflates `ir-node` whenever it contains keys that are also
+  in [[pandoc-arg-descriptor]]. It is the inverse of [[args->ir]]."
+  [ir-node]
   (-> (fn [node [k args]]
         (if-let [vs (mapv node args)]
           (assoc node k vs)
