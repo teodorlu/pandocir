@@ -19,6 +19,7 @@
       (json/encode)
       (call-pandoc "json" to)))
 
+#_{:clj-kondo/ignore [:clojure-lsp/unused-public-var]}
 (defn inline-test [inline to]
   (block-test {:t "Plain" :c [inline]} to))
 
