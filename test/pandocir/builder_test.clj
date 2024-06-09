@@ -18,6 +18,12 @@
            (builder/space)]}
          (builder/para (builder/str "Hello,") (builder/space)))))
 
+(deftest emph-test
+  (is (= {:pandocir/type :pandocir.type/emph,
+          :pandocir/inlines
+          [(builder/str "Pandoc")]}
+         (builder/emph (builder/str "Pandoc")))))
+
 (deftest doc-test
   (is (= {:blocks []}
          (builder/doc {})))

@@ -18,3 +18,7 @@
 
 (defn space []
   {:pandocir/type :pandocir.type/space})
+
+(defn emph [& inlines]
+  {:pandocir/type :pandocir.type/emph,
+   :pandocir/inlines (or inlines [])})
