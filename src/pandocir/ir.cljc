@@ -60,8 +60,8 @@
    (make-descriptor "DefinitionList" :pandocir/definitions)
    (make-descriptor "Header" :pandocir/level :pandocir/attr :pandocir/inlines)
    (make-descriptor "HorizontalRule")
-   (make-descriptor "Table" :pandocir/attr :pandocir.table/caption :pandocir.table/col-specs :pandocir.table/head :pandocir.table/body :pandocir.table/foot)
-   (make-descriptor "Figure" :pandocir/attr :pandocir.figure/caption :pandocir/blocks)
+   (make-descriptor "Table" :pandocir/attr :pandocir/caption :pandocir.table/col-specs :pandocir.table/head :pandocir.table/body :pandocir.table/foot)
+   (make-descriptor "Figure" :pandocir/attr :pandocir/caption :pandocir/blocks)
    (make-descriptor "Div" :pandocir/attr :pandocir/blocks)
 
    ;; Quotes
@@ -88,7 +88,8 @@
   {:pandocir/attr [:pandocir.attr/id :pandocir.attr/classes :pandocir.attr/keyvals]
    :pandocir/list-attr [:pandocir.list-attr/start :pandocir.list-attr/style :pandocir.list-attr/delim]
    :pandocir/link [:pandocir.link/href :pandocir.link/title]
-   :pandocir/image [:pandocir.image/src :pandocir.image/title]})
+   :pandocir/image [:pandocir.image/src :pandocir.image/title]
+   :pandocir/caption [:pandocir.caption/short :pandocir.caption/blocks]})
 
 (def ^:private pandoc-simple-types
   "Pandoc AST nodes that are always leaves. In addition, these types are not

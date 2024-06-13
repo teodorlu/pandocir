@@ -145,8 +145,11 @@
 
 (defmethod ir->hiccup-1 :pandocir.type/table [_ir-node]
   :pandocir.error/table-not-implemented)
-(defmethod ir->hiccup-1 :pandocir.type/figure [_ir-node]
-  :pandocir.error/figure-not-implemented)
+
+(defmethod ir->hiccup-1 :pandocir.type/figure [ir-node]
+  (conj (into [:figure (ir->html-attrs ir-node)] (:pandocir/blocks ir-node))
+        (into [:figcaption] (:pandocir.caption/blocks ir-node))))
+
 (defmethod ir->hiccup-1 :pandocir.type/div [_ir-node]
   :pandocir.error/div-not-implemented)
 

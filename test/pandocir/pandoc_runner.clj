@@ -73,7 +73,10 @@
   (is (block-compare-pandoc-to-hiccup (:pandocir.test/bullet-list test-data)))
   (is (block-compare-pandoc-to-hiccup (:pandocir.test/definition-list test-data)))
   (is (block-compare-pandoc-to-hiccup (:pandocir.test/header test-data)))
-  (is (block-compare-pandoc-to-hiccup (:pandocir.test/horizontal-rule test-data))))
+  (is (block-compare-pandoc-to-hiccup (:pandocir.test/horizontal-rule test-data)))
+  ;; Postponing tables
+  ;; (is (block-compare-pandoc-to-hiccup (:pandocir.test/table test-data)))
+  (is (block-compare-pandoc-to-hiccup (:pandocir.test/figure test-data))))
 
 #_{:clj-kondo/ignore [:clojure-lsp/unused-public-var]}
 (defn run-pandoc-tests [_]
