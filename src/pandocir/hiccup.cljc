@@ -153,12 +153,6 @@
 (defmethod ir->hiccup-1 :pandocir.type/div [ir-node]
   (into [:div (ir->html-attrs ir-node)] (:pandocir/blocks ir-node)))
 
-;; Arguments
-(defmethod ir->hiccup-1 :pandocir/attr [_ir-node]
-  :pandocir.error/not-implemented)
-(defmethod ir->hiccup-1 :pandocir/list-attr [_ir-node]
-  :pandocir.error/not-implemented)
-
 (defmethod ir->hiccup-1 :default [x]
   x)
 
