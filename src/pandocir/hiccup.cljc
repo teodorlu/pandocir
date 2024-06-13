@@ -150,8 +150,8 @@
   (conj (into [:figure (ir->html-attrs ir-node)] (:pandocir/blocks ir-node))
         (into [:figcaption] (:pandocir.caption/blocks ir-node))))
 
-(defmethod ir->hiccup-1 :pandocir.type/div [_ir-node]
-  :pandocir.error/div-not-implemented)
+(defmethod ir->hiccup-1 :pandocir.type/div [ir-node]
+  (into [:div (ir->html-attrs ir-node)] (:pandocir/blocks ir-node)))
 
 ;; Arguments
 (defmethod ir->hiccup-1 :pandocir/attr [_ir-node]
