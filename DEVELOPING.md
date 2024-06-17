@@ -1,6 +1,6 @@
 # DEVELOPING PANDOCIR
 
-Most development work requires that you have installed a JVM, Clojure and Babashka.
+Most development work requires a JVM, Clojure and Babashka.
 
 ## Run the tests once
 
