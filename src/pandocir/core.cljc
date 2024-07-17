@@ -11,7 +11,9 @@
   (pandocir.ir/ir->pandoc ir))
 
 (defn ir->hiccup [ir]
-  (apply list (:blocks (pandocir.hiccup/ir->hiccup ir))))
+  (if-let [blocks (:blocks ir)]
+    (seq (pandocir.hiccup/ir->hiccup blocks))
+    (pandocir.hiccup/ir->hiccup ir)))
 
 (defn pandocir-transform
   "Traverses the pandocir AST and applies the given filters. The filters is
