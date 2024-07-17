@@ -1,7 +1,7 @@
 (ns pandocir.hiccup
   "A namespace for converting from pandocir to hiccup."
   (:require [clojure.walk :as walk]
-            [hiccup2.core :as h]
+            #?(:clj [hiccup2.core :as h])
             [clojure.string :as s]))
 
 (defn ir->html-attrs [ir-node]
@@ -75,7 +75,8 @@
   ;; Raw strings are treated differently in hiccup, reagent and replicant.
   ;; This solution is dependent on hiccup, which might not be ideal.
   (when (= (:pandocir/format ir-node) "html")
-    (h/raw (:pandocir/text ir-node))))
+    #?(:clj (h/raw (:pandocir/text ir-node))
+       :cljs (:pandocir/text ir-node))))
 
 (defmethod ir->hiccup-1 :pandocir.type/link [ir-node]
   (into [:a (ir->html-attrs ir-node)] (:pandocir/inlines ir-node)))
@@ -108,7 +109,8 @@
   ;; Raw strings are treated differently in hiccup, reagent and replicant.
   ;; This solution is dependent on hiccup, which might not be ideal.
   (when (= (:pandocir/format ir-node) "html")
-    (h/raw (:pandocir/text ir-node))))
+    #?(:clj (h/raw (:pandocir/text ir-node))
+       :cljs (:pandocir/text ir-node))))
 
 (defmethod ir->hiccup-1 :pandocir.type/block-quote [ir-node]
   (into [:blockquote] (:pandocir/blocks ir-node)))
