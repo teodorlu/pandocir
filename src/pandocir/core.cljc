@@ -1,7 +1,8 @@
 (ns pandocir.core
   (:require
-   pandocir.ir
-   pandocir.hiccup))
+   [clojure.walk :as walk]
+   [pandocir.hiccup]
+   [pandocir.ir]))
 
 (defn raw->ir [rawpandoc]
   (pandocir.ir/pandoc->ir rawpandoc))
@@ -11,3 +12,14 @@
 
 (defn ir->hiccup [ir]
   (apply list (:blocks (pandocir.hiccup/ir->hiccup ir))))
+
+(defn pandocir-transform
+  "Traverses the pandocir AST and applies the given filters. The filters is
+  assumed to be a map with pandocir types (e.g. :pandocir.type/div) as keys and
+  functions that take a pandocir node as input."
+  [ir filters]
+  (walk/postwalk
+   (fn [node]
+     (let [filter (filters (:pandocir/type node))]
+       (cond-> node filter filter)))
+   ir))
