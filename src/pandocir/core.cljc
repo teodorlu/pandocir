@@ -15,13 +15,22 @@
     (seq (pandocir.hiccup/ir->hiccup blocks))
     (pandocir.hiccup/ir->hiccup ir)))
 
-(defn pandocir-transform
-  "Traverses the pandocir AST and applies the given filters. The filters is
-  assumed to be a map with pandocir types (e.g. :pandocir.type/div) as keys and
-  functions that take a pandocir node as input."
+(defn- apply-filter [filters node]
+  (let [filter (filters (:pandocir/type node))]
+    (cond-> node filter filter)))
+
+(defn postwalk
+  "Traverses the given pandocir AST in a depth-first, post-order traversal, and
+  applies the given filters. The filters is assumed to be a map with pandocir
+  types (e.g. :pandocir.type/div) as keys and functions that take a pandocir
+  node as input."
   [ir filters]
-  (walk/postwalk
-   (fn [node]
-     (let [filter (filters (:pandocir/type node))]
-       (cond-> node filter filter)))
-   ir))
+  (walk/postwalk (partial apply-filter filters) ir))
+
+(defn prewalk
+  "Traverses the given pandocir AST in a depth-first, pre-order traversal, and
+  applies the given filters. The filters is assumed to be a map with pandocir
+  types (e.g. :pandocir.type/div) as keys and functions that take a pandocir
+  node as input."
+  [ir filters]
+  (walk/prewalk (partial apply-filter filters) ir))
