@@ -14,7 +14,7 @@ Most development work requires a JVM, Clojure and Babashka.
 
     bb lint
 
-Static analysis requires that you have installed clj-kondo locally.
+Static analysis requires a local clj-kondo installation.
 See https://github.com/clj-kondo/clj-kondo for installation instructions.
 
 ## Run the slower tests
