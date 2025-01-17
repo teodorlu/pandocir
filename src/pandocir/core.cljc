@@ -12,7 +12,7 @@
 
 (defn ir->hiccup [ir]
   (if-let [blocks (:blocks ir)]
-    (seq (pandocir.hiccup/ir->hiccup blocks))
+    (pandocir.hiccup/ir->hiccup (seq blocks))
     (pandocir.hiccup/ir->hiccup ir)))
 
 (defn- apply-filter [filters node]
