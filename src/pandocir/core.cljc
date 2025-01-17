@@ -24,7 +24,7 @@
   applies the given filters. The filters is assumed to be a map with pandocir
   types (e.g. :pandocir.type/div) as keys and functions that take a pandocir
   node as input."
-  [ir filters]
+  [filters ir]
   (walk/postwalk (partial apply-filter filters) ir))
 
 (defn prewalk
@@ -32,5 +32,5 @@
   applies the given filters. The filters is assumed to be a map with pandocir
   types (e.g. :pandocir.type/div) as keys and functions that take a pandocir
   node as input."
-  [ir filters]
+  [filters ir]
   (walk/prewalk (partial apply-filter filters) ir))
