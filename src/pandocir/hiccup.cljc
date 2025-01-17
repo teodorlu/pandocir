@@ -87,8 +87,13 @@
                          (map #(ir->hiccup-1 % state))
                          s/join))])
 
-(defmethod ir->hiccup-1 :pandocir.type/note [_ir-node state]
-  :pandocir.error/note-not-implemented)
+(defmethod ir->hiccup-1 :pandocir.type/note [ir-node state]
+  (let [fnum (inc (count (:notes @state)))]
+    (swap! state update :notes into (:pandocir/blocks ir-node))
+    [:a.footnote-ref {:id (str "fnref" fnum)
+                      :href (str "#fn" fnum)
+                      :role "doc-noteref"}
+     [:sup (str fnum)]]))
 
 (defmethod ir->hiccup-1 :pandocir.type/span [ir-node state]
   (into [:span (ir->html-attrs ir-node)] (:pandocir/inlines ir-node)))
@@ -160,6 +165,25 @@
 (defmethod ir->hiccup-1 :default [x state]
   x)
 
+(defn footnote-item [fnum note state]
+  [:li
+   [:div {:id (str "fn" fnum)}
+    (conj
+     (ir->hiccup-1 note state)
+     [:a.footnote-back {:href (str "#fnref" fnum) :role "doc-backlink"} "↩︎"])]])
+
+(defn add-footnote-section [hiccup state]
+  (list
+   hiccup
+   [:section#footnotes.footnotes.footnotes-end-of-document
+    {:role "doc-endnotes"}
+    [:hr]
+    [:ol
+     (for [[i note] (map-indexed vector (:notes @state))
+           :let [fnum (inc i)]]
+       (footnote-item fnum note state))]]))
+
 (defn ir->hiccup [ir]
   (let [state (atom {})]
-    (walk/postwalk #(ir->hiccup-1 % state) ir)))
+    (cond-> (walk/postwalk #(ir->hiccup-1 % state) ir)
+      (:notes @state) (add-footnote-section state))))

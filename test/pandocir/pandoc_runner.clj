@@ -59,7 +59,7 @@
   (is (inline-compare-pandoc-to-hiccup (:pandocir.test/link test-data)))
   (is (inline-compare-pandoc-to-hiccup (:pandocir.test/image test-data)))
   ;; Postponing footnote
-  ;; (is (inline-compare-pandoc-to-hiccup (:pandocir.test/note test-data)))
+  (is (inline-compare-pandoc-to-hiccup (:pandocir.test/note test-data)))
   (is (inline-compare-pandoc-to-hiccup (:pandocir.test/span test-data))))
 
 (deftest comparing-block-with-pandoc
