@@ -23,62 +23,62 @@
 (defmulti ir->hiccup-1 :pandocir/type)
 
 ;; Inline
-(defmethod ir->hiccup-1 :pandocir.type/str [ir-node state]
+(defmethod ir->hiccup-1 :pandocir.type/str [ir-node _state]
   (:pandocir/text ir-node))
 
-(defmethod ir->hiccup-1 :pandocir.type/emph [ir-node state]
+(defmethod ir->hiccup-1 :pandocir.type/emph [ir-node _state]
   (into [:em] (:pandocir/inlines ir-node)))
 
-(defmethod ir->hiccup-1 :pandocir.type/underline [ir-node state]
+(defmethod ir->hiccup-1 :pandocir.type/underline [ir-node _state]
   (into [:u] (:pandocir/inlines ir-node)))
 
-(defmethod ir->hiccup-1 :pandocir.type/strong [ir-node state]
+(defmethod ir->hiccup-1 :pandocir.type/strong [ir-node _state]
   (into [:strong] (:pandocir/inlines ir-node)))
 
-(defmethod ir->hiccup-1 :pandocir.type/strikeout [ir-node state]
+(defmethod ir->hiccup-1 :pandocir.type/strikeout [ir-node _state]
   (into [:del] (:pandocir/inlines ir-node)))
 
-(defmethod ir->hiccup-1 :pandocir.type/superscript [ir-node state]
+(defmethod ir->hiccup-1 :pandocir.type/superscript [ir-node _state]
   (into [:sup] (:pandocir/inlines ir-node)))
 
-(defmethod ir->hiccup-1 :pandocir.type/subscript [ir-node state]
+(defmethod ir->hiccup-1 :pandocir.type/subscript [ir-node _state]
   (into [:sub] (:pandocir/inlines ir-node)))
 
-(defmethod ir->hiccup-1 :pandocir.type/small-caps [ir-node state]
+(defmethod ir->hiccup-1 :pandocir.type/small-caps [ir-node _state]
   (into [:span {:class ["smallcaps"]}] (:pandocir/inlines ir-node)))
 
-(defmethod ir->hiccup-1 :pandocir.type/quoted [ir-node state]
+(defmethod ir->hiccup-1 :pandocir.type/quoted [ir-node _state]
   (let [[open close] (case (:pandocir.quote/type ir-node)
                        :pandocir.type/single-quote ["‘" "’"]
                        :pandocir.type/double-quote ["“" "”"])]
     (concat [open] (:pandocir/inlines ir-node) [close])))
 
-(defmethod ir->hiccup-1 :pandocir.type/cite [_ir-node state]
+(defmethod ir->hiccup-1 :pandocir.type/cite [_ir-node _state]
   :pandocir.error/cite-not-implemented)
 
-(defmethod ir->hiccup-1 :pandocir.type/code [ir-node state]
+(defmethod ir->hiccup-1 :pandocir.type/code [ir-node _state]
   [:code (ir->html-attrs ir-node) (:pandocir/text ir-node)])
 
-(defmethod ir->hiccup-1 :pandocir.type/space [_ir-node state]
+(defmethod ir->hiccup-1 :pandocir.type/space [_ir-node _state]
   " ")
 
-(defmethod ir->hiccup-1 :pandocir.type/soft-break [_ir-node state]
+(defmethod ir->hiccup-1 :pandocir.type/soft-break [_ir-node _state]
   " ")
 
-(defmethod ir->hiccup-1 :pandocir.type/line-break [_ir-node state]
+(defmethod ir->hiccup-1 :pandocir.type/line-break [_ir-node _state]
   [:br])
 
-(defmethod ir->hiccup-1 :pandocir.type/math [_ir-node state]
+(defmethod ir->hiccup-1 :pandocir.type/math [_ir-node _state]
   :pandocir.error/math-not-implemented)
 
-(defmethod ir->hiccup-1 :pandocir.type/raw-inline [ir-node state]
+(defmethod ir->hiccup-1 :pandocir.type/raw-inline [ir-node _state]
   ;; Raw strings are treated differently in hiccup, reagent and replicant.
   ;; This solution is dependent on hiccup, which might not be ideal.
   (when (= (:pandocir/format ir-node) "html")
     #?(:clj (h/raw (:pandocir/text ir-node))
        :cljs (:pandocir/text ir-node))))
 
-(defmethod ir->hiccup-1 :pandocir.type/link [ir-node state]
+(defmethod ir->hiccup-1 :pandocir.type/link [ir-node _state]
   (into [:a (ir->html-attrs ir-node)] (:pandocir/inlines ir-node)))
 
 (defmethod ir->hiccup-1 :pandocir.type/image [ir-node state]
@@ -95,34 +95,34 @@
                       :role "doc-noteref"}
      [:sup (str fnum)]]))
 
-(defmethod ir->hiccup-1 :pandocir.type/span [ir-node state]
+(defmethod ir->hiccup-1 :pandocir.type/span [ir-node _state]
   (into [:span (ir->html-attrs ir-node)] (:pandocir/inlines ir-node)))
 
 ;; Block
-(defmethod ir->hiccup-1 :pandocir.type/plain [ir-node state]
+(defmethod ir->hiccup-1 :pandocir.type/plain [ir-node _state]
   (seq (:pandocir/inlines ir-node)))
 
-(defmethod ir->hiccup-1 :pandocir.type/para [ir-node state]
+(defmethod ir->hiccup-1 :pandocir.type/para [ir-node _state]
   (into [:p] (:pandocir/inlines ir-node)))
 
-(defmethod ir->hiccup-1 :pandocir.type/line-block [ir-node state]
+(defmethod ir->hiccup-1 :pandocir.type/line-block [ir-node _state]
   (into [:div {:class ["line-block"]}]
         (mapcat identity (interpose (list [:br] "\n") (:pandocir/inlines ir-node)))))
 
-(defmethod ir->hiccup-1 :pandocir.type/code-block [ir-node state]
+(defmethod ir->hiccup-1 :pandocir.type/code-block [ir-node _state]
   [:pre (ir->html-attrs ir-node) [:code (:pandocir/text ir-node)]])
 
-(defmethod ir->hiccup-1 :pandocir.type/raw-block [ir-node state]
+(defmethod ir->hiccup-1 :pandocir.type/raw-block [ir-node _state]
   ;; Raw strings are treated differently in hiccup, reagent and replicant.
   ;; This solution is dependent on hiccup, which might not be ideal.
   (when (= (:pandocir/format ir-node) "html")
     #?(:clj (h/raw (:pandocir/text ir-node))
        :cljs (:pandocir/text ir-node))))
 
-(defmethod ir->hiccup-1 :pandocir.type/block-quote [ir-node state]
+(defmethod ir->hiccup-1 :pandocir.type/block-quote [ir-node _state]
   (into [:blockquote] (:pandocir/blocks ir-node)))
 
-(defmethod ir->hiccup-1 :pandocir.type/ordered-list [ir-node state]
+(defmethod ir->hiccup-1 :pandocir.type/ordered-list [ir-node _state]
   (let [{:pandocir.list-attr/keys [start style]} ir-node
         type (case style
                :pandocir.type/lower-roman "i"
@@ -134,10 +134,10 @@
                  (not= start 1) (assoc :start start))]
           (map (partial into [:li]) (:pandocir/list-items ir-node)))))
 
-(defmethod ir->hiccup-1 :pandocir.type/bullet-list [ir-node state]
+(defmethod ir->hiccup-1 :pandocir.type/bullet-list [ir-node _state]
   (into [:ul] (map (partial into [:li]) (:pandocir/list-items ir-node))))
 
-(defmethod ir->hiccup-1 :pandocir.type/definition-list [ir-node state]
+(defmethod ir->hiccup-1 :pandocir.type/definition-list [ir-node _state]
   (->> (:pandocir/definitions ir-node)
        (mapcat (fn [[term definition]]
                  (->> definition
@@ -145,24 +145,24 @@
                       (cons (into [:dt] term)))))
        (into [:dl])))
 
-(defmethod ir->hiccup-1 :pandocir.type/header [ir-node state]
+(defmethod ir->hiccup-1 :pandocir.type/header [ir-node _state]
   (let [h (keyword (str "h" (:pandocir/level ir-node)))]
     (into [h (ir->html-attrs ir-node)] (:pandocir/inlines ir-node))))
 
-(defmethod ir->hiccup-1 :pandocir.type/horizontal-rule [_ state]
+(defmethod ir->hiccup-1 :pandocir.type/horizontal-rule [_ _state]
   [:hr])
 
-(defmethod ir->hiccup-1 :pandocir.type/table [_ir-node state]
+(defmethod ir->hiccup-1 :pandocir.type/table [_ir-node _state]
   :pandocir.error/table-not-implemented)
 
-(defmethod ir->hiccup-1 :pandocir.type/figure [ir-node state]
+(defmethod ir->hiccup-1 :pandocir.type/figure [ir-node _state]
   (conj (into [:figure (ir->html-attrs ir-node)] (:pandocir/blocks ir-node))
         (into [:figcaption] (:pandocir.caption/blocks ir-node))))
 
-(defmethod ir->hiccup-1 :pandocir.type/div [ir-node state]
+(defmethod ir->hiccup-1 :pandocir.type/div [ir-node _state]
   (into [:div (ir->html-attrs ir-node)] (:pandocir/blocks ir-node)))
 
-(defmethod ir->hiccup-1 :default [x state]
+(defmethod ir->hiccup-1 :default [x _state]
   x)
 
 (defn footnote-item [fnum note state]
