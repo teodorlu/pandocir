@@ -20,6 +20,8 @@ jobs:
 
     - name: Install pandoc binary
       uses: nikeee/setup-pandoc@v1
+      with:
+        pandoc-version: '3.5'
 
     - name: Print Pandoc veresion
       run: pandoc --version
