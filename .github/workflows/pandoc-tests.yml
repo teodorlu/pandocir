@@ -21,6 +21,9 @@ jobs:
     - name: Install pandoc binary
       uses: nikeee/setup-pandoc@v1
 
+    - name: Print Pandoc veresion
+      run: pandoc --version
+
     - name: Install dependencies
       run: clojure -e :download-deps
 
