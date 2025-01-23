@@ -53,8 +53,12 @@
                        :pandocir.type/double-quote ["“" "”"])]
     (concat [open] (:pandocir/inlines ir-node) [close])))
 
-(defmethod ir->hiccup-1 :pandocir.type/cite [_ir-node _state]
-  :pandocir.error/cite-not-implemented)
+(defmethod ir->hiccup-1 :pandocir.type/cite [ir-node _state]
+  (let [cites (->> (:pandocir/citations ir-node)
+                   (map :pandocir.citation/citation-id)
+                   (s/join " "))]
+    (into [:span {:class ["citation"] :data-cites cites}]
+          (:pandocir/inlines ir-node))))
 
 (defmethod ir->hiccup-1 :pandocir.type/code [ir-node _state]
   [:code (ir->html-attrs ir-node) (:pandocir/text ir-node)])

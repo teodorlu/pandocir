@@ -81,7 +81,12 @@
    (make-descriptor "DefaultDelim")
    (make-descriptor "Period")
    (make-descriptor "OneParen")
-   (make-descriptor "TwoParens")])
+   (make-descriptor "TwoParens")
+
+   ;; Citation modes
+   (make-descriptor "AuthorInText")
+   (make-descriptor "SuppressAuthor")
+   (make-descriptor "NormalCitation")])
 
 (def ^:private pandoc-arg-descriptor
   "Descriptions for arguments to Pandoc AST nodes."
@@ -103,6 +108,19 @@
 (def ^:private descriptors-by-pandocir-type
   "A mapping from the pandocir type to the corresponding type descriptor."
   (associate-by :pandocir/type pandoc-type-descriptors))
+
+(def ^:private record-fields-by-pandocir
+  "A mapping from pandocir type to the original Pandoc record field."
+  {:pandocir.citation/citation-id :citationId
+   :pandocir.citation/citation-prefix :citationPrefix
+   :pandocir.citation/citation-suffix :citationSuffix
+   :pandocir.citation/citation-mode :citationMode
+   :pandocir.citation/citation-note-num :citationNoteNum
+   :pandocir.citation/citation-hash :citationHash})
+
+(def ^:private record-fields-by-pandoc
+  "A mapping from pandocir type to the original Pandoc record field."
+  (reduce-kv (fn [m k v] (assoc m v k)) {} record-fields-by-pandocir))
 
 (defn ^:private unwrap-simple-types
   "Transforms {k {:pandocir/type v}} into {k v} for every simple type listed
@@ -137,7 +155,7 @@
       (cond-> {:pandocir/type type}
         (= 1 (count args)) (assoc (first args) c)
         (< 1 (count args)) (merge (zipmap args c)))))
-    pandoc-node))
+    (record-fields-by-pandoc pandoc-node pandoc-node)))
 
 (defn ^:private wrap-simple-types
   "Transforms {k v} into {k {:pandocir/type v}} for every simple type listed
@@ -170,7 +188,7 @@
       (cond-> {:t pandoc-type}
         args (assoc :c ((apply juxt args) node))
         (= 1 (count args)) (update :c first)))
-    ir-node))
+    (record-fields-by-pandocir ir-node ir-node)))
 
 (defn pandoc->ir
   "Walk a Pandoc JSON abstract syntax tree and convert each node to a pandocir

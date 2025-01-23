@@ -13,7 +13,7 @@
 (def test-data (into {} pandoc-test-data))
 
 (defn call-pandoc [input from to]
-  (let [{:keys [out err]} (sh/sh "pandoc" "-f" from "-t" to :in input)]
+  (let [{:keys [out err]} (sh/sh "pandoc" "--wrap" "none" "-f" from "-t" to :in input)]
     (when err (print err))
     (s/trim out)))
 
@@ -49,8 +49,7 @@
   (is (inline-compare-pandoc-to-hiccup (:pandocir.test/subscript test-data)))
   (is (inline-compare-pandoc-to-hiccup (:pandocir.test/smallcaps test-data)))
   (is (inline-compare-pandoc-to-hiccup (:pandocir.test/quoted test-data)))
-  ;; Postponing cite
-  ;; (is (inline-compare-pandoc-to-hiccup (:pandocir.test/cite test-data)))
+  (is (inline-compare-pandoc-to-hiccup (:pandocir.test/cite test-data)))
   (is (inline-compare-pandoc-to-hiccup (:pandocir.test/code test-data)))
   (is (inline-compare-pandoc-to-hiccup (:pandocir.test/space test-data)))
   (is (inline-compare-pandoc-to-hiccup (:pandocir.test/softbreak test-data)))
@@ -58,7 +57,6 @@
   (is (inline-compare-pandoc-to-hiccup (:pandocir.test/rawinline test-data)))
   (is (inline-compare-pandoc-to-hiccup (:pandocir.test/link test-data)))
   (is (inline-compare-pandoc-to-hiccup (:pandocir.test/image test-data)))
-  ;; Postponing footnote
   (is (inline-compare-pandoc-to-hiccup (:pandocir.test/note test-data)))
   (is (inline-compare-pandoc-to-hiccup (:pandocir.test/span test-data))))
 
