@@ -190,4 +190,4 @@
 (defn ir->hiccup [ir]
   (let [state (atom {:notes []})]
     (cond-> (walk/postwalk #(ir->hiccup-1 % state) ir)
-      (:notes @state) (add-footnote-section state))))
+      (seq (:notes @state)) (add-footnote-section state))))
