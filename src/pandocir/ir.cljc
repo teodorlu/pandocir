@@ -25,68 +25,69 @@
 
 (def ^:private pandoc-type-descriptors
   "A list of Pandoc type descriptors."
-  [
-   ;; Inline
-   (make-descriptor "Str" :pandocir/text)
-   (make-descriptor "Emph" :pandocir/inlines)
-   (make-descriptor "Underline" :pandocir/inlines)
-   (make-descriptor "Strong" :pandocir/inlines)
-   (make-descriptor "Strikeout" :pandocir/inlines)
-   (make-descriptor "Superscript" :pandocir/inlines)
-   (make-descriptor "Subscript" :pandocir/inlines)
-   (make-descriptor "SmallCaps" :pandocir/inlines)
-   (make-descriptor "Quoted" :pandocir.quote/type :pandocir/inlines)
-   (make-descriptor "Cite" :pandocir/citations :pandocir/inlines)
-   (make-descriptor "Code" :pandocir/attr :pandocir/text)
-   (make-descriptor "Space")
-   (make-descriptor "SoftBreak")
-   (make-descriptor "LineBreak")
-   (make-descriptor "Math" :pandocir.math/type :pandocir/text)
-   (make-descriptor "RawInline" :pandocir/format :pandocir/text)
-   (make-descriptor "Link" :pandocir/attr :pandocir/inlines :pandocir/link)
-   (make-descriptor "Image" :pandocir/attr :pandocir/inlines :pandocir/image)
-   (make-descriptor "Note" :pandocir/blocks)
-   (make-descriptor "Span" :pandocir/attr :pandocir/inlines)
+  (mapv (partial apply make-descriptor)
+        [
+         ;; Inline
+         ["Str" :pandocir/text]
+         ["Emph" :pandocir/inlines]
+         ["Underline" :pandocir/inlines]
+         ["Strong" :pandocir/inlines]
+         ["Strikeout" :pandocir/inlines]
+         ["Superscript" :pandocir/inlines]
+         ["Subscript" :pandocir/inlines]
+         ["SmallCaps" :pandocir/inlines]
+         ["Quoted" :pandocir.quote/type :pandocir/inlines]
+         ["Cite" :pandocir/citations :pandocir/inlines]
+         ["Code" :pandocir/attr :pandocir/text]
+         ["Space"]
+         ["SoftBreak"]
+         ["LineBreak"]
+         ["Math" :pandocir.math/type :pandocir/text]
+         ["RawInline" :pandocir/format :pandocir/text]
+         ["Link" :pandocir/attr :pandocir/inlines :pandocir/link]
+         ["Image" :pandocir/attr :pandocir/inlines :pandocir/image]
+         ["Note" :pandocir/blocks]
+         ["Span" :pandocir/attr :pandocir/inlines]
 
-   ;; Block
-   (make-descriptor "Plain" :pandocir/inlines)
-   (make-descriptor "Para" :pandocir/inlines)
-   (make-descriptor "LineBlock" :pandocir/inlines)
-   (make-descriptor "CodeBlock" :pandocir/attr :pandocir/text)
-   (make-descriptor "RawBlock" :pandocir/format :pandocir/text)
-   (make-descriptor "BlockQuote" :pandocir/blocks)
-   (make-descriptor "OrderedList" :pandocir/list-attr :pandocir/list-items)
-   (make-descriptor "BulletList" :pandocir/list-items)
-   (make-descriptor "DefinitionList" :pandocir/definitions)
-   (make-descriptor "Header" :pandocir/level :pandocir/attr :pandocir/inlines)
-   (make-descriptor "HorizontalRule")
-   (make-descriptor "Table" :pandocir/attr :pandocir/caption :pandocir.table/col-specs :pandocir.table/head :pandocir.table/body :pandocir.table/foot)
-   (make-descriptor "Figure" :pandocir/attr :pandocir/caption :pandocir/blocks)
-   (make-descriptor "Div" :pandocir/attr :pandocir/blocks)
+         ;; Block
+         ["Plain" :pandocir/inlines]
+         ["Para" :pandocir/inlines]
+         ["LineBlock" :pandocir/inlines]
+         ["CodeBlock" :pandocir/attr :pandocir/text]
+         ["RawBlock" :pandocir/format :pandocir/text]
+         ["BlockQuote" :pandocir/blocks]
+         ["OrderedList" :pandocir/list-attr :pandocir/list-items]
+         ["BulletList" :pandocir/list-items]
+         ["DefinitionList" :pandocir/definitions]
+         ["Header" :pandocir/level :pandocir/attr :pandocir/inlines]
+         ["HorizontalRule"]
+         ["Table" :pandocir/attr :pandocir/caption :pandocir.table/col-specs :pandocir.table/head :pandocir.table/body :pandocir.table/foot]
+         ["Figure" :pandocir/attr :pandocir/caption :pandocir/blocks]
+         ["Div" :pandocir/attr :pandocir/blocks]
 
-   ;; Quotes
-   (make-descriptor "SingleQuote")
-   (make-descriptor "DoubleQuote")
+         ;; Quotes
+         ["SingleQuote"]
+         ["DoubleQuote"]
 
-   ;; List styles
-   (make-descriptor "DefaultStyle")
-   (make-descriptor "Example")
-   (make-descriptor "Decimal")
-   (make-descriptor "LowerRoman")
-   (make-descriptor "UpperRoman")
-   (make-descriptor "LowerAlpha")
-   (make-descriptor "UpperAlpha")
+         ;; List styles
+         ["DefaultStyle"]
+         ["Example"]
+         ["Decimal"]
+         ["LowerRoman"]
+         ["UpperRoman"]
+         ["LowerAlpha"]
+         ["UpperAlpha"]
 
-   ;; List delimiters
-   (make-descriptor "DefaultDelim")
-   (make-descriptor "Period")
-   (make-descriptor "OneParen")
-   (make-descriptor "TwoParens")
+         ;; List delimiters
+         ["DefaultDelim"]
+         ["Period"]
+         ["OneParen"]
+         ["TwoParens"]
 
-   ;; Citation modes
-   (make-descriptor "AuthorInText")
-   (make-descriptor "SuppressAuthor")
-   (make-descriptor "NormalCitation")])
+         ;; Citation modes
+         ["AuthorInText"]
+         ["SuppressAuthor"]
+         ["NormalCitation"]]))
 
 (def ^:private pandoc-arg-descriptor
   "Descriptions for arguments to Pandoc AST nodes."
