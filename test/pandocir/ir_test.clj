@@ -3,27 +3,27 @@
             [clojure.test :refer [deftest testing is]]))
 
 (def cases
-  [{:name :pandocir.test/singlequote,
+  [{:description "singlequote",
     :pandoc {:t "SingleQuote"},
     :ir {:pandocir/type :pandocir.type/single-quote}}
 
-   {:name :pandocir.test/doublequote,
+   {:description "doublequote",
     :pandoc {:t "DoubleQuote"},
     :ir {:pandocir/type :pandocir.type/double-quote}}
 
-   {:name :pandocir.test/authorintext,
+   {:description "authorintext",
     :pandoc {:t "AuthorInText"},
     :ir {:pandocir/type :pandocir.type/author-in-text}}
 
-   {:name :pandocir.test/suppressauthor,
+   {:description "suppressauthor",
     :pandoc {:t "SuppressAuthor"},
     :ir {:pandocir/type :pandocir.type/suppress-author}}
 
-   {:name :pandocir.test/normalcitation,
+   {:description "normalcitation",
     :pandoc {:t "NormalCitation"},
     :ir {:pandocir/type :pandocir.type/normal-citation}}
 
-   {:name :pandocir.test/citation,
+   {:description "citation",
     :pandoc
     {:citationId "jameson:unconscious",
      :citationPrefix [{:t "Str", :c "cf"}],
@@ -43,60 +43,60 @@
      :pandocir.citation/note-num 0,
      :pandocir.citation/hash 0}}
 
-   {:name :pandocir.test/str,
+   {:description "str",
     :pandoc {:t "Str", :c "Hello"},
     :ir {:pandocir/type :pandocir.type/str, :pandocir/text "Hello"}}
 
-   {:name :pandocir.test/emph,
+   {:description "emph",
     :pandoc {:t "Emph", :c [{:t "Str", :c "Hello"}]},
     :ir
     {:pandocir/type :pandocir.type/emph,
      :pandocir/inlines
      [{:pandocir/type :pandocir.type/str, :pandocir/text "Hello"}]}}
 
-   {:name :pandocir.test/underline,
+   {:description "underline",
     :pandoc {:t "Underline", :c [{:t "Str", :c "Hello"}]},
     :ir
     {:pandocir/type :pandocir.type/underline,
      :pandocir/inlines
      [{:pandocir/type :pandocir.type/str, :pandocir/text "Hello"}]}}
 
-   {:name :pandocir.test/strong,
+   {:description "strong",
     :pandoc {:t "Strong", :c [{:t "Str", :c "Hello"}]},
     :ir
     {:pandocir/type :pandocir.type/strong,
      :pandocir/inlines
      [{:pandocir/type :pandocir.type/str, :pandocir/text "Hello"}]}}
 
-   {:name :pandocir.test/strikeout,
+   {:description "strikeout",
     :pandoc {:t "Strikeout", :c [{:t "Str", :c "Hello"}]},
     :ir
     {:pandocir/type :pandocir.type/strikeout,
      :pandocir/inlines
      [{:pandocir/type :pandocir.type/str, :pandocir/text "Hello"}]}}
 
-   {:name :pandocir.test/superscript,
+   {:description "superscript",
     :pandoc {:t "Superscript", :c [{:t "Str", :c "Hello"}]},
     :ir
     {:pandocir/type :pandocir.type/superscript,
      :pandocir/inlines
      [{:pandocir/type :pandocir.type/str, :pandocir/text "Hello"}]}}
 
-   {:name :pandocir.test/subscript,
+   {:description "subscript",
     :pandoc {:t "Subscript", :c [{:t "Str", :c "Hello"}]},
     :ir
     {:pandocir/type :pandocir.type/subscript,
      :pandocir/inlines
      [{:pandocir/type :pandocir.type/str, :pandocir/text "Hello"}]}}
 
-   {:name :pandocir.test/smallcaps,
+   {:description "smallcaps",
     :pandoc {:t "SmallCaps", :c [{:t "Str", :c "Hello"}]},
     :ir
     {:pandocir/type :pandocir.type/small-caps,
      :pandocir/inlines
      [{:pandocir/type :pandocir.type/str, :pandocir/text "Hello"}]}}
 
-   {:name :pandocir.test/quoted,
+   {:description "quoted",
     :pandoc {:t "Quoted", :c [{:t "SingleQuote"} [{:t "Str", :c "Hello"}]]},
     :ir
     {:pandocir/type :pandocir.type/quoted,
@@ -104,7 +104,7 @@
      :pandocir/inlines
      [{:pandocir/type :pandocir.type/str, :pandocir/text "Hello"}]}}
 
-   {:name :pandocir.test/cite,
+   {:description "cite",
     :pandoc
     {:t "Cite",
      :c
@@ -139,7 +139,7 @@
       {:pandocir/type :pandocir.type/space}
       {:pandocir/type :pandocir.type/str, :pandocir/text "12]"}]}}
 
-   {:name :pandocir.test/code,
+   {:description "code",
     :pandoc {:t "Code", :c [["" [] [["language" "haskell"]]] "foo bar"]},
     :ir
     {:pandocir/type :pandocir.type/code,
@@ -148,26 +148,26 @@
      :pandocir.attr/classes [],
      :pandocir.attr/keyvals [["language" "haskell"]]}}
 
-   {:name :pandocir.test/space,
+   {:description "space",
     :pandoc {:t "Space"},
     :ir {:pandocir/type :pandocir.type/space}}
 
-   {:name :pandocir.test/softbreak,
+   {:description "softbreak",
     :pandoc {:t "SoftBreak"},
     :ir {:pandocir/type :pandocir.type/soft-break}}
 
-   {:name :pandocir.test/linebreak,
+   {:description "linebreak",
     :pandoc {:t "LineBreak"},
     :ir {:pandocir/type :pandocir.type/line-break}}
 
-   {:name :pandocir.test/rawinline,
+   {:description "rawinline",
     :pandoc {:t "RawInline", :c ["html" "<div>foo bar</div>"]},
     :ir
     {:pandocir/type :pandocir.type/raw-inline,
      :pandocir/format "html",
      :pandocir/text "<div>foo bar</div>"}}
 
-   {:name :pandocir.test/link,
+   {:description "link",
     :pandoc
     {:t "Link",
      :c
@@ -192,7 +192,7 @@
      :pandocir.link/href "https://www.google.com",
      :pandocir.link/title "google"}}
 
-   {:name :pandocir.test/image,
+   {:description "image",
     :pandoc
     {:t "Image",
      :c
@@ -217,7 +217,7 @@
      :pandocir.image/src "my_img.png",
      :pandocir.image/title "image"}}
 
-   {:name :pandocir.test/note,
+   {:description "note",
     :pandoc {:t "Note", :c [{:t "Para", :c [{:t "Str", :c "Hello"}]}]},
     :ir
     {:pandocir/type :pandocir.type/note,
@@ -226,7 +226,7 @@
        :pandocir/inlines
        [{:pandocir/type :pandocir.type/str, :pandocir/text "Hello"}]}]}}
 
-   {:name :pandocir.test/span,
+   {:description "span",
     :pandoc
     {:t "Span",
      :c [["id" ["kls"] [["k1" "v1"] ["k2" "v2"]]] [{:t "Str", :c "Hello"}]]},
@@ -238,21 +238,21 @@
      :pandocir.attr/classes ["kls"],
      :pandocir.attr/keyvals [["k1" "v1"] ["k2" "v2"]]}}
 
-   {:name :pandocir.test/plain,
+   {:description "plain",
     :pandoc {:t "Plain", :c [{:t "Str", :c "Hello"}]},
     :ir
     {:pandocir/type :pandocir.type/plain,
      :pandocir/inlines
      [{:pandocir/type :pandocir.type/str, :pandocir/text "Hello"}]}}
 
-   {:name :pandocir.test/para,
+   {:description "para",
     :pandoc {:t "Para", :c [{:t "Str", :c "Hello"}]},
     :ir
     {:pandocir/type :pandocir.type/para,
      :pandocir/inlines
      [{:pandocir/type :pandocir.type/str, :pandocir/text "Hello"}]}}
 
-   {:name :pandocir.test/line-block,
+   {:description "line-block",
     :pandoc
     {:t "LineBlock", :c [[{:t "Str", :c "Hello"}] [{:t "Str", :c "Moin"}]]},
     :ir
@@ -261,7 +261,7 @@
      [[{:pandocir/type :pandocir.type/str, :pandocir/text "Hello"}]
       [{:pandocir/type :pandocir.type/str, :pandocir/text "Moin"}]]}}
 
-   {:name :pandocir.test/code-block,
+   {:description "code-block",
     :pandoc
     {:t "CodeBlock", :c [["id" ["kls"] [["k1" "v1"] ["k2" "v2"]]] "Foo Bar"]},
     :ir
@@ -271,14 +271,14 @@
      :pandocir.attr/classes ["kls"],
      :pandocir.attr/keyvals [["k1" "v1"] ["k2" "v2"]]}}
 
-   {:name :pandocir.test/raw-block,
+   {:description "raw-block",
     :pandoc {:t "RawBlock", :c ["html" "<div>foo bar</div>"]},
     :ir
     {:pandocir/type :pandocir.type/raw-block,
      :pandocir/format "html",
      :pandocir/text "<div>foo bar</div>"}}
 
-   {:name :pandocir.test/block-quote,
+   {:description "block-quote",
     :pandoc {:t "BlockQuote", :c [{:t "Para", :c [{:t "Str", :c "Hello"}]}]},
     :ir
     {:pandocir/type :pandocir.type/block-quote,
@@ -287,7 +287,7 @@
        :pandocir/inlines
        [{:pandocir/type :pandocir.type/str, :pandocir/text "Hello"}]}]}}
 
-   {:name :pandocir.test/ordered-list,
+   {:description "ordered-list",
     :pandoc
     {:t "OrderedList",
      :c
@@ -307,7 +307,7 @@
      :pandocir.list-attr/style :pandocir.type/decimal,
      :pandocir.list-attr/delim :pandocir.type/period}}
 
-   {:name :pandocir.test/bullet-list,
+   {:description "bullet-list",
     :pandoc
     {:t "BulletList",
      :c
@@ -323,7 +323,7 @@
         :pandocir/inlines
         [{:pandocir/type :pandocir.type/str, :pandocir/text "bar"}]}]]}}
 
-   {:name :pandocir.test/definition-list,
+   {:description "definition-list",
     :pandoc
     {:t "DefinitionList",
      :c
@@ -341,7 +341,7 @@
           :pandocir/inlines
           [{:pandocir/type :pandocir.type/str, :pandocir/text "pop"}]}]]]]}}
 
-   {:name :pandocir.test/header,
+   {:description "header",
     :pandoc
     {:t "Header",
      :c [2 ["id" ["kls"] [["k1" "v1"] ["k2" "v2"]]] [{:t "Str", :c "Head"}]]},
@@ -354,11 +354,11 @@
      :pandocir.attr/classes ["kls"],
      :pandocir.attr/keyvals [["k1" "v1"] ["k2" "v2"]]}}
 
-   {:name :pandocir.test/horizontal-rule,
+   {:description "horizontal-rule",
     :pandoc {:t "HorizontalRule"},
     :ir {:pandocir/type :pandocir.type/horizontal-rule}}
 
-   {:name :pandocir.test/figure,
+   {:description "figure",
     :pandoc
     {:t "Figure",
      :c
@@ -382,7 +382,7 @@
        :pandocir/inlines
        [{:pandocir/type :pandocir.type/str, :pandocir/text "cap content"}]}]}}
 
-   {:name :pandocir.test/div,
+   {:description "div",
     :pandoc
     {:t "Div",
      :c
@@ -399,8 +399,8 @@
      :pandocir.attr/keyvals [["k1" "v1"] ["k2" "v2"]]}}])
 
 (deftest test-cases
-  (doseq [{:keys [name pandoc ir]} cases]
-    (testing (str name)
+  (doseq [{:keys [description pandoc ir]} cases]
+    (testing description
       (is (= (ir/pandoc->ir pandoc) ir))
       (is (= (ir/ir->pandoc ir) pandoc))
 
