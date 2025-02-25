@@ -32,16 +32,16 @@
      :citationNoteNum 0,
      :citationHash 0},
     :ir
-    {:pandocir.citation/citation-id "jameson:unconscious",
-     :pandocir.citation/citation-prefix
+    {:pandocir.citation/id "jameson:unconscious",
+     :pandocir.citation/prefix
      [{:pandocir/type :pandocir.type/str, :pandocir/text "cf"}],
-     :pandocir.citation/citation-suffix
+     :pandocir.citation/suffix
      [{:pandocir/type :pandocir.type/space}
       {:pandocir/type :pandocir.type/str, :pandocir/text "123"}],
-     :pandocir.citation/citation-mode
+     :pandocir.citation/mode
      {:pandocir/type :pandocir.type/normal-citation},
-     :pandocir.citation/citation-note-num 0,
-     :pandocir.citation/citation-hash 0}}
+     :pandocir.citation/note-num 0,
+     :pandocir.citation/hash 0}}
 
    {:name :pandocir.test/str,
     :pandoc {:t "Str", :c "Hello"},
@@ -122,16 +122,16 @@
     :ir
     {:pandocir/type :pandocir.type/cite,
      :pandocir/citations
-     [{:pandocir.citation/citation-id "jameson:unconscious",
-       :pandocir.citation/citation-prefix
+     [{:pandocir.citation/id "jameson:unconscious",
+       :pandocir.citation/prefix
        [{:pandocir/type :pandocir.type/str, :pandocir/text "cf"}],
-       :pandocir.citation/citation-suffix
+       :pandocir.citation/suffix
        [{:pandocir/type :pandocir.type/space}
         {:pandocir/type :pandocir.type/str, :pandocir/text "12"}],
-       :pandocir.citation/citation-mode
+       :pandocir.citation/mode
        {:pandocir/type :pandocir.type/normal-citation},
-       :pandocir.citation/citation-note-num 0,
-       :pandocir.citation/citation-hash 0}],
+       :pandocir.citation/note-num 0,
+       :pandocir.citation/hash 0}],
      :pandocir/inlines
      [{:pandocir/type :pandocir.type/str, :pandocir/text "[cf"}
       {:pandocir/type :pandocir.type/space}

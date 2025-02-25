@@ -55,7 +55,7 @@
 
 (defmethod ir->hiccup-1 :pandocir.type/cite [ir-node _state]
   (let [cites (->> (:pandocir/citations ir-node)
-                   (map :pandocir.citation/citation-id)
+                   (map :pandocir.citation/id)
                    (s/join " "))]
     (into [:span {:class ["citation"] :data-cites cites}]
           (:pandocir/inlines ir-node))))

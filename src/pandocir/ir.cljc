@@ -112,12 +112,12 @@
 
 (def ^:private record-fields-by-pandocir
   "A mapping from pandocir type to the original Pandoc record field."
-  {:pandocir.citation/citation-id :citationId
-   :pandocir.citation/citation-prefix :citationPrefix
-   :pandocir.citation/citation-suffix :citationSuffix
-   :pandocir.citation/citation-mode :citationMode
-   :pandocir.citation/citation-note-num :citationNoteNum
-   :pandocir.citation/citation-hash :citationHash})
+  {:pandocir.citation/id :citationId
+   :pandocir.citation/prefix :citationPrefix
+   :pandocir.citation/suffix :citationSuffix
+   :pandocir.citation/mode :citationMode
+   :pandocir.citation/note-num :citationNoteNum
+   :pandocir.citation/hash :citationHash})
 
 (def ^:private record-fields-by-pandoc
   "A mapping from pandocir type to the original Pandoc record field."
