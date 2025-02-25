@@ -189,12 +189,12 @@
     #_[:pandocir.test/tablefoot
        [["id" ["kls"] [["k1" "v1"] ["k2" "v2"]]]
         [[["id" ["kls"] [["k1" "v1"] ["k2" "v2"]]] []]]]]
-    #_[:pandocir.test/cell
-       [["id" ["kls"] [["k1" "v1"] ["k2" "v2"]]]
-        {:t "AlignLeft"}
-        1
-        1
-        [{:t "Para", :c [{:t "Str", :c "bar"}]}]]]
+    [:pandocir.test/cell
+     [["id" ["kls"] [["k1" "v1"] ["k2" "v2"]]]
+      {:t "AlignLeft"}
+      1
+      1
+      [{:t "Para", :c [{:t "Str", :c "bar"}]}]]]
     #_[:pandocir.test/rowspan
        1]
     #_[:pandocir.test/colspan
