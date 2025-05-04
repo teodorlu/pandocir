@@ -1,6 +1,6 @@
 **⚠️ THIS PROJECT IS EXPERIMENTAL, EXPECT BREAKING CHANGES ⚠️**
 
-# `pandocir`: Pandoc Intermediate Representation as Clojure data
+# Pandoc Intermediate Representation for Clojure
 
 [Pandoc] is a lovely program for converting documents between formats.
 This conversion happens by first converting from a source format to an intermediate representation, then converting from an intermediate representation to the target format.
