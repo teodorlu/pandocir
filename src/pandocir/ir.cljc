@@ -192,8 +192,11 @@
     (record-fields-by-pandocir ir-node ir-node)))
 
 (defn pandoc->ir
-  "Walk a Pandoc JSON abstract syntax tree and convert each node to a pandocir
-  node by calling [[pandoc->ir-1]]. It is the inverse of [[ir->pandoc]]."
+  "Convert Pandoc JSON represented as Clojure data where keys are keywords to IR.
+
+  Implemented by walking the Pandoc JSON abstract syntax tree and converting
+  each node to a pandocir node by calling [[pandoc->ir-1]]. It is the inverse
+  of [[ir->pandoc]]."
   [pandoc]
   (walk/postwalk pandoc->ir-1 pandoc))
 
